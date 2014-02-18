@@ -15,8 +15,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
-**/  
+**/ 
 
+#ifndef _AUDIOMONITORSERVER_HPP__
+#define _AUDIOMONITORSERVER_HPP__
+
+#include<cstdio>
+#include<cstdlib>
 #include<sys/types.h>
 #include<sys/time.h>
 #include<sys/socket.h>
@@ -28,12 +33,12 @@
 #include<fcntl.h>
 #include<signal.h>
 #include<vector>
-
+#include"EASEAClientData.hpp"
 
 class AudioMonitorServer{
   
   public:
-    AudioMonitorServer(int port);
+    AudioMonitorServer(int port,int dbg);
     ~AudioMonitorServer();
     void start();
 
@@ -46,5 +51,11 @@ class AudioMonitorServer{
     int servSockfd;
 	  struct sigaction terminaison;
     int max_select;
+    socklen_t addrlen;
+    struct sockaddr_in my_addr;
+    int debug;
+    int port;
 
-}
+};
+
+#endif

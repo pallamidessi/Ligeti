@@ -1,5 +1,5 @@
 /**
- * @file EASEAClientData.c
+ * @file mainFrame.hpp
  * @author Pallamidessi Joseph
  * @version 1.0
  *
@@ -16,33 +16,13 @@
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
 **/  
-#ifndef _EASEACLIENTDATA_HPP__
-#define _EASEACLIENTDATA_HPP__
+
+#ifndef _MAINFRAME_HPP__
+#define _MAINFRAME_HPP__
 
 #include <cstdio>
 #include <cstdlib>
-#include <vector>
-
-/*For each node of an EASEA Cloud, store the received data*/
-class EASEAClientData {
-  
-  public:
-    EASEAClientData ();
-    EASEAClientData (int sock);
-    virtual ~EASEAClientData ();
-    void processBuffer(char* buffer);
-    
-    /*getter*/
-    int getSocket();
-  
-  private:
-  
-    /* data */
-    int clientSockfd;
-    std::vector<double> best;
-    std::vector<double> average;
-    std::vector<double> stdev;
-    std::vector<double> worst;
-};
+#include <pthread.h>
+#include "AudioMonitorServer.hpp"
 
 #endif
