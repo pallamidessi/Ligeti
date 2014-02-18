@@ -1,5 +1,5 @@
 /**
- * @file AudioMonitorServer.c
+ * @file EASEAClientData.c
  * @author Pallamidessi Joseph
  * @version 1.0
  *
@@ -17,34 +17,28 @@
  * http://www.gnu.org/copyleft/gpl.html
 **/  
 
-#include<sys/types.h>
-#include<sys/time.h>
-#include<sys/socket.h>
-#include<unistd.h>
-#include<netinet/in.h>
-#include<arpa/inet.h>
-#include<cstring>
-#include<sys/select.h>
-#include<fcntl.h>
-#include<signal.h>
-#include<vector>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
 
-
-class AudioMonitorServer{
+/*For each node of an EASEA Cloud, store the received data*/
+class EASEAClientData {
   
   public:
-    AudioMonitorServer(int port);
-    ~AudioMonitorServer();
-    void start();
-
-  private:
-    void signalHandler();
-    void sigIntEvent(int sig);
+    EASEAClientData ();
+    EASEAClientData (int sock);
+    virtual ~EASEAClientData ();
+    void EASEAClientData::processBuffer(char* buffer){
     
-    /*Data*/
-    std::vector<EASEAClientData>* list_client; 
-    int servSockfd;
-	  struct sigaction terminaison;
-    int max_select;
-
-}
+    /*getter*/
+    int getSocket();
+  
+  private:
+  
+    /* data */
+    int clientSockfd;
+    std::vector<double> best;
+    std::vector<double> average;
+    std::vector<double> stdev;
+    std::vector<double> worst;
+};
