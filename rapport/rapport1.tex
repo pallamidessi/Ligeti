@@ -1,0 +1,195 @@
+\documentclass{article}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\begin{document}
+  \title{Stage monitoring audio pour EASEA: \\
+    \large Rapport 1}
+  \author{PALLAMIDESSI Joseph}
+  \maketitle
+
+  \section{Intro} % (fold)
+  \label{sec:Intro}
+    \paragraph{} % (fold)
+    \label{par:} 
+      Tout au long de ce stage, je fournirai toutes les deux semaines un rapport de ce
+      type, pour que tout les encadrants, même les plus distants puissent suivre la
+      progression de ce stage. Cela me permet aussi d'avoir une certaine rigueur dans
+      mon travail, surtout leurs de ces phases de recherche, et de garder une trace
+      écrite des solutions envisagées et/ou testées.
+    % paragraph paragraph name (end)
+    
+    \paragraph{} % (fold)
+    \label{par:}
+      Je me suis plus porté sur la faisabilité technique et la recherche des
+      technologies à utilisées ces deux premières semaines. J'ai commencé à me
+      familiariser avec la plateforme EASEA et j'ai entamé les recherches en
+      composition algorithmique. Cela passe aussi par de l'apprentissage de théories
+      de la musique plus généraux.
+      La production à donc été relativement faible, car il s'agit d'une grande phase de
+      recherche initiale.
+    
+    % paragraph  (end)
+  % section Intro (end)
+
+  \section{Buts} % (fold)
+  \label{sec:But}
+    \paragraph{} % (fold)
+    \label{par:}
+      Le but de ce stage est de créé un système de monitoring audio pour le solveur
+      évolutionnaire distribué EASEA. S'agissant d'un système complexe, les systèmes de
+      monitoring usuelles (i.e. graphique) ne se révéle pas être satisfaisant, surtout
+      que les runs peuvent être très longues (> 30 heures), et qu'ils force
+      l'administrateur/opérateur à fixer son écran... 
+    % paragraph  (end)
+  % section But (end)
+
+  \section{Problématique} % (fold)
+  \label{sec:problematique}
+    \paragraph{} % (fold)
+    \label{par:}
+      La musique doit donc être générée en temps réel, et répondre à certains
+      critères essentiels tels qu'une forte cohérence avec l'état du système et le
+      fait de ne pas être fatiguante/insupportable sur des écoutes prolongées.
+      On songera donc à une certaine cohérence et progression des/de la mélodie(s)
+      ainsi qu'à obtenir un résultat relativement harmonieux. 
+    % paragraph  (end)
+  % section problématique (end)
+
+  \section{Difficultés} % (fold)
+  \label{sec:Difficultes}
+    Ce projet soulève quelques difficultés notamment sur la génération algorithmique
+    de musique tout en gardant une forte association Modèle(EASEA)/Vue(musique
+    résultante).
+    N'étant pas compositeur ni musicien, j'aurai possiblement besoin de conseil sur
+    le plan musical, et je remercie d'avance tout les encadrants pour leurs aides et
+    aiguillage sur des domaines qui me sont inconnus.
+  % section Difficultés (end)
+
+  \section{Identification des problèmes} % (fold)
+  \label{sec:Identification des problemes}
+    \paragraph{} % (fold)
+    \label{par:}
+      Il s'agit dans un premier temps de comprendre qu'est-ce qu'un bon déroulement
+      d'un noeud EASEA et du système tout entier, ainsi que de bien identifié les
+      problèmes et défaut de fonctionnement, qu'il faudra sonifier différement.
+    % paragraph  (end)
+    \paragraph{} % (fold)
+    \label{par:}
+      Por cela je compte me baser sur les outils de monitoring visuelle d'EASEA déjà
+      présent, car une grande partie de l'identification des "défauts" de fonctionnement et d'analyse
+      statistique à déjà été développé.
+    % paragraph  (end)
+    \paragraph{} % (fold)
+    \label{par:}
+      Il aussi que je prenne contacte avec des chercheurs/doctorants travaillant actuellement
+      sur EASEA, pour voir quels comportements précis ils veulent surveiller.
+    % paragraph  (end)
+  % section Identification des "problèmes" (end)
+
+  \section{Mise en place technique} % (fold)
+  \label{sec:Mise en place technique}
+    \paragraph{} % (fold)
+    \label{par:}
+      Les technologies utilisées jusqu'ici seront les suivantes:\\
+      -pour la synthèse audio, et la gestion du son en règle générale, on utilisera
+      le langage de programmation (interprété) SuperCollider, et son interpréteur
+      Sclang.\\
+      -On utilisera le protocole réseaux OSC, successeur du MIDI, pour communiquer
+      au programme écrit en SuperCollider.\\
+      \\
+      Le système sera tripartite.\\
+      Premièrement, une intégration au compilateur EASEA qui intégrera
+      au code produit un système de communication au serveur de monitoring audio. Il
+      s'agira là de communication TCP/UDP standard en c++ (facile, partie client).\\
+      \\
+      Un serveur auquel les clients ce connecteront et qui fera une grande partie des
+      calcul de composition algorithmique et statistique, écrit en C++
+      standard.\\
+      \\
+      Celui-ci renverra les "notes/plages/ect.." en OSC (Open Sound
+      Control) au programme SuperCollider, qui ici fera office de
+      "player".\\
+      \\
+      L'intêret de de gagner du temps (bien meilleurs maîtrise du C++ que du Sc) et
+      surtout au niveau des performances (C++ bien plus rapide que l'interpréteur
+      SC).
+    % paragraph  (end)
+  % section Mise en place technique (end)
+
+
+  \section{Choix du type de composition} % (fold)
+  \label{sec:Composition }
+    Pour ce garder des possibilités assez (trop?) ouverte, on ne se restreint pas au
+    niveau de la liberté compositionnelle: hauteur, tempo, timbre, intensité, etc...
+    Et de manière plus abstraite, garder une liberté de "genre".
+  % section Composition  (end)
+
+  \section{Canon et contrepoint} % (fold)
+  \label{sec:Canon et contrepoint}
+    \paragraph{} % (fold)
+    \label{par:}
+      Il y a des choses intéressantes au niveau de l'écriture en contrepoint et plus
+      particulièrement des canons ("Offrandes musicales" de Bach). Domaine relativement
+      bien théorisé. Il faut que je me penche plus dessus.
+    % paragraph  (end)
+  % section Canon et contrepoint (end)
+
+  \section{Sérialisme} % (fold)
+  \label{sec:Serielisme}
+    \paragraph{} % (fold)
+    \label{par:}
+    L'approche de la musique sérielle est assez intérressante dans le cadre de ce
+    projet, mais je ne sui pas vraiment convaincu du résultat. Peut-être faut-il
+    reprendre seulement certains points tel que les transformations de base
+    (rétrograge, inversion, etc ...) et en laisser d'autre de coté.   
+    % paragraph  (end)
+  % section Sérielisme (end)
+
+  \section{Baroque: basse continu et impro blues} % (fold)
+  \label{sec:Baroque: basse continu}
+    \paragraph{} % (fold)
+    \label{par:}
+      Je ne me suis pas vraiment penché dessus, mais le principe semble vraiment
+      coller avec ce que l'on essaye de faire. \\
+      Dans le même principe, les improvisations dans le blues sont aussi facilement
+      (en partie) formalisable.
+    % paragraph  (end)
+  % section section (end)
+  \section{Ligeti} % (fold)
+  \label{sec:Ligeti}
+    \subsubsection{Atmosphère Requiem} % (fold)
+    \label{ssub:Atmosphère Requiem}
+      \paragraph{} % (fold)
+      \label{par:}
+    
+      % paragraph  (end)
+        Il s'agit de pièces pour choeur avec un nombre assez impressionante de voix (dans
+        le sens de la composition), avec des clusters assez statique. Les voix du choeur
+        suivent des règles qu'on pourrait sans doute formaliser.\\ 
+        \\
+        Avantage: \\
+        Polyphonie complexe régis des règles, on peut tiré parti de la staticité
+        apparante. \\
+        \\
+        Désavantage:\\
+        Fatiguant pour l'oreille = > travaille sur les timbre (son plus éthéré)?\\
+        "Confus" (trop de voix proche en hauteur) = > étalé sur plus d'octave ? 
+    % subsubsection Atmosphère,Requiem (end)
+    \subsubsection{Melodien} % (fold)
+    \label{ssub:Melodien}
+      Ici, on propose de recréée les "textures" présente mesure 0 à 14. On se base
+      sur le travail de Marc Chemillier de l'IRCAM.\\
+      Présente plus ou moins les mêmes avantages/désavantages que dans le requiem.
+      
+    % subsubsection subsubsection (end)
+  % section Ligeti (end)
+
+  \section{Xenakis} % (fold)
+  \label{sec:Xenakis}
+    \paragraph{} % (fold)
+    \label{par:}
+      Utilisation directe de modèle mathématique.
+    
+    % paragraph  (end)
+  % section Xenakis (end)
+\end{document}
