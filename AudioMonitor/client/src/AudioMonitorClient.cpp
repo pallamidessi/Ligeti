@@ -19,12 +19,23 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <unistd.h>
 #include"AudioMonitorClient.hpp"
 
 int main(int argc, char* argv[]){
-  
+  int i;
+
   AudioMonitorModule* test=new AudioMonitorModule("127.0.0.1",27800);
-  //test->sendGenerationData(5.3,6.3,7.3,8.);
+  
+  for (i = 0; i < 1000; i++) {
+    sleep(1);
+    
+    if (atoi(argv[1])==1) {
+      test->sendGenerationData(5.3,5.3,5.3,5.3);
+    }
+    else
+      test->sendGenerationData(100.1,100.1,100.1,100.1);
+  }
 
   return 0;
 }

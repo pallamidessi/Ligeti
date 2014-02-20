@@ -31,26 +31,28 @@ class EASEAClientData {
     EASEAClientData (int sock);
     virtual ~EASEAClientData ();
     void processBuffer(char* buffer);
-    void addData(char* buffer);
+    void addData(float best,float worst,float stdev,float average);
     void print();
-
     /*getter*/
     int getSocket();
-    vector<float>* getWorstVector;
-    vector<float>* getBestVector;
-    vector<float>* getStDevVector;
-    vector<float>* getAverageVector;
-    
     float* getLast();
+    bool toIgnore();
+    std::vector<float>* getWorstVector();
+    std::vector<float>* getBestVector();
+    std::vector<float>* getStDevVector();
+    std::vector<float>* getAverageVector();
+    /*setter*/
+    void setIgnoreFlag(bool value);
   private:
   
     /* data */
     int clientSockfd;
     int nbData;
-    std::vector<double> best;
-    std::vector<double> average;
-    std::vector<double> stdev;
-    std::vector<double> worst;
+    bool ignoreFlag;
+    std::vector<float> best;
+    std::vector<float> average;
+    std::vector<float> stdev;
+    std::vector<float> worst;
 };
 
 #endif

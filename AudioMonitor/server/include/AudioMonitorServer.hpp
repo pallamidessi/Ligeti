@@ -47,15 +47,21 @@ class AudioMonitorServer{
     void signalHandler();
     void sigIntEvent(int sig);
     
+    void buildSocketList();
+    void newClient();
+    void recvSomething();
+    void recvFromClient();
+
     /*Data*/
-    std::vector<EASEAClientData>* list_client; 
-    int servSockfd;
-	  struct sigaction terminaison;
-    int max_select;
-    socklen_t addrlen;
-    struct sockaddr_in my_addr;
     int debug;
     int port;
+    int max_select;
+    int servSockfd;
+	  struct sigaction terminaison;
+    struct sockaddr_in my_addr;
+    fd_set rdclient; 
+    socklen_t addrlen;
+    std::vector<EASEAClientData>* list_client; 
 
 };
 

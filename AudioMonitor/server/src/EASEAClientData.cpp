@@ -5,7 +5,7 @@ EASEAClientData::EASEAClientData (){
 }
 
 EASEAClientData::EASEAClientData (int sock):
-                nbData(0){
+                nbData(0),ignoreFlag(true){
   clientSockfd=sock;
 }
 
@@ -14,7 +14,6 @@ EASEAClientData::~EASEAClientData (){}
 /*The packet received from EASEA nodes have a mask on their first byte, which indicate how
  * many and what data it contained*/
 void EASEAClientData::processBuffer(char* buffer){
-  //regarder comment les truc sont gerer dans EASEA
 }
 
 int EASEAClientData::getSocket(){
@@ -34,13 +33,42 @@ void EASEAClientData::addData(float best,float worst,float stdev,float average){
 void EASEAClientData::print(){
   int i;
 
-  printf("%s\n");
+  printf(" BEST\t\tWORST\t\tSTDEV\t\tAVERAGE\n ");
   for (i = 0; i < nbData; i++) {
-    printf("%e %e %e %e\n"); 
+    printf(" %e\t\t%e\t\t%e\t\t%e\n ",best[i],worst[i],stdev[i],average[i]); 
   }
 }
-vector<float>* EASEAClientData::getWorstVector{}
-vector<float>* EASEAClientData::getBestVector{}
-vector<float>* EASEAClientData::getStDevVector{}
-vector<float>* EASEAClientData::getAverageVector{}
-float* EASEAClientData::getLast(){}
+
+std::vector<float>* EASEAClientData::getWorstVector(){
+  return &worst;
+}
+
+std::vector<float>* EASEAClientData::getBestVector(){
+  return &best;
+}
+
+std::vector<float>* EASEAClientData::getStDevVector(){
+  return &stdev;
+}
+
+std::vector<float>* EASEAClientData::getAverageVector(){
+  return &average;
+}
+
+float* EASEAClientData::getLast(){
+  float* lastData=new float[5];
+  lastData[0]=best.back();
+  lastData[1]=best.back();
+  lastData[2]=best.back();
+  lastData[3]=best.back();
+
+  return lastData; 
+}
+
+bool EASEAClientData::toIgnore(){
+  return ignoreFlag;
+}
+    
+void EASEAClientData::setIgnoreFlag(bool value){
+  ignoreFlag=value;
+}
