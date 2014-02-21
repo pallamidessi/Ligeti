@@ -35,7 +35,7 @@ class EASEAClientData {
     void print();
     /*getter*/
     int getSocket();
-    float* getLast();
+    float* getLast(); //Vague: specialized struct instead ?
     bool toIgnore();
     std::vector<float>* getWorstVector();
     std::vector<float>* getBestVector();

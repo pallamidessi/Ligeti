@@ -1,14 +1,14 @@
 #include "Compositor.hpp"
 
 
-Compositor::OSCSender(std::string synthesisIP,int portnum,bool dbg):
+Compositor::Compositor(std::string synthesisIP,int portnum,bool dbg):
           debug(dbg){
   
-  synthServSocket(IpEndpointName(synthesisIP, portnum));
+  synthServSocket=new UdpTransmitSocket( IpEndpointName(synthesisIP.c_str(), portnum) );
   OUTPUT_BUFFER_SIZE=1024;
 }
 
-Compositor::~OSCSender(){}
+Compositor::~Compositor(){}
 
 
 void Compositor::send(){
@@ -20,11 +20,11 @@ void Compositor::send(){
           <<  "hello" << osc::EndMessage
         << osc::EndBundle;
   
-  synthServSocket.Send( p.Data(), p.Size() );
+  synthServSocket->Send( p.Data(), p.Size() );
 }
 
-bool Compositor::send(osc::OutboundPacketStream oscMsg){
-  synthServSocket.Send(oscMsg.Data(),oscMsg.Size());  
+void Compositor::send(osc::OutboundPacketStream oscMsg){
+  synthServSocket->Send(oscMsg.Data(),oscMsg.Size());  
 }
 
 osc::OutboundPacketStream Compositor::compose(EASEAClientData* cl){
@@ -37,10 +37,10 @@ osc::OutboundPacketStream Compositor::compose(EASEAClientData* cl){
           <<  freq << osc::EndMessage
         << osc::EndBundle;
   
-  synthServSocket.Send( p.Data(), p.Size() );
+  return p; 
 }
 
-int Compositor::rescaling(int rangeMin,int rangeMax,float min,float max,float value){
+float Compositor::rescaling(int rangeMin,int rangeMax,float min,float max,float value){
   float normalized=((value-min)/(max-min));
   int rangeMult=rangeMax-rangeMin;
   

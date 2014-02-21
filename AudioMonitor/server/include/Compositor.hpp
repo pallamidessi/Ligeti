@@ -32,18 +32,18 @@ class Compositor {
   
   public:
     Compositor(std::string synthesisIP,int portnum,bool dbg=false);
-    virtual ~OSCSender();
-    virtual bool send()=0;
-    virtual bool send(osc::OutboundPacketStream oscMsg)=0;
+    virtual ~Compositor();
+    virtual void send()=0;
+    virtual void send(osc::OutboundPacketStream oscMsg)=0;
     virtual osc::OutboundPacketStream compose(EASEAClientData* cl);
     virtual void notify(EASEAClientData* cl)=0;
     
-    static float rescaling(float rangeMin,float rangeMax,float value);
+    static float rescaling(int rangeMin,int rangeMax,float min,float max,float value);
 
   private:
 
     /* data */   
-    UdpTransmitSocket synthServSocket;
+    UdpTransmitSocket* synthServSocket;
     bool debug;
     unsigned int OUTPUT_BUFFER_SIZE;
     float maxValue; //used for normalizing data 
@@ -51,5 +51,5 @@ class Compositor {
 
 class SimpleCompositor:public Compositor{
     
-}
+};
 #endif /* end of include guard: COMPOSITOR_H__ */

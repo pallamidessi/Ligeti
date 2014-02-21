@@ -3,7 +3,7 @@ CFLAGS = -Wall -g -O0
 #OBJECTS_DIR = $(patsubst src/%.c, objets/%.o, $(wildcard src/*.c))
 CC = g++
 LIB=-lm -lpthread 
-LIB_PATH=
+LIB_PATH= lib/oscpack
 INC_PATH = include
 SRC_PATH = src
 OBJ_PATH = obj
@@ -17,8 +17,8 @@ ALL:$(TARGET)
 #	gcc $(CFLAGS) -o $@ $(OBJ_PATH)/mainFrame.o $(OBJ_PATH)/AudioMonitorServer.o $(OBJ_PATH)/EASEAClientData.o $(OBJ_PATH)/Compositor.o $(OBJ_PATH)/OSCWrapper.o  $(LIB)
 #	mv $@ bin/.
 
-AudioMonitor:mainFrame.o AudioMonitorServer.o EASEAClientData.o
-	$(CC) $(CFLAGS) -o $@ $(OBJ_PATH)/mainFrame.o $(OBJ_PATH)/AudioMonitorServer.o $(OBJ_PATH)/EASEAClientData.o  $(LIB)
+AudioMonitor:mainFrame.o AudioMonitorServer.o EASEAClientData.o Compositor.o  
+	$(CC) $(CFLAGS) -o $@ $(OBJ_PATH)/mainFrame.o $(OBJ_PATH)/AudioMonitorServer.o $(OBJ_PATH)/EASEAClientData.o  $(OBJ_PATH)/Compositor.o $(LIB_PATH)/ip/IpEndpointName.o $(LIB_PATH)/osc/OscOutboundPacketStream.o $(LIB_PATH)/osc/OscTypes.o $(LIB_PATH)/ip/posix/UdpSocket.o $(LIB_PATH)/ip/posix/NetworkingUtils.o $(LIB)
 	mv $@ bin/.
 
 %.o: %.cpp %.hpp
