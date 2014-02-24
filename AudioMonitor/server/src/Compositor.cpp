@@ -31,7 +31,8 @@ osc::OutboundPacketStream Compositor::compose(EASEAClientData* cl){
   char buffer[OUTPUT_BUFFER_SIZE];
   osc::OutboundPacketStream p( buffer, OUTPUT_BUFFER_SIZE );
     
-  int freq = cl->getWorstVector()->back();
+  int freq = cl->getBestVector()->back();
+  freq=rescaling(freq);
     p << osc::BeginBundleImmediate
         << osc::BeginMessage( "/note" ) 
           <<  freq << osc::EndMessage
@@ -47,6 +48,39 @@ float Compositor::rescaling(int rangeMin,int rangeMax,float min,float max,float 
   return rangeMin+(normalized*rangeMult);
 }
 
+float Compositor::rescaling(float value){
+  float normalized=((value-projectedMinValue)/(projectedMaxValue-projectedMinValue));
+  int rangeMult=freqRangeMax-freqRangeMin;
+  
+  return freqRangeMin+(normalized*rangeMult);
+}
+
+
 void Compositor::notify(EASEAClientData* cl){
-  this->send();
+  this->send(compose(cl));
+}
+
+
+void Compositor::setNormalization(float rangeMin,float rangeMax,float projectedMin,float projectedMax){
+  this->projectedMinValue=projectedMin;
+  this->projectedMaxValue=projectedMax;
+  this->freqRangeMin=rangeMin;
+  this->freqRangeMax=rangeMax;
+
+}
+
+void SimpleCompositor::send(){
+  Compositor::send();
+}
+
+void SimpleCompositor::send(osc::OutboundPacketStream oscMsg){
+  Compositor::send(oscMsg);
+}
+
+void SimpleCompositor::notify(EASEAClientData* cl){
+  Compositor::notify(cl);
+}
+
+
+SimpleCompositor::SimpleCompositor(std::string ip,int port,bool dbg):Compositor::Compositor(ip,port,dbg){
 }

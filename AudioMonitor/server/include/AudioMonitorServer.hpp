@@ -35,6 +35,7 @@
 #include<signal.h>
 #include<vector>
 #include"EASEAClientData.hpp"
+#include"Compositor.hpp"
 
 class AudioMonitorServer{
   
@@ -42,7 +43,8 @@ class AudioMonitorServer{
     AudioMonitorServer(int port,int dbg);
     ~AudioMonitorServer();
     void start();
-
+    void setCompositor(Compositor* compo);
+  
   private:
     void signalHandler();
     void sigIntEvent(int sig);
@@ -51,7 +53,7 @@ class AudioMonitorServer{
     void newClient();
     void recvSomething();
     void recvFromClient();
-
+    
     /*Data*/
     int debug;
     int port;
@@ -59,6 +61,7 @@ class AudioMonitorServer{
     int servSockfd;
 	  struct sigaction terminaison;
     struct sockaddr_in my_addr;
+    Compositor* compo;
     fd_set rdclient; 
     socklen_t addrlen;
     std::vector<EASEAClientData>* list_client; 

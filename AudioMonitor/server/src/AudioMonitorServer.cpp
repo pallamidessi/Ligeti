@@ -154,6 +154,7 @@ void AudioMonitorServer::recvFromClient(){
               std::cout<<"I have received something from ..."<<std::endl;
               std::cout<<dec[0]<<" "<<dec[1]<<" "<<dec[2]<<" "<<dec[3]<<std::endl;
             }
+            compo->notify(&list_client->at(i));
           }
           else
             list_client->at(i).setIgnoreFlag(false);
@@ -183,4 +184,15 @@ void AudioMonitorServer::start(){
      recvSomething();
     }
   }
+}
+
+
+/**
+* /brief    Add a Compositor
+* /details  Work with any classes derived from Compositor (polymorphism)
+*
+*  @param  compo pointer to the wanted Compositor 
+**/
+void AudioMonitorServer::setCompositor(Compositor* compo){
+  this->compo=compo;
 }

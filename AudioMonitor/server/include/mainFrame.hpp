@@ -24,5 +24,5 @@
 #include <cstdlib>
 #include <pthread.h>
 #include "AudioMonitorServer.hpp"
-
+#include "Compositor.hpp"
 #endif
