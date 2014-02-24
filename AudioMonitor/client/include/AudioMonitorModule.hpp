@@ -29,17 +29,53 @@
 #include<arpa/inet.h>
 #include<signal.h>
 
+/**
+* /brief    Module managing and sending current data to the audio monitoring server.
+* /details  Is mean to be included in EASEA compiled program. (Currently
+* CEvolutionaryAlgorithme). 
+*
+**/
 class AudioMonitorModule{
   
   public:
+    /**
+    * /brief    Constructor of AudioMonitorModule.
+    * /details  Create and initialize a TCP/IP connection to a central monitoring 
+    *  server.
+    *
+    *  @param  serverIP A string representing the server IPv4 adresse
+    *  (xxx.xxx.xxx.xxx).
+    *  @param  port The listening port of the monitoring server.
+    **/
     AudioMonitorModule(std::string serverIP,int port);
+    
+    
+    /**
+    * /brief   Destructor of AudioMonitorModule.
+    * /details Proprely Close the TCP connection. 
+    *
+    **/
     virtual ~AudioMonitorModule ();
+    
+    
+    /**
+    * /brief    Send various essential information of the last generation
+    * evaluation to the assciated server.
+    *
+    * /details  Send rather basic information and straightforward, can easily be extended/override.
+    *
+    *  @param  best             Best genome's fitness
+    *  @param  worst            Worst genome's fitness.
+    *  @param  stdev            Population's standard deviation 
+    *  @param  averageFitness   Population's average fitness
+    **/
     void sendGenerationData(float best,float worst,float stdev,float averageFitness);
+
 
   private  :
     /* data */
     int sockfd;
-    bool debug;
+    bool debug; //show various information during exec (stdout)
 };
 
 
