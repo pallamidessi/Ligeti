@@ -38,6 +38,7 @@
 class Compositor {
 
   public:
+    /*Constructor/Destructor------------------------------------------------------*/ 
     /**
     * /brief    Constructor of Compositor
     * /details  Create the udp adress structure. 
@@ -57,7 +58,7 @@ class Compositor {
     **/
     virtual ~Compositor();
     
-    
+    /*Method----------------------------------------------------------------------*/
     /**
     * /brief    Send the most basic/no argument needed OSC message.
     * /details  Send to the associate server.
@@ -131,7 +132,7 @@ class Compositor {
     **/
     float rescaling(float value);
     
-    /* data */   
+    /* Data-----------------------------------------------------------------------*/  
     UdpTransmitSocket* synthServSocket;
     bool debug;
     unsigned int OUTPUT_BUFFER_SIZE;

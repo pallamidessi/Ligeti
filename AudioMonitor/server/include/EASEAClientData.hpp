@@ -15,7 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
-**/  
+**/ 
+
 #ifndef _EASEACLIENTDATA_HPP__
 #define _EASEACLIENTDATA_HPP__
 
