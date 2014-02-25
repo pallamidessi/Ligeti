@@ -101,14 +101,34 @@ class Compositor {
     *  @param  rangeMin   Inferior bound wanted
     *  @param  rangeMax   Superior bound wanted
     *  @param  min        Minimum value of the data set
-    *  @param  max        maximum value of the data set
+    *  @param  max        Maximum value of the data set
     **/
     virtual void setNormalization(float rangeMin, float rangeMax,float min,float max);
     
+    
+    /**
+    * /brief    Static method for rescaling data to a range.
+    * /details  Equivalent to a call to setNormalization + rescaling(float value). 
+    *
+    *  @param  rangeMin   Inferior bound wanted
+    *  @param  rangeMax   Superior bound wanted
+    *  @param  min        Minimum value of the data set
+    *  @param  max        Maximum value of the data set
+    *  @param  value      Value to rescale
+    * @return  resValue   Rescaled value
+    **/
     static float rescaling(int rangeMin,int rangeMax,float min,float max,float value);
   
   protected:
     
+
+    /**
+    * /brief    Rescale giving the class parameter
+    * /details The parameters are set by setNormalization 
+    *
+    * @param  Value The value to rescale 
+    * @return  resValue   Rescaled value
+    **/
     float rescaling(float value);
     
     /* data */   
