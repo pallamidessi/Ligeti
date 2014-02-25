@@ -25,9 +25,9 @@
 #include <vector>
 
 /**
-*  /struct   EASEAClientData 
-*  /brief    Represent an EASEA client and store its data. 
-*  /details  Hold client data and socket. 
+*  \class   EASEAClientData 
+*  \brief    Represent an EASEA client and store its data. 
+*  \details  Hold client data and socket. 
 *  
 **/
 class EASEAClientData {
@@ -36,16 +36,16 @@ class EASEAClientData {
     
     /*Constructor/Destructor------------------------------------------------------*/ 
     /**
-    * /brief    Constructor of EASEAClientData
-    * /details  Empty constructor
+    * \brief    Constructor of EASEAClientData
+    * \details  Empty constructor
     *
     **/
     EASEAClientData ();
     
     
     /**
-    * /brief    Constructor of EASEAClientData
-    * /details Store the client's socket.
+    * \brief    Constructor of EASEAClientData
+    * \details Store the client's socket.
     *
     * @param  sock A previously created socket representing an EASEA client
     **/
@@ -53,16 +53,16 @@ class EASEAClientData {
     
     
     /**
-    * /brief    Destructor of EASEAClientData   
-    * /details 
+    * \brief    Destructor of EASEAClientData   
+    * \details 
     *
     **/
     virtual ~EASEAClientData ();
     
     /*Method----------------------------------------------------------------------*/
     /**
-    * /brief    A more generic way to add data. 
-    * /details  See specific implementation for details.
+    * \brief    A more generic way to add data. 
+    * \details  See specific implementation for details.
     *
     *  @param  buffer Adress to the data to process
     **/
@@ -70,8 +70,8 @@ class EASEAClientData {
     
 
     /**
-    * /brief    Add data to the different vector.
-    * /details  TODO: Not very generic.
+    * \brief    Add data to the different vector.
+    * \details  TODO: Not very generic.
     *
     *  @param  best     Value to push back to the best's vector.
     *  @param  worst    Value to push back to the worst's vector.
@@ -82,8 +82,8 @@ class EASEAClientData {
     
     
     /**
-    * /brief    Print the content of the different vectors.
-    * /details  For debugging purpose, print on stdout.
+    * \brief    Print the content of the different vectors.
+    * \details  For debugging purpose, print on stdout.
     *
     **/
     void print();
@@ -91,8 +91,8 @@ class EASEAClientData {
     
     /*Getter----------------------------------------------------------------------*/
     /**
-    * /brief   Return the socket.
-    * /details Getter.
+    * \brief   Return the socket.
+    * \details Getter.
     *
     * @return  socket This instance's socket.
     **/
@@ -100,8 +100,8 @@ class EASEAClientData {
     
     
     /**
-    * /brief   Return the last data on each vector, in an array.
-    * /details TODO: dirty
+    * \brief   Return the last data on each vector, in an array.
+    * \details TODO: dirty
     *
     * @return  array An flat array of the last data on each vector.
     **/
@@ -109,8 +109,8 @@ class EASEAClientData {
     
     
     /**
-    * /brief    Return the value of ignoreFlag
-    * /details  The select based server check this to know if the data are wanted.
+    * \brief    Return the value of ignoreFlag
+    * \details  The select based server check this to know if the data are wanted.
     *
     * @return  ignoreFlag The current ignore flag.
     **/
@@ -118,8 +118,8 @@ class EASEAClientData {
     
     
     /**
-    * /brief    Return the vector containing the worst notes.
-    * /details Getter.
+    * \brief    Return the vector containing the worst notes.
+    * \details Getter.
     *
     * @return  vector A pointer to the vector.
     **/
@@ -127,8 +127,8 @@ class EASEAClientData {
     
     
     /**
-    * /brief    Return the vector containing the best notes.
-    * /details Getter.
+    * \brief    Return the vector containing the best notes.
+    * \details Getter.
     *
     * @return  vector A pointer to the vector.
     **/
@@ -136,9 +136,9 @@ class EASEAClientData {
     
     
     /**
-    * /brief    Return the vector containing the standard deviation of the
+    * \brief    Return the vector containing the standard deviation of the
     * population.
-    * /details Getter.
+    * \details Getter.
     *
     * @return  vector A pointer to the vector.
     **/
@@ -146,8 +146,8 @@ class EASEAClientData {
     
     
     /**
-    * /brief    Return the vector containing the average notes of the population.
-    * /details Getter.
+    * \brief    Return the vector containing the average notes of the population.
+    * \details Getter.
     *
     * @return  vector A pointer to the vector.
     **/
@@ -156,8 +156,8 @@ class EASEAClientData {
     
     /*Setter----------------------------------------------------------------------*/
     /**
-    * /brief    Set the ignore flag.
-    * /details  Data will not be process/add if ignoreFlag is true. 
+    * \brief    Set the ignore flag.
+    * \details  Data will not be process/add if ignoreFlag is true. 
     *
     *  @param  value New value of the ignoreFlag.
     **/

@@ -37,28 +37,93 @@
 #include"EASEAClientData.hpp"
 #include"Compositor.hpp"
 
+/**
+*  \class   AudioMonitorServer 
+*  \brief   Central server of the monitoring system.
+*  \details TCP polling server, select() based.
+*  
+**/
 class AudioMonitorServer{
   
   public:
-    AudioMonitorServer(int port,int dbg);
+    /*Constructor/Destructor------------------------------------------------------*/ 
+    /**
+    * \brief    Constructor of AudioMonitorServer.
+    * \details  Create the listening socket on the specified port num.
+    *
+    *  @param  port Port on which the server will listened.
+    *  @param  dbg  For enabling debug printing.
+    **/
+    AudioMonitorServer(int port,int dbg=0);
+    
+
+    /**
+    * \brief    Destructor of AudioMonitorServer.
+    * \details  Close its listening and client socket.
+    *
+    **/
     ~AudioMonitorServer();
+    
+
+    /*Method----------------------------------------------------------------------*/
+    /**
+    * \brief    Start the server.
+    * \details  To be called in a thread or a fork. 
+    *
+    **/
     void start();
-    void setCompositor(Compositor* compo);
+    
+    
+    /**
+    * \brief    Set the compositor to be used.
+    * \details  Must not be NULL.
+    *
+    *  @param  compo An instance of a class derived from Compositor.
+    **/
+    virtual void setCompositor(Compositor* compo);
   
-  private:
+  protected:
+    /*Signal handling function : not working*/
     void signalHandler();
     void sigIntEvent(int sig);
     
-    void buildSocketList();
-    void newClient();
-    void recvSomething();
-    void recvFromClient();
     
-    /*Data*/
-    int debug;
-    int port;
-    int max_select;
-    int servSockfd;
+    /**
+    * \brief    Create the FD_SET that will be monitored by select().
+    * \details  Use socket present in the list_client.
+    *
+    **/
+    void buildSocketList();
+    
+    
+    /**
+    * \brief    Create/handle a new connection.
+    * \details  
+    *
+    **/
+    virtual void newClient();
+    
+    
+    /**
+    * \brief    Handle the case of receiving something.
+    * \details  Wrapper that either call recvFromClient() or newClient().
+    *
+    **/
+    virtual void recvSomething();
+    
+    
+    /**
+    * \brief    Handle the case where a know client has sent something.
+    * \details  
+    *
+    **/
+    virtual void recvFromClient();
+    
+    /* Data-----------------------------------------------------------------------*/ 
+    int debug;                      //Flag for debug printing 
+    int port;                       //Listening port
+    int max_select;                 //Needed for select()
+    int servSockfd;                 //Listening socket 
 	  struct sigaction terminaison;
     struct sockaddr_in my_addr;
     Compositor* compo;

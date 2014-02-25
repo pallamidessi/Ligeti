@@ -31,4 +31,4 @@ tar:
 	tar czvf AudioMonitor.tar.gz $(SRC_PATH) $(INC_PATH) $(LIB_PATH) makefile
 
 doc:
-	doxygen
+	doxygen Doxyfile

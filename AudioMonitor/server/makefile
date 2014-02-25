@@ -1,4 +1,4 @@
-CFLAGS = -Wall -g -O0
+CFLAGS = -Wall -g -O0 -fpermissive
 #OBJECTS = $(patsubst src/%.c, %.o, $(wildcard src/*.c))
 #OBJECTS_DIR = $(patsubst src/%.c, objets/%.o, $(wildcard src/*.c))
 CC = g++
@@ -25,10 +25,10 @@ AudioMonitor:mainFrame.o AudioMonitorServer.o EASEAClientData.o Compositor.o
 	$(CC) $(CFLAGS)  -c $< -I $(INC_PATH) -o $(OBJ_PATH)/$@ -I $(LIB_PATH) $(LIB)
 
 clean : 
-	rm $(OBJ_PATH)/*.o $(BIN_PATH)/$(TARGET)
+	rm -r doc/ $(OBJ_PATH)/*.o $(BIN_PATH)/$(TARGET) 
 
 tar:
 	tar czvf AudioMonitor.tar.gz $(SRC_PATH) $(INC_PATH) $(LIB_PATH) makefile
 
 doc:
-	doxygen
+	doxygen Doxyfile

@@ -30,8 +30,9 @@
 #include<signal.h>
 
 /**
-* /brief    Module managing and sending current data to the audio monitoring server.
-* /details  Is mean to be included in EASEA compiled program. (Currently
+* \class    AudioMonitorModule
+* \brief    Module managing and sending current data to the audio monitoring server.
+* \details  Is mean to be included in EASEA compiled program. (Currently
 * CEvolutionaryAlgorithme). 
 *
 **/
@@ -39,8 +40,8 @@ class AudioMonitorModule{
   
   public:
     /**
-    * /brief    Constructor of AudioMonitorModule.
-    * /details  Create and initialize a TCP/IP connection to a central monitoring 
+    * \brief    Constructor of AudioMonitorModule.
+    * \details  Create and initialize a TCP/IP connection to a central monitoring 
     *  server.
     *
     *  @param  serverIP A string representing the server IPv4 adresse
@@ -51,18 +52,18 @@ class AudioMonitorModule{
     
     
     /**
-    * /brief   Destructor of AudioMonitorModule.
-    * /details Proprely Close the TCP connection. 
+    * \brief   Destructor of AudioMonitorModule.
+    * \details Proprely Close the TCP connection. 
     *
     **/
     virtual ~AudioMonitorModule ();
     
     
     /**
-    * /brief    Send various essential information of the last generation
+    * \brief    Send various essential information of the last generation
     * evaluation to the assciated server.
     *
-    * /details  Send rather basic information and straightforward, can easily be extended/override.
+    * \details  Send rather basic information and straightforward, can easily be extended/override.
     *
     *  @param  best             Best genome's fitness
     *  @param  worst            Worst genome's fitness.

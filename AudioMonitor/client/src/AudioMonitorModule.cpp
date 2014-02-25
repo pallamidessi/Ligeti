@@ -19,6 +19,7 @@
 
 #include "AudioMonitorModule.hpp"
 
+
 AudioMonitorModule::AudioMonitorModule(std::string serverIP,int port){
   struct sockaddr_in server;
   socklen_t addrlen;
@@ -64,9 +65,11 @@ AudioMonitorModule::AudioMonitorModule(std::string serverIP,int port){
   send(sockfd,buf,6,0);
 }
 
+
 AudioMonitorModule::~AudioMonitorModule (){
   close(sockfd);
 }
+
 
 void AudioMonitorModule::sendGenerationData(float best,float worst,float stdev,float averageFitness){
   float serial[4];

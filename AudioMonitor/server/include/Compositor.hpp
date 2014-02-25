@@ -29,10 +29,11 @@
 #include "EASEAClientData.hpp"
 
 /**
-* /brief    Abstract class, used for polymorphism and to set a standard structure
+* \class Compositor 
+* \brief    Abstract class, used for polymorphism and to set a standard structure
 * and working for all compositor. The compositor also create the connection and
 * communicate with the synthesis server/program (SClang).
-* /details  Abstract, but all function are implemented and ready to use. 
+* \details  Abstract, but all function are implemented and ready to use. 
 *
 **/
 class Compositor {
@@ -40,8 +41,8 @@ class Compositor {
   public:
     /*Constructor/Destructor------------------------------------------------------*/ 
     /**
-    * /brief    Constructor of Compositor
-    * /details  Create the udp adress structure. 
+    * \brief    Constructor of Compositor
+    * \details  Create the udp adress structure. 
     *
     *  @param  synthesisIP A string representing the synthesis server IP(v4)
     *  (xxx.xxx.xxx.xxx).
@@ -52,24 +53,24 @@ class Compositor {
     
     
     /**
-    * /brief    Destructor of Compositor
-    * /details Free some networking's structures 
+    * \brief    Destructor of Compositor
+    * \details Free some networking's structures 
     *
     **/
     virtual ~Compositor();
     
     /*Method----------------------------------------------------------------------*/
     /**
-    * /brief    Send the most basic/no argument needed OSC message.
-    * /details  Send to the associate server.
+    * \brief    Send the most basic/no argument needed OSC message.
+    * \details  Send to the associate server.
     *
     **/
     virtual void send()=0;
     
     
     /**
-    * /brief    Send an OSC packet.
-    * /details Send an OSc packet to the associate synthesis server.
+    * \brief    Send an OSC packet.
+    * \details Send an OSc packet to the associate synthesis server.
     *
     * @param  oscMsg The OSC packet to send.
     **/
@@ -77,8 +78,8 @@ class Compositor {
     
     
     /**
-    * /brief    Do something with the specified EASEA node data.
-    * /details  The magic happened here !
+    * \brief    Do something with the specified EASEA node data.
+    * \details  The magic happened here !
     *
     *  @param  cl An EASEAClientData which generaly jut had an update.  
     **/
@@ -86,8 +87,8 @@ class Compositor {
     
     
     /**
-    * /brief    Main Wrapper to call.
-    * /details  it's content depend of the compositor.
+    * \brief    Main Wrapper to call.
+    * \details  it's content depend of the compositor.
     *
     * @param  cl An EASEAClientData which generaly jut had an update.  
     **/
@@ -95,8 +96,8 @@ class Compositor {
    
 
     /**
-    * /brief    Set range and extremes values for normalization operation.
-    * /details  the caller MUST or at least estimate the minimun and maximum value
+    * \brief    Set range and extremes values for normalization operation.
+    * \details  the caller MUST or at least estimate the minimun and maximum value
     * of the run. 
     *
     *  @param  rangeMin   Inferior bound wanted
@@ -108,8 +109,8 @@ class Compositor {
     
     
     /**
-    * /brief    Static method for rescaling data to a range.
-    * /details  Equivalent to a call to setNormalization + rescaling(float value). 
+    * \brief    Static method for rescaling data to a range.
+    * \details  Equivalent to a call to setNormalization + rescaling(float value). 
     *
     *  @param  rangeMin   Inferior bound wanted
     *  @param  rangeMax   Superior bound wanted
@@ -124,8 +125,8 @@ class Compositor {
     
 
     /**
-    * /brief    Rescale giving the class parameter
-    * /details The parameters are set by setNormalization 
+    * \brief    Rescale giving the class parameter
+    * \details The parameters are set by setNormalization 
     *
     * @param  Value The value to rescale 
     * @return  resValue   Rescaled value
