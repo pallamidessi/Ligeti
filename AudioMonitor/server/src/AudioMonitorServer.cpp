@@ -3,14 +3,7 @@
 /*Constructor of AudioMonitorServer, create the server socket and initialize the data
  * structure*/
 
-/**
- * /brief    Constructor of AudioMonitorServer
- * /details  Create the server socket and initialize the data structure
- *
- * @param  prt Port num of this server
- * @param  dbg Debug flag, print numerous information
- **/
-AudioMonitorServer::AudioMonitorServer(int prt=27800,int dbg=1):
+AudioMonitorServer::AudioMonitorServer(int prt,int dbg):
   debug(1),port(prt){
 
     /* socket factory*/
@@ -49,8 +42,6 @@ AudioMonitorServer::AudioMonitorServer(int prt=27800,int dbg=1):
 
 /**
  * /brief    Destructor of AudioMonitorServer
- * /details  Free alloc'd structure and release opened socket
- *
  **/
 AudioMonitorServer::~AudioMonitorServer(){
   /*close every opened socket*/
@@ -119,6 +110,8 @@ void AudioMonitorServer::newClient(){
 
   /*Adding the newly connected client to the list of client*/
   new_client = new EASEAClientData(tmp_sockfd);
+  new_client->setIP(inet_ntoa(my_addr.sin_addr));
+  new_client->setPort(ntohs(my_addr.sin_port));
   list_client->push_back(*new_client);	
 
 }
@@ -137,28 +130,36 @@ void AudioMonitorServer::recvFromClient(){
   char buf[1024];
   float* dec=(float*)buf;
   unsigned int i; 
-    
+  EASEAClientData* changedClient;
   memset(buf,'\0',1024); //reset buffer
   
   for(i=0;i<list_client->size();i++){
     if(list_client->at(i).getSocket()!=0){
       if(FD_ISSET(list_client->at(i).getSocket(),&rdclient)){
-        if(recv(list_client->at(i).getSocket(),buf,1024,0)==0){
+        
+        changedClient=&list_client->at(i);
+        
+        if(recv(changedClient->getSocket(),buf,1024,0)==0){
           //client_disconnected=true;
         }//Envoi de packet vide => deconnecte/fini;
         else {
-          if (!list_client->at(i).toIgnore()) {
-            list_client->at(i).addData(dec[0],dec[1],dec[2],dec[3]);
+          if (!changedClient->toIgnore()) {
+            changedClient->addData(dec[0],dec[1],dec[2],dec[3]);
 
             if (debug){
-              std::cout<<"I have received something from ..."<<std::endl;
+              std::cout<<"I have received something from "<<
+              changedClient->getIP()<<":"<<changedClient->getPort()
+              <<std::endl;
               std::cout<<dec[0]<<" "<<dec[1]<<" "<<dec[2]<<" "<<dec[3]<<std::endl;
             }
-            compo->notify(&list_client->at(i));
+
+            compo->notify(changedClient);
           }
-          else
+          else{
             list_client->at(i).setIgnoreFlag(false);
+          }
         }
+
       }
     }
   }
@@ -168,8 +169,6 @@ void AudioMonitorServer::recvFromClient(){
 
 /**
  * /brief    Start the server, which will never stop listening  
- * /details  Create a EASEAClientData for each client 
- *
  **/
 void AudioMonitorServer::start(){
 
@@ -189,9 +188,6 @@ void AudioMonitorServer::start(){
 
 /**
 * /brief    Add a Compositor
-* /details  Work with any classes derived from Compositor (polymorphism)
-*
-*  @param  compo pointer to the wanted Compositor 
 **/
 void AudioMonitorServer::setCompositor(Compositor* compo){
   this->compo=compo;

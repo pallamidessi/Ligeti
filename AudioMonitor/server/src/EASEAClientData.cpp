@@ -9,6 +9,13 @@ EASEAClientData::EASEAClientData (int sock):
   clientSockfd=sock;
 }
 
+EASEAClientData::EASEAClientData (int sock,std::string ip,int port):
+                nbData(0),ignoreFlag(true){
+  clientSockfd=sock;
+  clPort=port;
+  clIP=ip;
+}
+
 EASEAClientData::~EASEAClientData (){}
 
 /*The packet received from EASEA nodes have a mask on their first byte, which indicate how
@@ -37,6 +44,19 @@ void EASEAClientData::print(){
   for (i = 0; i < nbData; i++) {
     printf(" %e\t\t%e\t\t%e\t\t%e\n ",best[i],worst[i],stdev[i],average[i]); 
   }
+}
+void EASEAClientData::setIP(std::string ip){
+  clIP=ip;
+}
+void EASEAClientData::setPort(int port){
+  clPort=port;
+}
+
+int EASEAClientData::getPort(){
+  return clPort;
+}
+std::string EASEAClientData::getIP(){
+  return clIP;
 }
 
 std::vector<float>* EASEAClientData::getWorstVector(){

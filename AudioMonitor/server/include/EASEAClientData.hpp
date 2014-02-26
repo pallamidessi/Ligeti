@@ -20,8 +20,10 @@
 #ifndef _EASEACLIENTDATA_HPP__
 #define _EASEACLIENTDATA_HPP__
 
+#include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <vector>
 
 /**
@@ -44,12 +46,22 @@ class EASEAClientData {
     
     
     /**
-    * \brief    Constructor of EASEAClientData
+    * \brief   Constructor of EASEAClientData
     * \details Store the client's socket.
     *
     * @param  sock A previously created socket representing an EASEA client
     **/
     EASEAClientData (int sock);
+    
+    /**
+    * \brief   Constructor of EASEAClientData
+    * \details Store the client's socket.
+    *
+    * @param  sock  A previously created socket representing an EASEA client
+    * @param  ip    The IP adress of the client
+    * @param  port  The port number of the client
+    **/
+    EASEAClientData (int sock,std::string ip,int port);
     
     
     /**
@@ -164,12 +176,19 @@ class EASEAClientData {
     void setIgnoreFlag(bool value);
   
   
+
+    void setIP(std::string ip);
+    void setPort(int port);
+    int getPort();
+    std::string getIP();
   private:
   
     /* Data-----------------------------------------------------------------------*/
     int clientSockfd;
     int nbData;
     bool ignoreFlag;
+    int clPort; 
+    std::string clIP;
     std::vector<float> best;
     std::vector<float> average;
     std::vector<float> stdev;
