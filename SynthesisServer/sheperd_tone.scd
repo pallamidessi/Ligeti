@@ -1,102 +1,4 @@
 (
-	Task({
-		s.boot;
-		2.wait;
-		"je ne fais pas de son".postln;
-	}).play;
-
-
-	s.makeGui;
-
-).value;
-
-
-SynthDef.new("2sec",{
-  arg freq=440;
-  var sine,env,env_gen;
-  env=Env.perc(1,1,1,[-4,4]);
-  env_gen=EnvGen.kr(env,doneAction:2);
-  sine={SinOsc.ar(freq,0,0.4)};
-  Out.ar(0,[sine*env_gen,sine*env_gen]);
-}).send(s);
-
-Synth("2sec").play;
-
-(
-OSCdef(\newDef,
-  {Synth("2sec");},
-  \simple); 
-)
-
-(
-OSCdef(\newDef2,
-  {
-    arg msg;
-    Synth("2sec",[freq:msg[1]]);
-    },
-  \note); 
-)
-
-midinote
-(
-	~afunc={
-		|test=0.5|	
-		p={PinkNoise.ar([test,test])}.play;
-	}
-);
-
-{~afunc.value}.defer(2);
-
-
-
-(
-~func={
-  var volume=0.5;
-	var midiArray=(6,6.01..113.99);
-  var speed=0.001;	
-	var ampArray = Array.newClear(10800);
-  var pat1;	
-	
-  (-5400..5399).do{
-		arg val, index;
-		ampArray[index]=1.000001.pow((val.pow(2).neg));
-	};
-
-  pat1 = Pmono(*[\shep,
-		dur:speed,
-		amp:
-			Pseq(ampArray.rotate(-1200),inf) *
-			Pseq([
-				Pseg(Pseq([0,1],1),Pseq([1,0],1),\sine),
-				Pseq([1],inf)
-			],1) *
-			volume,
-		midinote:Pseq(midiArray.rotate(-1200),inf),]).play;
-
-	Pspawner({
-		arg sp;
-		sp.par(pat1);
-  }).play;
-};)
-~func.play;
-
-(
-SynthDef("shep",{
-	arg amp=0.08, freq=440;
-	var sig;
-	sig = SinOsc.ar([freq,freq]);
-	sig = sig*amp;
-	Out.ar(0, sig);
-}).add;
-)
-
-
-(
-p = Pmono("default", \dur, Pfunc({[1,2,3,4,5].choose}), \freq, Pwhite(1,8) * 100 ).play
-p.free;
-)
-(
-s = Server.local;
 s.waitForBoot({
 var from=0.015;
 
@@ -253,10 +155,11 @@ OSCdef(\newDef3,
 		sp.par(pat8);
 	}).play;
 };
+~playShep.(0.030, 0.75,  0,  0);
 })
 )
 
-
+/*
 ~playShep.(0.010, 0.75,  0,  0);
 
 (
@@ -286,3 +189,105 @@ OSCdef(\newDef3,
 ~playShep.(0.065,  0.122,  1,   17.1);
 ~playShep.(0.041,  0.122,  1,   5.7);
 )
+*/
+
+/*
+(
+	Task({
+		s.boot;
+		2.wait;
+		"je ne fais pas de son".postln;
+	}).play;
+
+
+	s.makeGui;
+
+).value;
+
+
+SynthDef.new("2sec",{
+  arg freq=440;
+  var sine,env,env_gen;
+  env=Env.perc(1,1,1,[-4,4]);
+  env_gen=EnvGen.kr(env,doneAction:2);
+  sine={SinOsc.ar(freq,0,0.4)};
+  Out.ar(0,[sine*env_gen,sine*env_gen]);
+}).send(s);
+
+Synth("2sec").play;
+
+(
+OSCdef(\newDef,
+  {Synth("2sec");},
+  \simple); 
+)
+
+(
+OSCdef(\newDef2,
+  {
+    arg msg;
+    Synth("2sec",[freq:msg[1]]);
+    },
+  \note); 
+)
+
+midinote
+(
+	~afunc={
+		|test=0.5|	
+		p={PinkNoise.ar([test,test])}.play;
+	}
+);
+
+{~afunc.value}.defer(2);
+
+
+
+(
+~func={
+  var volume=0.5;
+	var midiArray=(6,6.01..113.99);
+  var speed=0.001;	
+	var ampArray = Array.newClear(10800);
+  var pat1;	
+	
+  (-5400..5399).do{
+		arg val, index;
+		ampArray[index]=1.000001.pow((val.pow(2).neg));
+	};
+
+  pat1 = Pmono(*[\shep,
+		dur:speed,
+		amp:
+			Pseq(ampArray.rotate(-1200),inf) *
+			Pseq([
+				Pseg(Pseq([0,1],1),Pseq([1,0],1),\sine),
+				Pseq([1],inf)
+			],1) *
+			volume,
+		midinote:Pseq(midiArray.rotate(-1200),inf),]).play;
+
+	Pspawner({
+		arg sp;
+		sp.par(pat1);
+  }).play;
+};)
+~func.play;
+
+(
+SynthDef("shep",{
+	arg amp=0.08, freq=440;
+	var sig;
+	sig = SinOsc.ar([freq,freq]);
+	sig = sig*amp;
+	Out.ar(0, sig);
+}).add;
+)
+
+
+(
+p = Pmono("default", \dur, Pfunc({[1,2,3,4,5].choose}), \freq, Pwhite(1,8) * 100 ).play
+p.free;
+)
+*/
+
