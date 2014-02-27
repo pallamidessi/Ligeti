@@ -15,14 +15,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
-**/
+ **/
 
 #include "include/AudioMonitorModule.h"
 
-AudioMonitorModule::AudioMonitorModule(std::string serverIP,int port){
+AudioMonitorModule::AudioMonitorModule(std::string serverIP,int port,bool recvMsg,bool sendMsg):
+                    notifyReception(recvMsg),notifySending(sendMsg){
   struct sockaddr_in server;
   socklen_t addrlen;
-  
+
   debug=true;
 
   /* socket factory*/
@@ -44,18 +45,18 @@ AudioMonitorModule::AudioMonitorModule(std::string serverIP,int port){
     close(sockfd);
     exit(EXIT_FAILURE);
   }
-  
+
   if (debug) {
     printf("Trying to connect to the remote host\n");
   }
-  
+
   /* enable the TCP connection between this client and the AudioMonitorServer*/
   if(connect(sockfd,(struct sockaddr*)&server,addrlen) == -1)
   {
     perror("connect");
     exit(EXIT_FAILURE);
   }
-  
+
   if (debug) {
     printf("Connection OK\n");
   }
@@ -64,13 +65,13 @@ AudioMonitorModule::AudioMonitorModule(std::string serverIP,int port){
   send(sockfd,buf,6,0);
 }
 
-AudioMonitorModule::~AudioMonitorModule (){
+AudioMonitorModule::~AudioMonitorModule(){
   close(sockfd);
 }
 
 void AudioMonitorModule::sendGenerationData(float best,float worst,float stdev,float averageFitness){
   float serial[4];
-  
+
   serial[0]=best;
   serial[1]=worst;
   serial[2]=stdev;
@@ -79,3 +80,24 @@ void AudioMonitorModule::sendGenerationData(float best,float worst,float stdev,f
   send(sockfd,serial,sizeof(float)*4,0);
 }
 
+void AudioMonitorModule::receivedIndividuals(){
+  bool arg=true;
+
+  if (notifyReception) {
+    send(sockfd,&arg,sizeof(bool),0);
+  }
+}
+
+void AudioMonitorModule::sendingIndividuals(){
+  bool arg=false;
+
+  if (notifySending) {
+    send(sockfd,&arg,sizeof(bool),0);
+  }
+
+}
+
+void AudioMonitorModule::setMigrationNotification(bool onRecvPolicy,bool onSendPolicy){
+  notifyReception=onRecvPolicy;  
+  notifySending=onSendPolicy;  
+}

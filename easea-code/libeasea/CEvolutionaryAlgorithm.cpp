@@ -94,8 +94,12 @@ extern bool INSTEAD_EVAL_STEP;
 CEvolutionaryAlgorithm::CEvolutionaryAlgorithm(Parameters* params){
 	this->params = params;
     this->cstats = new CStats();
+
+  /***********************************************************/
   this->audioMonitor=new AudioMonitorModule("127.0.0.1",27800);
-	CPopulation::initPopulation(params->selectionOperator,params->replacementOperator,params->parentReductionOperator,params->offspringReductionOperator,
+  /***********************************************************/
+	
+  CPopulation::initPopulation(params->selectionOperator,params->replacementOperator,params->parentReductionOperator,params->offspringReductionOperator,
 			params->selectionPressure,params->replacementPressure,params->parentReductionPressure,params->offspringReductionPressure);
 
 	this->population = new CPopulation(params->parentPopulationSize,params->offspringPopulationSize,
@@ -144,7 +148,7 @@ CEvolutionaryAlgorithm::CEvolutionaryAlgorithm(Parameters* params){
 		this->myClientNumber=0;	
 		this->initializeClients();
 		//if(params->remoteIslandModel)
-		server = new CComUDPServer(params->serverPort,0); //1 if debug
+		server = new CComUDPServer(params->serverPort,audioMonitor,0); //1 if debug
 	}
 }
 

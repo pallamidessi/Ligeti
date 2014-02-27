@@ -17,6 +17,9 @@
  * http://www.gnu.org/copyleft/gpl.html
 **/
 
+#ifndef AUDIOMONITORMODULE_H__
+#define AUDIOMONITORMODULE_H__
+
 #include<iostream>
 #include<cstring>
 #include<cstdio>
@@ -32,14 +35,20 @@
 class AudioMonitorModule{
   
   public:
-    AudioMonitorModule(std::string serverIP,int port);
+    AudioMonitorModule(std::string serverIP="127.0.0.1",int port=27800,bool recvMsg=true,bool sendMsg=false);
     virtual ~AudioMonitorModule ();
     void sendGenerationData(float best,float worst,float stdev,float averageFitness);
-
+    void receivedIndividuals();
+    void sendingIndividuals();
+    void setMigrationNotification(bool onRecv,bool onSend);
   private  :
     /* data */
     int sockfd;
     bool debug;
+    bool notifyReception;
+    bool notifySending;
 };
+
+#endif /* end of include guard: AUDIOMONITORMODULE_H__ */
 
 

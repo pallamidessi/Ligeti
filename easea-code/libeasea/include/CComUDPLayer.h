@@ -6,6 +6,8 @@
 #ifndef CCOMUDPLAYER_H_
 #define CCOMUDPLAYER_H_
 
+#include "AudioMonitorModule.h"
+
 #ifdef WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -50,6 +52,7 @@ public:
 	int nb_data;
 	UDP_server_thread_parm_t *parm;
 	CComUDPServer(unsigned short port, int dg);
+	CComUDPServer(unsigned short port,AudioMonitorModule* monitor, int dg);
 	static void * UDP_server_thread(void *parm);
 	~CComUDPServer();
 	void read_data_lock();
@@ -58,6 +61,7 @@ private:
 	int ServerSocket;
 	pthread_t thread;
 	int Socket;
+  static AudioMonitorModule* audioMonitor;
 };
 
 class CComUDPClient {
@@ -66,7 +70,7 @@ public:
 	int debug;
 	void CComUDP_client_send(char *individual);
 	CComUDPClient(unsigned short port, const char *ip,int dg);
-    CComUDPClient(struct sockaddr_in* addr, int dg);
+  CComUDPClient(struct sockaddr_in* addr, int dg);
 	~CComUDPClient();
 	std::string getIP();
     int getPort();
