@@ -124,11 +124,13 @@ void AudioMonitorServer::recvSomething(){
 
 }
 
+/*FAIRE DES STRUCTS POUR L'ENVOI/RECEPTION*/
 /* Case new data from known client*/
 /* Check whose fd changed and received from them*/
 void AudioMonitorServer::recvFromClient(){
   char buf[1024];
   float* dec=(float*)buf;
+
   unsigned int i; 
   EASEAClientData* changedClient;
   memset(buf,'\0',1024); //reset buffer
@@ -138,14 +140,21 @@ void AudioMonitorServer::recvFromClient(){
       if(FD_ISSET(list_client->at(i).getSocket(),&rdclient)){
         
         changedClient=&list_client->at(i);
-        
-        if(recv(changedClient->getSocket(),buf,1024,0)==0){
-          //client_disconnected=true;
-        }//Envoi de packet vide => deconnecte/fini;
+        /*TRES CRADE: FAIRE UN *HEADER* QUI CONTIENT UN CODE IDENTIFICATEUR PLUTOT*/
+        if(recv(changedClient->getSocket(),buf,1024,0)==sizeof(bool)){
+          
+          if ((bool*)buf[0]) {
+            compo->aReception();
+          }
+          if (!(bool*)buf[0]) {
+            compo->aSending();
+          }
+
+        }
         else {
           if (!changedClient->toIgnore()) {
             changedClient->addData(dec[0],dec[1],dec[2],dec[3]);
-
+            
             if (debug){
               std::cout<<"I have received something from "<<
               changedClient->getIP()<<":"<<changedClient->getPort()
