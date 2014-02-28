@@ -31,18 +31,21 @@
 #include<netinet/in.h>
 #include<arpa/inet.h>
 #include<signal.h>
-
+#include "AudioMonitorUtils.h"
 class AudioMonitorModule{
   
   public:
     AudioMonitorModule(std::string serverIP="127.0.0.1",int port=27800,bool recvMsg=true,bool sendMsg=false);
     virtual ~AudioMonitorModule ();
     void sendGenerationData(float best,float worst,float stdev,float averageFitness);
+    void send();
     void receivedIndividuals();
     void sendingIndividuals();
     void setMigrationNotification(bool onRecv,bool onSend);
+    void setParams(MonitorParameter* params);
   private  :
     /* data */
+    MonitorParameter* params;
     int sockfd;
     bool debug;
     bool notifyReception;

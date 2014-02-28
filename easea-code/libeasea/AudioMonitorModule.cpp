@@ -65,9 +65,11 @@ AudioMonitorModule::AudioMonitorModule(std::string serverIP,int port,bool recvMs
   send(sockfd,buf,6,0);
 }
 
+
 AudioMonitorModule::~AudioMonitorModule(){
   close(sockfd);
 }
+
 
 void AudioMonitorModule::sendGenerationData(float best,float worst,float stdev,float averageFitness){
   float serial[4];
@@ -80,24 +82,40 @@ void AudioMonitorModule::sendGenerationData(float best,float worst,float stdev,f
   send(sockfd,serial,sizeof(float)*4,0);
 }
 
-void AudioMonitorModule::receivedIndividuals(){
-  bool arg=true;
 
-  if (notifyReception) {
-    send(sockfd,&arg,sizeof(bool),0);
+void AudioMonitorModule::send(){
+  param->fill(); 
+  if (params->isData()) {
+    send(sockfd,param,params->size(),0);
   }
 }
+
+
+void AudioMonitorModule::receivedIndividuals(){
+  bool arg=true;
+  if (notifyReception) {
+    params->reception();
+    send(sockfd,param,params->size(),0);
+  }
+}
+
 
 void AudioMonitorModule::sendingIndividuals(){
   bool arg=false;
 
   if (notifySending) {
-    send(sockfd,&arg,sizeof(bool),0);
+    params->sending();
+    send(sockfd,param,params->size(),0);
   }
-
 }
+
 
 void AudioMonitorModule::setMigrationNotification(bool onRecvPolicy,bool onSendPolicy){
   notifyReception=onRecvPolicy;  
   notifySending=onSendPolicy;  
+}
+
+
+void AudioMonitorModule::setParams(MonitorParameter* params){
+  this->params=params;
 }

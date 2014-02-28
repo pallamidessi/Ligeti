@@ -44,6 +44,7 @@ public:
   bool allCriteria();
   CPopulation* getPopulation(){ return population;}
   unsigned getCurrentGeneration() { return currentGeneration;}
+  void setMonitorParams(unsigned int strType);
 public:
   unsigned currentGeneration;
   CPopulation* population;
