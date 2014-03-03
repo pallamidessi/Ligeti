@@ -98,7 +98,7 @@ CEvolutionaryAlgorithm::CEvolutionaryAlgorithm(Parameters* params){
   /***********************************************************/
   this->audioMonitor=new AudioMonitorModule("127.0.0.1",27800);
   audioMonitor->setMigrationNotification();
-  audioMonitor->setMonitorParams(new SimpleMonitorParameter(this));
+  audioMonitor->setParams(new SimpleMonitorParameter(this));
   /***********************************************************/
    	
   CPopulation::initPopulation(params->selectionOperator,params->replacementOperator,params->parentReductionOperator,params->offspringReductionOperator,
@@ -623,22 +623,6 @@ void CEvolutionaryAlgorithm::generateRScript(){
 }
 
 
-void CEvolutionaryAlgorithm::setMonitorParams(unsigned int strType){
-  switch(strType){
-  
-    case SIMPLEDATA:
-      toMonitorServer=new SimpleMonitorParameter();
-    
-    default:
-      toMonitorServer=NULL;
-  }
-}
-
-
-
-void CEvolutionaryAlgorithm::fillMonitorParams(){
-  
-}
 bool CEvolutionaryAlgorithm::allCriteria(){
 
 	for( unsigned i=0 ; i<stoppingCriteria.size(); i++ ){

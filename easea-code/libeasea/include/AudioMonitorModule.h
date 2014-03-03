@@ -31,7 +31,10 @@
 #include<netinet/in.h>
 #include<arpa/inet.h>
 #include<signal.h>
-#include "AudioMonitorUtils.h"
+#include"AudioMonitorUtils.h"
+
+class MonitorParameter;
+
 class AudioMonitorModule{
   
   public:
@@ -41,7 +44,7 @@ class AudioMonitorModule{
     void send();
     void receivedIndividuals();
     void sendingIndividuals();
-    void setMigrationNotification(bool onRecv,bool onSend);
+    void setMigrationNotification(bool onRecv=true,bool onSend=false);
     void setParams(MonitorParameter* params);
   private  :
     /* data */

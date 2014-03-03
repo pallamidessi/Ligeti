@@ -30,7 +30,7 @@ enum{NOTUSE,SIMPLEDATA};
 class MonitorParameter {
   public:
     MonitorParameter (CEvolutionaryAlgorithm* parent);
-    virtual ~monitorParameter();
+    virtual ~MonitorParameter();
     virtual void fill();
     virtual void sending();
     virtual void reception();
@@ -38,7 +38,7 @@ class MonitorParameter {
     bool isData();
 
     /*TODO: Better use a mask instead of four boolean ...*/
-    bool isData;    
+    bool dataFlag;    
     bool migration;
     bool recv;
     bool send;
@@ -47,10 +47,14 @@ class MonitorParameter {
   
 };
 
-class SimpleMonitorParameter:public monitorParameter {
+class SimpleMonitorParameter:public MonitorParameter {
   public:
-    virtual SimpleMonitorParameter (CEvolutionaryAlgorithm* parent);
+    SimpleMonitorParameter (CEvolutionaryAlgorithm* parent);
     virtual ~SimpleMonitorParameter();
+    virtual void fill();
+    virtual void sending();
+    virtual void reception();
+    virtual size_t size();
     
     float best;
     float worst;

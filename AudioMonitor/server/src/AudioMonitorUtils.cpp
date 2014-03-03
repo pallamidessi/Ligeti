@@ -17,12 +17,11 @@
  * http://www.gnu.org/copyleft/gpl.html
 **/  
 
-#include "AudioMonitorUtils.hpp"
+#include "include/AudioMonitorUtils.h"
 
 /*MonitorParameter---------------------------------------------*/
 MonitorParameter::MonitorParameter(CEvolutionaryAlgorithm* parent):
-                  strType(NOTUSE){
-  source=parent;
+                  source(parent),strType(NOTUSE){
 }
 
 
@@ -39,13 +38,12 @@ size_t MonitorParameter::size(){
 }
 
 bool MonitorParameter::isData(){
-  return isData;
+  return dataFlag;
 }
 
 /*SimpleMonitorParameter---------------------------------------------*/
 SimpleMonitorParameter::SimpleMonitorParameter(CEvolutionaryAlgorithm* parent):
-                        strType(SIMPLEDATA){
-  source=parent;
+                        MonitorParameter(parent){
 }
 
 
@@ -55,23 +53,23 @@ SimpleMonitorParameter::~SimpleMonitorParameter(){
 
 void SimpleMonitorParameter::fill(){
   
-  isData=true;
+  dataFlag=true;
   migration=false;
-  best=parent->population->Best->getFitness();
-  worst=parent->population->Worst->getFitness();
-  stdev=parent->cstats->currentStdDev;
-  average=parent->cstats->currentAverageFitness;
+  best=source->population->Best->getFitness();
+  worst=source->population->Worst->getFitness();
+  stdev=source->cstats->currentStdDev;
+  average=source->cstats->currentAverageFitness;
 }
 
 void SimpleMonitorParameter::sending(){
-  isData=false;
+  dataFlag=false;
   migration=true;
   recv=false;
   send=true;
 }
 
 void SimpleMonitorParameter::reception(){
-  isData=false;
+  dataFlag=false;
   migration=true;
   recv=true;
   send=false;

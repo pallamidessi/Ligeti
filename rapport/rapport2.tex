@@ -1,0 +1,68 @@
+\documentclass{article}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\begin{document}
+
+  \title{Stage musicalisation pour EASEA: \\
+    \large Rapport 2}
+  \author{PALLAMIDESSI Joseph}
+  \maketitle
+
+  \newpage
+  \section{Récapitulatif} % (fold)
+  \label{sec:Récapitulatif}
+    \paragraph{} % (fold)
+    \label{par:}
+    Comme énoncé lors du rapport précédent, je me suis focalisé durant ces deux
+    semaines sur la partie purement "mécanique" du système. Comme nous l'avons conclu
+    suite à la réunion du lundi 17 février, nous procéderons de manière relativement
+    empirique à la réalisation sonore selon les contraintes énoncées (pas fatiguant
+    pour l'oreille, musicalement intéressant, etc ... ).\\
+    Cette approche repose donc sur le fait d'avoir un système ou workbench déjà en 
+    place.
+    % paragraph  (end)
+  % section Récapitulatif (end)
+  
+  \section{Avancement du système} % (fold)
+  \label{sec:Avancement du système}
+    \paragraph{} % (fold)
+    \label{par:}
+      Le système de monitoring d'EASEA est déjà en place et fonctionnel. Il a été
+      conçu dans l'idée d'être flexible et générique, pour justement pouvoir
+      beaucoup expérimenter. Je peux donc dès maintenant me lancé dans le
+      coeur du sujet, l'algorithme de composition.\\
+      Pour l'instant, j'ai mis en place une gamme de Shepard et un rythme de Risset 
+      dont la vitesse est lié à la moyenne des meilleurs individus, mais le résultat
+      final est douteux et très (impossible) à analyser (les changements de vitesse
+      sont relativement faible).
+    % paragraph  (end)
+  % section Avancement du système (end)
+
+  \section{Considération technique} % (fold)
+  \label{sec:considération technique}
+    \paragraph{} % (fold)
+    \label{par:}
+      Pour le coté technique, j'ai rajouté un module de communication TCP/IP aux
+      programmes compilés par Easea, qui notifie un serveur central lors de chaque
+      génération et lors d'une réception/envoi d'individu. Ce serveur central "compose"
+      alors selon les données qu'il reçoit et envoie des directives spécifiques au
+      programme/serveur de synthèse supercollider qui joue le rôle "d'interprète".
+      Le serveur central intègre un petit module statistique, pour notamment
+      normaliser les données des clients EASEA.\\
+      Je fournirai bientôt les diagrammes de classe et autres UML (dans une semaine
+      environ).
+    % paragraph  (end)
+  % section considération technique (end)
+
+  \section{Prochaine étape} % (fold)
+  \label{sec:Prochaines étapes}
+    \paragraph{} % (fold)
+    \label{par:}
+      Pour dans deux semaines, j'aimerai avoir une sonification (musicalisation déjà
+      ?) basique mais utilisable.\\
+      Je reste ouvert à toute les suggestions sur le plan musical comme technique,
+      et je serais ravi de répondre a vos questions.
+    % paragraph  (end)
+  % section Prochaines étapes (end)
+
+\end{document}

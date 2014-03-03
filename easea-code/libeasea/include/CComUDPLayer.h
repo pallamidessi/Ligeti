@@ -32,6 +32,8 @@
 #define _MULTI_THREADED
 #define MAXINDSIZE 50000 /*maximum size of an individual in number of characters*/
 
+class AudioMonitorModule;
+
 typedef struct {
         char data[MAXINDSIZE];
 }RECV_DATA;

@@ -62,7 +62,7 @@ AudioMonitorModule::AudioMonitorModule(std::string serverIP,int port,bool recvMs
   }
   char buf[6]="Hello";
   /*Hello the server*/
-  send(sockfd,buf,6,0);
+  ::send(sockfd,buf,6,0);
 }
 
 
@@ -79,14 +79,14 @@ void AudioMonitorModule::sendGenerationData(float best,float worst,float stdev,f
   serial[2]=stdev;
   serial[3]=averageFitness;
 
-  send(sockfd,serial,sizeof(float)*4,0);
+  ::send(sockfd,serial,sizeof(float)*4,0);
 }
 
 
 void AudioMonitorModule::send(){
-  param->fill(); 
+  params->fill(); 
   if (params->isData()) {
-    send(sockfd,param,params->size(),0);
+    ::send(sockfd,(void*)params,params->size(),0);
   }
 }
 
@@ -95,7 +95,7 @@ void AudioMonitorModule::receivedIndividuals(){
   bool arg=true;
   if (notifyReception) {
     params->reception();
-    send(sockfd,param,params->size(),0);
+    ::send(sockfd,(void*)params,params->size(),0);
   }
 }
 
@@ -105,7 +105,7 @@ void AudioMonitorModule::sendingIndividuals(){
 
   if (notifySending) {
     params->sending();
-    send(sockfd,param,params->size(),0);
+    ::send(sockfd,(void*)params,params->size(),0);
   }
 }
 

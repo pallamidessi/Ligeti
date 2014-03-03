@@ -23,6 +23,10 @@
 
 class Parameters;
 class CGrapher;
+class CComUDPServer;
+class CComUDPClient;
+class AudioMonitorModule;
+
 
 class CEvolutionaryAlgorithm {
 public:
