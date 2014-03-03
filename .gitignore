@@ -18,6 +18,7 @@
 *.lo
 *.o
 *.obj
+*.a
 
 #vim tmp/backup
 .*.swp
@@ -28,6 +29,8 @@
 *.plot
 *.mak
 *.prm
+*.r
+*.dat
 
 #OS garbage
 .DS_Store
