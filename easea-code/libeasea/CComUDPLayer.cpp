@@ -16,6 +16,7 @@
 #ifndef WIN32
 #include <ifaddrs.h>
 #endif
+
 using namespace std;
 
 pthread_mutex_t server_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -50,7 +51,7 @@ void * CComUDPServer::UDP_server_thread(void *parm) {
 		}
 		printf("    Received individual from %s:%d\n", inet_ntoa(cliaddr.sin_addr), ntohs(cliaddr.sin_port));
 		pthread_mutex_lock(&server_mutex);
-    audioMonitor->receivedIndividuals();
+    p->audioMonitor->receivedIndividuals();
 		/*process received data */
 		memmove(p->data[(*p->nb_data)].data,buffer,sizeof(char)*MAXINDSIZE);
 		(*p->nb_data)++;
@@ -107,6 +108,7 @@ CComUDPServer::CComUDPServer(unsigned short port,AudioMonitorModule* monitor,int
 	this->parm->nb_data = &this->nb_data;
 	this->parm->data = this->data;
     this->parm->debug = this->debug;
+    this->parm->audioMonitor=this->audioMonitor;
 
     if(pthread_create(&thread, NULL, &CComUDPServer::UDP_server_thread, (void *)this->parm) != 0) {
         printf("pthread create failed. exiting\n"); exit(1);

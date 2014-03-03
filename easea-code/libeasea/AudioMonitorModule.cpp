@@ -92,7 +92,6 @@ void AudioMonitorModule::send(){
 
 
 void AudioMonitorModule::receivedIndividuals(){
-  bool arg=true;
   if (notifyReception) {
     params->reception();
     ::send(sockfd,(void*)params,params->size(),0);
@@ -101,7 +100,6 @@ void AudioMonitorModule::receivedIndividuals(){
 
 
 void AudioMonitorModule::sendingIndividuals(){
-  bool arg=false;
 
   if (notifySending) {
     params->sending();

@@ -28,6 +28,11 @@ MonitorParameter::MonitorParameter(CEvolutionaryAlgorithm* parent):
 MonitorParameter::~MonitorParameter(){
 }
 
+void MonitorParameter::sending(){
+}
+
+void MonitorParameter::reception(){
+}
 
 void MonitorParameter::fill(){
 }

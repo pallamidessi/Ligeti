@@ -6,7 +6,6 @@
 #ifndef CCOMUDPLAYER_H_
 #define CCOMUDPLAYER_H_
 
-#include "AudioMonitorModule.h"
 
 #ifdef WIN32
 #include <winsock2.h>
@@ -28,6 +27,7 @@
 #include <omp.h>
 #endif
 #include <string>
+#include "AudioMonitorModule.h"
 
 #define _MULTI_THREADED
 #define MAXINDSIZE 50000 /*maximum size of an individual in number of characters*/
@@ -44,6 +44,7 @@ typedef struct {
         int debug;
 	RECV_DATA *data;
 	int *nb_data;
+  AudioMonitorModule* audioMonitor;
 }UDP_server_thread_parm_t;
 
 class CComUDPServer {
@@ -63,7 +64,7 @@ private:
 	int ServerSocket;
 	pthread_t thread;
 	int Socket;
-  static AudioMonitorModule* audioMonitor;
+  AudioMonitorModule* audioMonitor;
 };
 
 class CComUDPClient {
