@@ -17,6 +17,7 @@
 #include "CComUDPLayer.h"
 #include "CStats.h"
 #include "AudioMonitorModule.h"
+#include "ClientMonitorParameter.h"
 #ifdef WIN32
 #include <windows.h>
 #endif

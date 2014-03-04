@@ -1,5 +1,5 @@
 /**
- * @file AudioMonitorUtils.hpp
+ * @file ClientMonitorParameter.h
  * @author Pallamidessi Joseph
  * @version 1.0
  *
@@ -15,34 +15,33 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
-**/
+**/  
 
-#ifndef AUDIOMONITORUTILS_H__
-#define AUDIOMONITORUTILS_H__
+#ifndef CLIENTMONITORPARAMETER_H__
+#define CLIENTMONITORPARAMETER_H__
 
 #include <iostream>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
+#include "CEvolutionaryAlgorithm.h"
+#include "AudioMonitorUtils.h"
 
-enum{NOTUSE,SIMPLEDATA};
-
-class MonitorParameter {
+class ClientMonitorParameter:public MonitorParameter {
   public:
-    MonitorParameter ();
-    virtual ~MonitorParameter();
+    ClientMonitorParameter (CEvolutionaryAlgorithm* parent);
+    virtual ~ClientMonitorParameter();
     virtual void fill();
     virtual void sending();
     virtual void reception();
     virtual size_t size();
-    bool isData();
-
-    unsigned char strType; // The server need to know how to cast this struct
-    /*TODO: Better use a mask instead of four boolean ...*/
-    bool dataFlag;    
-    bool migration;
-    bool recv;
-    bool send;
+    
+    float best;
+    float worst;
+    float stdev;
+    float average;
+    CEvolutionaryAlgorithm* source;
 };
 
-#endif /* end of include guard: AUDIOMONITORUTILS_H__ */
+
+#endif /* end of include guard: CLIENTMONITORPARAMETER_H__ */

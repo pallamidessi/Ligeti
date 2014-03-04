@@ -8,7 +8,7 @@ CXXFLAGS = -g -Wall -fmessage-length=0 -I/usr/local/cuda/include #-I../boost/
 OBJS = CRandomGenerator.o CSelectionOperator.o CEvolutionaryAlgorithm.o\
 	   CStoppingCriterion.o COptionParser.o CPopulation.o CIndividual.o\
 	CGrapher.o CCmaes.o CCmaesCuda.o Parameters.o CGPNode.o\
-	 CStats.o CGPNode.o AudioMonitorModule.o AudioMonitorUtils.o CComUDPLayer.o
+	 CStats.o CGPNode.o AudioMonitorModule.o AudioMonitorUtils.o CComUDPLayer.o ClientMonitorParameter.o
 
 ifneq ("$(OS)","")
 OBJS += inet_pton.o

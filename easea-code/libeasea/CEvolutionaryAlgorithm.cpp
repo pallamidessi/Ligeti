@@ -98,7 +98,7 @@ CEvolutionaryAlgorithm::CEvolutionaryAlgorithm(Parameters* params){
   /***********************************************************/
   this->audioMonitor=new AudioMonitorModule("127.0.0.1",27800);
   audioMonitor->setMigrationNotification();
-  audioMonitor->setParams(new SimpleMonitorParameter(this));
+  audioMonitor->setParams(new ClientMonitorParameter(this));
   /***********************************************************/
    	
   CPopulation::initPopulation(params->selectionOperator,params->replacementOperator,params->parentReductionOperator,params->offspringReductionOperator,
