@@ -57,6 +57,8 @@ float Compositor::rescaling(float value){
 
 
 void Compositor::notify(EASEAClientData* cl){
+  aSending(cl);
+  aReception(cl);
   this->send(compose(cl));
 }
 
@@ -69,6 +71,35 @@ void Compositor::setNormalization(float rangeMin,float rangeMax,float projectedM
 
 }
 
+void Compositor::aSending(EASEAClientData* cl){
+  if (cl->isASending()) {
+ char buffer[OUTPUT_BUFFER_SIZE];
+  osc::OutboundPacketStream p( buffer, OUTPUT_BUFFER_SIZE );
+    
+    p << osc::BeginBundleImmediate
+        << osc::BeginMessage( "/Sending" ) 
+        << osc::EndMessage
+        << osc::EndBundle;
+  
+  synthServSocket->Send( p.Data(), p.Size() );
+   
+  }
+}
+
+void Compositor::aReception(EASEAClientData* cl){
+  if (cl->isAReception()) {
+    char buffer[OUTPUT_BUFFER_SIZE];
+    osc::OutboundPacketStream p( buffer, OUTPUT_BUFFER_SIZE );
+      
+      p << osc::BeginBundleImmediate
+          << osc::BeginMessage( "/Reception" ) 
+          << osc::EndMessage
+          << osc::EndBundle;
+    
+    synthServSocket->Send( p.Data(), p.Size() );
+  }
+}
+
 void SimpleCompositor::send(){
   Compositor::send();
 }
@@ -78,9 +109,19 @@ void SimpleCompositor::send(osc::OutboundPacketStream oscMsg){
 }
 
 void SimpleCompositor::notify(EASEAClientData* cl){
+  aSending(cl);
+  aReception(cl);
   Compositor::notify(cl);
 }
 
 
 SimpleCompositor::SimpleCompositor(std::string ip,int port,bool dbg):Compositor::Compositor(ip,port,dbg){
+}
+
+void SimpleCompositor::aSending(EASEAClientData* cl){
+  Compositor::aSending(cl); 
+}
+
+void SimpleCompositor::aReception(EASEAClientData* cl){
+  Compositor::aReception(cl);
 }

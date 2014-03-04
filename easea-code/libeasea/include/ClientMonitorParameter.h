@@ -35,7 +35,10 @@ class ClientMonitorParameter:public MonitorParameter {
     virtual void sending();
     virtual void reception();
     virtual size_t size();
-    
+    char* serialize();
+    int serialSize();
+    void deserialize(char*);
+
     float best;
     float worst;
     float stdev;

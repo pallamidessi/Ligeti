@@ -5,7 +5,7 @@ EASEAClientData::EASEAClientData (){
 }
 
 EASEAClientData::EASEAClientData (int sock):
-                nbData(0),ignoreFlag(true){
+                nbData(0),ignoreFlag(true),hasSent(false),hasReceived(false){
   clientSockfd=sock;
 }
 
@@ -28,12 +28,15 @@ int EASEAClientData::getSocket(){
 }
 
 
-void EASEAClientData::addData(float best,float worst,float stdev,float average){
-  this->best.push_back(best);
-  this->best.push_back(worst);
-  this->best.push_back(stdev);
-  this->best.push_back(average);
-
+void EASEAClientData::addData(MonitorParameter* monitor){
+  
+    ClientMonitorParameter* tmp=(ClientMonitorParameter*)monitor;
+  if(tmp->strType==SIMPLEDATA){
+    this->best.push_back(tmp->best);
+    this->worst.push_back(tmp->worst);
+    this->stdev.push_back(tmp->stdev);
+    this->average.push_back(tmp->average);
+  }
   nbData++;
 }
 
@@ -91,4 +94,34 @@ bool EASEAClientData::toIgnore(){
     
 void EASEAClientData::setIgnoreFlag(bool value){
   ignoreFlag=value;
+}
+
+void EASEAClientData::verifyReception(MonitorParameter* params){
+  if(params->isReception())
+    hasReceived=true;
+}
+
+void EASEAClientData::verifySending(MonitorParameter* params){
+  if(params->isSending())
+    hasSent=true;
+}
+
+bool EASEAClientData::isAReception(){
+  if(hasReceived){
+    hasReceived=false;
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+bool EASEAClientData::isASending(){
+  if(hasSent){
+    hasSent=false;
+    return true;
+  }
+  else{
+    return false;
+  }
 }

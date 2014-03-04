@@ -34,6 +34,53 @@ void ClientMonitorParameter::reception(){
   recv=true;
   send=false;
 }
+/*HORRIBLE*/
+char* ClientMonitorParameter::serialize(){
+  char* serial=new char[sizeof(unsigned char)+4*sizeof(float)+4*sizeof(bool)];
+  void* next;
+  next=mempcpy(serial,&strType,sizeof(unsigned char));
+  
+  next=mempcpy(next,&dataFlag,sizeof(bool));
+  next=mempcpy(next,&migration,sizeof(bool));
+  next=mempcpy(next,&recv,sizeof(bool));
+  next=mempcpy(next,&send,sizeof(bool));
+  
+  next=mempcpy(next,&best,sizeof(float));
+  next=mempcpy(next,&worst,sizeof(float));
+  next=mempcpy(next,&stdev,sizeof(float));
+  next=mempcpy(next,&average,sizeof(float));
+
+  return serial;
+}
+
+int serialSize(){
+  return sizeof(unsigned char)+4*sizeof(float)+4*sizeof(bool);
+}
+
+void ClientMonitorParameter::deserialize(char* data){
+  int offset=0;
+  memcpy(&strType,data,sizeof(unsigned char));
+  
+  offset+=sizeof(bool);
+  memcpy(&dataFlag,data+offset,sizeof(bool));
+  offset+=sizeof(bool);
+  memcpy(&migration,data+offset,sizeof(bool));
+  offset+=sizeof(bool);
+  memcpy(&recv,data+offset,sizeof(bool));
+  offset+=sizeof(bool);
+  memcpy(&send,data+offset,sizeof(bool));
+  offset+=sizeof(bool);
+
+
+  memcpy(&best,data+offset,sizeof(float));
+  offset+=sizeof(float);
+  memcpy(&worst,data+offset,sizeof(float));
+  offset+=sizeof(float);
+  memcpy(&stdev,data+offset,sizeof(float));
+  offset+=sizeof(float);
+  memcpy(&average,data+offset,sizeof(float));
+  offset+=sizeof(float);
+}
 
 size_t ClientMonitorParameter::size(){
   return sizeof(this);

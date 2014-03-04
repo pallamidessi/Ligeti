@@ -86,7 +86,7 @@ void AudioMonitorModule::sendGenerationData(float best,float worst,float stdev,f
 void AudioMonitorModule::send(){
   params->fill(); 
   if (params->isData()) {
-    ::send(sockfd,(void*)params,params->size(),0);
+    ::send(sockfd,(void*)params->serialize(),params->serialSize(),0);
   }
 }
 
@@ -94,7 +94,7 @@ void AudioMonitorModule::send(){
 void AudioMonitorModule::receivedIndividuals(){
   if (notifyReception) {
     params->reception();
-    ::send(sockfd,(void*)params,params->size(),0);
+    ::send(sockfd,(void*)params->serialize(),params->serialSize(),0);
   }
 }
 
@@ -103,7 +103,7 @@ void AudioMonitorModule::sendingIndividuals(){
 
   if (notifySending) {
     params->sending();
-    ::send(sockfd,(void*)params,params->size(),0);
+    ::send(sockfd,(void*)params->serialize(),params->serialSize(),0);
   }
 }
 

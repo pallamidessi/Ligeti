@@ -129,7 +129,7 @@ void AudioMonitorServer::recvSomething(){
 /* Check whose fd changed and received from them*/
 void AudioMonitorServer::recvFromClient(){
   char buf[1024];
-  float* dec=(float*)buf;
+  MonitorParameter* params;
 
   unsigned int i; 
   EASEAClientData* changedClient;
@@ -140,39 +140,31 @@ void AudioMonitorServer::recvFromClient(){
       if(FD_ISSET(list_client->at(i).getSocket(),&rdclient)){
         
         changedClient=&list_client->at(i);
-        /*TRES CRADE: FAIRE UN *HEADER* QUI CONTIENT UN CODE IDENTIFICATEUR PLUTOT*/
-        if(recv(changedClient->getSocket(),buf,1024,0)==sizeof(bool)){
+        
+        recv(changedClient->getSocket(),buf,1024,0);
+        params=cast_magic(buf);
+        if (!changedClient->toIgnore()) {
+          changedClient->verifyReception(params);
+          changedClient->verifySending(params);
+          changedClient->addData(params);
           
-          if ((bool*)buf[0]) {
-            compo->aReception();
-          }
-          if (!(bool*)buf[0]) {
-            compo->aSending();
+          if (debug){
+            std::cout<<"I have received something from "<<
+            changedClient->getIP()<<":"<<changedClient->getPort()
+            <<std::endl;
+            float* last=changedClient->getLast();
+            std::cout<<last[0]<<" "<<last[1]<<" "<<last[2]<<" "<<last[3]<<std::endl;
+          delete[] last;
           }
 
+          compo->notify(changedClient);
         }
-        else {
-          if (!changedClient->toIgnore()) {
-            changedClient->addData(dec[0],dec[1],dec[2],dec[3]);
-            
-            if (debug){
-              std::cout<<"I have received something from "<<
-              changedClient->getIP()<<":"<<changedClient->getPort()
-              <<std::endl;
-              std::cout<<dec[0]<<" "<<dec[1]<<" "<<dec[2]<<" "<<dec[3]<<std::endl;
-            }
-
-            compo->notify(changedClient);
-          }
-          else{
-            list_client->at(i).setIgnoreFlag(false);
-          }
+        else{
+          list_client->at(i).setIgnoreFlag(false);
         }
-
       }
     }
   }
-
 }
 
 

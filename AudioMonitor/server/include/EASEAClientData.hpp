@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <ClientMonitorParameter.h>
 
 /**
 *  \class   EASEAClientData 
@@ -90,7 +91,7 @@ class EASEAClientData {
     *  @param  stdev    Value to push back to the stdev's vector.
     *  @param  average  Value to push back to the average's vector.
     **/
-    void addData(float best,float worst,float stdev,float average);
+    void addData(MonitorParameter* params);
     
     
     /**
@@ -100,6 +101,11 @@ class EASEAClientData {
     **/
     void print();
 
+
+    void verifyReception(MonitorParameter* params);
+    void verifySending(MonitorParameter* params);
+    bool isAReception();
+    bool isASending();
     
     /*Getter----------------------------------------------------------------------*/
     /**
@@ -187,7 +193,9 @@ class EASEAClientData {
     int clientSockfd;
     int nbData;
     bool ignoreFlag;
-    int clPort; 
+    int clPort;
+    bool hasSent;
+    bool hasReceived;
     std::string clIP;
     std::vector<float> best;
     std::vector<float> average;

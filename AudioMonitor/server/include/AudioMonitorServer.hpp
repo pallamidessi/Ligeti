@@ -36,7 +36,8 @@
 #include<vector>
 #include"EASEAClientData.hpp"
 #include"Compositor.hpp"
-
+#include<AudioMonitorUtils.h>
+#include<ClientMonitorParameter.h>
 /**
 *  \class   AudioMonitorServer 
 *  \brief   Central server of the monitoring system.

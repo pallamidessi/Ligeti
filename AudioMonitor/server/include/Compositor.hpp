@@ -120,7 +120,9 @@ class Compositor {
     * @return  resValue   Rescaled value
     **/
     static float rescaling(int rangeMin,int rangeMax,float min,float max,float value);
-  
+    
+    virtual void aSending(EASEAClientData* cl);
+    virtual void aReception(EASEAClientData* cl);
   protected:
     
 
@@ -149,5 +151,7 @@ class SimpleCompositor:public Compositor{
     void send();
     void send(osc::OutboundPacketStream oscMsg);
     void notify(EASEAClientData* cl);
+    void aSending(EASEAClientData* cl);
+    void aReception(EASEAClientData* cl);
 };
 #endif /* end of include guard: COMPOSITOR_H__ */
