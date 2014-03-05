@@ -10,13 +10,30 @@ SynthDef("shep",{
 	Out.ar(0, sig);
 }).add;
 
+SynthDef.new("bleep",{
+  arg freq=440;
+  var sine,env,env_gen;
+  env=Env.perc(0.2,0.2,0.2,[-4,4]);
+  env_gen=EnvGen.kr(env,doneAction:2);
+  sine={SinOsc.ar(freq,0,0.9)};
+  Out.ar(0,[sine*env_gen,sine*env_gen]);
+}).add;
 
-OSCdef(\newDef3,
+
+OSCdef(\best,
   {
     arg msg;
     from=(msg[1]/20000).squared;
     from.postln;},
   \note);
+
+OSCdef(\reception,
+  {Synth.new("bleep",[440]);},
+  \Reception);
+
+OSCdef(\sending,
+  {Synth.new("bleep",[1000]);},
+  \Sending);
 
 ~playShep = {
 	
