@@ -53,7 +53,7 @@ char* ClientMonitorParameter::serialize(){
   return serial;
 }
 
-int serialSize(){
+int ClientMonitorParameter::serialSize(){
   return sizeof(unsigned char)+4*sizeof(float)+4*sizeof(bool);
 }
 

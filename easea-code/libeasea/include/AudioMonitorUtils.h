@@ -24,7 +24,6 @@
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
-#include "ClientMonitorParameter.h"
 
 enum{NOTUSE,SIMPLEDATA};
 
@@ -37,11 +36,11 @@ class MonitorParameter {
     virtual void reception();
     virtual size_t size();
     virtual char* serialize()=0;
+    virtual void deserialize(char* buf)=0;
     virtual int serialSize()=0;
     bool isReception();
     bool isSending();
     bool isData();
-    static MonitorParameter* castMagic(char* buf);
     unsigned char strType; // The server need to know how to cast this struct
     /*TODO: Better use a mask instead of four boolean ...*/
     bool dataFlag;    

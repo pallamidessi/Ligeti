@@ -54,9 +54,3 @@ bool MonitorParameter::isSending(){
   return (migration && send);
 }
 
-MonitorParameter* MonitorParameter::castMagic(char* buf){
-  if(((char)buf[0])==SIMPLEDATA){
-    return (MonitorParameter*)(new ClientMonitorParameter(NULL));
-  }
-  return NULL;
-}

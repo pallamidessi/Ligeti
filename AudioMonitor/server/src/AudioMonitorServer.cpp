@@ -130,7 +130,7 @@ void AudioMonitorServer::recvSomething(){
 void AudioMonitorServer::recvFromClient(){
   char buf[1024];
   MonitorParameter* params;
-
+  unsigned char typeOfParam;
   unsigned int i; 
   EASEAClientData* changedClient;
   memset(buf,'\0',1024); //reset buffer
@@ -142,7 +142,18 @@ void AudioMonitorServer::recvFromClient(){
         changedClient=&list_client->at(i);
         
         recv(changedClient->getSocket(),buf,1024,0);
-        params=cast_magic(buf);
+        typeOfParam=buf[0];
+        
+        switch (typeOfParam) {
+        
+          case SIMPLEDATA:
+            params=new ClientMonitorParameter(NULL);
+            params->deserialize(buf);
+            break;
+        
+          default: 
+            params=NULL;
+        }
         if (!changedClient->toIgnore()) {
           changedClient->verifyReception(params);
           changedClient->verifySending(params);

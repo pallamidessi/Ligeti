@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <AudioMonitorUtils.h>
 #include <ClientMonitorParameter.h>
 
 /**

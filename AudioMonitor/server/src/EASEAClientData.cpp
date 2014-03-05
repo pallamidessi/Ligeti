@@ -29,8 +29,7 @@ int EASEAClientData::getSocket(){
 
 
 void EASEAClientData::addData(MonitorParameter* monitor){
-  
-    ClientMonitorParameter* tmp=(ClientMonitorParameter*)monitor;
+  ClientMonitorParameter* tmp=static_cast<ClientMonitorParameter*>(monitor); 
   if(tmp->strType==SIMPLEDATA){
     this->best.push_back(tmp->best);
     this->worst.push_back(tmp->worst);
@@ -81,9 +80,9 @@ std::vector<float>* EASEAClientData::getAverageVector(){
 float* EASEAClientData::getLast(){
   float* lastData=new float[5];
   lastData[0]=best.back();
-  lastData[1]=best.back();
-  lastData[2]=best.back();
-  lastData[3]=best.back();
+  lastData[1]=worst.back();
+  lastData[2]=stdev.back();
+  lastData[3]=average.back();
 
   return lastData; 
 }

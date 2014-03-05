@@ -37,7 +37,7 @@ class ClientMonitorParameter:public MonitorParameter {
     virtual size_t size();
     char* serialize();
     int serialSize();
-    void deserialize(char*);
+    void deserialize(char* buf);
 
     float best;
     float worst;
