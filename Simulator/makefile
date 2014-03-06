@@ -1,8 +1,7 @@
 CFLAGS = -Wall -g -O0 -fpermissive
 CC = g++
-LIB=-lm -lpthread 
+LDFLAGS=-lm -lpthread -lboost_system -lboost_thread -lboost_filesystem 
 LIB_EASEA=$(EZ_PATH)libeasea/include
-LIB_OSCPACK=lib/oscpack
 INC_PATH = include
 SRC_PATH = src
 OBJ_PATH = obj
@@ -12,18 +11,18 @@ TARGET=Simulator
 
 ALL:$(TARGET) 
 
-$(TARGET):  
-	$(CC) $(CFLAGS) -o $@ $(OBJ_PATH)/  $(LIB)
+$(TARGET):main.o Reader.o 
+	$(CC) $(CFLAGS) -o $@ $(OBJ_PATH)/main.o  $(OBJ_PATH)/Reader.o $(EZ_PATH)libeasea/libeasea.a $(LDFLAGS)
 	mv $@ bin/.
 
 %.o: %.cpp %.hpp
-	$(CC) $(CFLAGS)  -c $< -I $(INC_PATH) -o $(OBJ_PATH)/$@ -I$(LIB_OSCPACK) -I$(LIB_EASEA) $(LIB)
+	$(CC) $(CFLAGS)  -c $< -I $(INC_PATH) -o $(OBJ_PATH)/$@  -I$(LIB_EASEA) $(LDFLAGS)
 
 clean : 
 	rm -r doc/ $(OBJ_PATH)/*.o $(BIN_PATH)/$(TARGET) 
 
 tar:
-	tar czvf AudioMonitor.tar.gz *
+	tar czvf Simulator.tar.gz *
 
 doc:
 	doxygen Doxyfile

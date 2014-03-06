@@ -16,15 +16,12 @@
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
 **/ 
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <boost/thread.hpp>
-#include <vector>
-#include "Reader.hpp"
+#include "main.hpp"
+
 int main(int argc, char* argv[]){
-  int nbOfReader; 
-  std::vector<Reader> listReader;
+  int nbOfReader=argc; 
+  int i;
+  std::vector<Reader*> listReader;
 
   if (argc<=3) {
     std::cerr<<
@@ -34,11 +31,15 @@ int main(int argc, char* argv[]){
   }
   
   for (i = 0; i < nbOfReader; i++) {
-    listReader.push_back(new Reader(argv[i+1],new AudioMonitorModule(argv[0],34500+i),new ClientMonitorParameter()));  
+    listReader.push_back(new Reader(argv[i+1],new AudioMonitorModule(argv[0],34500+i),new ClientMonitorParameter(NULL)));  
   }
   
   for (i = 0; i < nbOfReader; i++) {
-    listReader[i].start();
+    listReader[i]->start();
+  }
+  
+  for (i = 0; i < nbOfReader; i++) {
+    listReader[i]->join();
   }
 
   return 0;

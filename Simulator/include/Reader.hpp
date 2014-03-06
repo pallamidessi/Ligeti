@@ -15,23 +15,33 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
-**/  
+**/
+#ifndef READER_H__
+#define READER_H__
+
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
 #include <AudioMonitorModule.h>
 #include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/thread.hpp>
 
 class Reader {
 public:
-  Reader (char* path,AudioMonitorModule* sendingModule,MonitorParameter* params)
-          :mPathTo(path),mSendingModule(sendingModule),mParams(params);
+  Reader (char* path,AudioMonitorModule* sendingModule,MonitorParameter* params);
   virtual ~Reader ();
   
   void start();
-  void read();
+  void join();
+  void readAndSend();
+  bool testLine(boost::filesystem::path extension,std::string buffer);
 private:
   boost::filesystem::path mPathTo;
+  boost::thread mThread;
   AudioMonitorModule* mSendingModule;  
   MonitorParameter* mParams;  
+
 };
+
+#endif /* end of include guard: READER_H__ */

@@ -15,26 +15,64 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
-**/  
+ **/  
 #include "Reader.hpp"
 
-Reader:: Reader(char* path,AudioMonitorModule* sendingModule,MonitorParameter* params){
- 
- mSendingModule->setParams(params);
+Reader::Reader(char* path,AudioMonitorModule* sendingModule,MonitorParameter* params):mPathTo(path),mSendingModule(sendingModule),mParams(params){
+
+  mSendingModule->setParams(params);
 
 }
 
-void Reader::Read(){
+void Reader::readAndSend(){
   boost::filesystem::fstream fs;
-  fs.open(mPathTo.system_complete(),ios_base::in);
-  path extension=mPathTo.extension();
+  std::string buffer;
+
+  fs.open(boost::filesystem::system_complete(mPathTo),std::ios_base::in);
+  boost::filesystem::path extension=mPathTo.extension();
+  
+  while(std::getline(fs,buffer)){
+    if(testLine(extension,buffer)){
+      mParams->processBuffer(buffer);
+      sleep(mParams->getTime());
+      mSendingModule->send();
+    }
+    else{}
+  }
+}
+
+Reader::~Reader(){
+}
+
+/*Check the current line, return true if it's a data line, false otherwise*/
+bool Reader::testLine(boost::filesystem::path extension,std::string line){
+  char firstChar=0;
   
   if(extension.compare(".csv")) {
+    firstChar=line[0];
+    if (firstChar=='#') {
+      return false;
+    }
+    else{
+      return true;
+    }
   }
-  else  if(extension.compare(".dat")) {
+  else if(extension.compare(".dat")) {
+    firstChar=line[0];
+    if (firstChar>='A'&& firstChar<='z'){
+      return false;
+    }
+    else {
+      return true;
+    }
   }
-
-  mParams-> 
+  return true;
 }
 
-bool nextLine
+void Reader::start(){
+  mThread=boost::thread(&Reader::readAndSend,this);
+}
+
+void Reader::join(){
+  mThread.join();
+}
