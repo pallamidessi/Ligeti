@@ -21,7 +21,7 @@
 
 /*MonitorParameter---------------------------------------------*/
 MonitorParameter::MonitorParameter():
-                  strType(NOTUSE){
+                  strType(NOTUSE),timeBegin(0),timeEnd(0){
 }
 
 
@@ -54,3 +54,8 @@ bool MonitorParameter::isSending(){
   return (migration && send);
 }
 
+void MonitorParameter::processBuffer(std::string line){}
+
+int MonitorParameter::getTime(){
+  return timeEnd-timeBegin;
+}

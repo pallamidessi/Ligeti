@@ -38,15 +38,22 @@ class MonitorParameter {
     virtual char* serialize()=0;
     virtual void deserialize(char* buf)=0;
     virtual int serialSize()=0;
+    virtual void processBuffer(std::string line)=0;
+    virtual int getTime();
+    
     bool isReception();
     bool isSending();
     bool isData();
+    
     unsigned char strType; // The server need to know how to cast this struct
     /*TODO: Better use a mask instead of four boolean ...*/
     bool dataFlag;    
     bool migration;
     bool recv;
     bool send;
+    int timeBegin;
+    int timeEnd;
+    
 };
 
 #endif /* end of include guard: AUDIOMONITORUTILS_H__ */
