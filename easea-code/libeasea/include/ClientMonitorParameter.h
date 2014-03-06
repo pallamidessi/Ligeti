@@ -21,6 +21,7 @@
 #define CLIENTMONITORPARAMETER_H__
 
 #include <iostream>
+#include <sstream>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -38,6 +39,8 @@ class ClientMonitorParameter:public MonitorParameter {
     char* serialize();
     int serialSize();
     void deserialize(char* buf);
+    void processBuffer(std::string line); 
+    int getTime();
 
     float best;
     float worst;

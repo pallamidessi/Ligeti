@@ -13,13 +13,30 @@ ClientMonitorParameter::~ClientMonitorParameter(){
 
 void ClientMonitorParameter::fill(){
   
-  dataFlag=true;
-  migration=false;
-  best=source->population->Best->getFitness();
-  worst=source->population->Worst->getFitness();
-  stdev=source->cstats->currentStdDev;
-  average=source->cstats->currentAverageFitness;
+  if(source!=NULL){
+    dataFlag=true;
+    migration=false;
+    best=source->population->Best->getFitness();
+    worst=source->population->Worst->getFitness();
+    stdev=source->cstats->currentStdDev;
+    average=source->cstats->currentAverageFitness;
+  }
 }
+
+void ClientMonitorParameter::processBuffer(std::string line){
+  float unused;
+  
+  timeBegin=timeEnd;
+  std::stringstream ss(line);
+  ss>>unused;
+  ss>>timeEnd;
+  ss>>unused;
+  ss>>best;
+  ss>>average;
+  ss>>stdev;
+  ss>>worst;
+}
+
 
 void ClientMonitorParameter::sending(){
   dataFlag=false;
@@ -86,3 +103,6 @@ size_t ClientMonitorParameter::size(){
   return sizeof(this);
 }
 
+int ClientMonitorParameter::getTime(){
+  return MonitorParameter::getTime();
+}
