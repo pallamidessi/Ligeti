@@ -51,8 +51,8 @@ class MonitorParameter {
     bool migration;
     bool recv;
     bool send;
-    int timeBegin;
-    int timeEnd;
+    float timeBegin;
+    float timeEnd;
     
 };
 

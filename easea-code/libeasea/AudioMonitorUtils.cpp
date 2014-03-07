@@ -55,7 +55,7 @@ bool MonitorParameter::isSending(){
 }
 
 void MonitorParameter::processBuffer(std::string line){}
-
+/*return time in microsecond*/
 int MonitorParameter::getTime(){
-  return timeEnd-timeBegin;
+  return (int)((timeEnd-timeBegin)*1000000);
 }
