@@ -26,6 +26,7 @@ void ClientMonitorParameter::fill(){
 void ClientMonitorParameter::processBuffer(std::string line){
   float unused;
   
+  dataFlag=true;
   timeBegin=timeEnd;
   std::stringstream ss(line);
   ss>>unused;
