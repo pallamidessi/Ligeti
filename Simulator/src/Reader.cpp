@@ -37,7 +37,11 @@ void Reader::readAndSend(){
       usleep(mParams->getTime());
       mSendingModule->send();
     }
-    else{}
+    else{
+      if(extension.compare(".dat")==0){
+        std::getline(fs,buffer);
+      }
+    }
   }
 }
 
