@@ -96,7 +96,7 @@ void AudioMonitorServer::buildSocketList(){
 void AudioMonitorServer::newClient(){
   int tmp_sockfd;
   EASEAClientData* new_client;
-  
+
   tmp_sockfd = accept(servSockfd,(struct sockaddr*)&my_addr,&addrlen);
 
   /*selected need to know the highest numerical socket value*/
@@ -134,44 +134,46 @@ void AudioMonitorServer::recvFromClient(){
   unsigned int i; 
   EASEAClientData* changedClient;
   memset(buf,'\0',1024); //reset buffer
-  
+
   for(i=0;i<list_client->size();i++){
     if(list_client->at(i).getSocket()!=0){
       if(FD_ISSET(list_client->at(i).getSocket(),&rdclient)){
-        
+
         changedClient=&list_client->at(i);
-        
-        recv(changedClient->getSocket(),buf,1024,0);
-        typeOfParam=buf[0];
-        
-        switch (typeOfParam) {
-        
-          case SIMPLEDATA:
-            params=new ClientMonitorParameter(NULL);
-            params->deserialize(buf);
-            break;
-        
-          default: 
-            params=NULL;
-        }
-        if (!changedClient->toIgnore()) {
-          changedClient->verifyReception(params);
-          changedClient->verifySending(params);
-          changedClient->addData(params);
-          
-          if (debug){
-            std::cout<<"I have received something from "<<
-            changedClient->getIP()<<":"<<changedClient->getPort()
-            <<std::endl;
-            float* last=changedClient->getLast();
-            std::cout<<last[0]<<" "<<last[1]<<" "<<last[2]<<" "<<last[3]<<std::endl;
-          delete[] last;
+
+        if(recv(changedClient->getSocket(),buf,1024,0)!=0){
+          typeOfParam=buf[0];
+
+          switch (typeOfParam) {
+
+            case SIMPLEDATA:
+              params=new ClientMonitorParameter(NULL);
+              params->deserialize(buf);
+              break;
+
+            default: 
+              params=NULL;
           }
 
-          compo->notify(changedClient);
-        }
-        else{
-          list_client->at(i).setIgnoreFlag(false);
+          if (!changedClient->toIgnore()) {
+            changedClient->verifyReception(params);
+            changedClient->verifySending(params);
+            changedClient->addData(params);
+
+            if (debug){
+              std::cout<<"I have received something from "<<
+                changedClient->getIP()<<":"<<changedClient->getPort()
+                <<std::endl;
+              float* last=changedClient->getLast();
+              std::cout<<last[0]<<" "<<last[1]<<" "<<last[2]<<" "<<last[3]<<std::endl;
+              delete[] last;
+            }
+
+            compo->notify(changedClient);
+          }
+          else{
+            list_client->at(i).setIgnoreFlag(false);
+          }
         }
       }
     }
@@ -192,15 +194,15 @@ void AudioMonitorServer::start(){
     buildSocketList();
 
     if((select(max_select+1,&rdclient,NULL,NULL,NULL))>=1){
-     recvSomething();
+      recvSomething();
     }
   }
 }
 
 
 /**
-* /brief    Add a Compositor
-**/
+ * /brief    Add a Compositor
+ **/
 void AudioMonitorServer::setCompositor(Compositor* compo){
   this->compo=compo;
 }
