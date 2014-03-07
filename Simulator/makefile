@@ -1,4 +1,4 @@
-CFLAGS = -Wall -g -O0 -fpermissive
+CFLAGS = -Wall -g -O0 -fpermissive 
 CC = g++
 LDFLAGS=-lm -lpthread -lboost_system -lboost_thread -lboost_filesystem 
 LIB_EASEA=$(EZ_PATH)libeasea/include

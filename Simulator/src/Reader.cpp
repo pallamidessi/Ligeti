@@ -34,7 +34,7 @@ void Reader::readAndSend(){
   while(std::getline(fs,buffer)){
     if(testLine(extension,buffer)){
       mParams->processBuffer(buffer);
-      sleep(mParams->getTime());
+      usleep(mParams->getTime());
       mSendingModule->send();
     }
     else{}
@@ -48,18 +48,18 @@ Reader::~Reader(){
 bool Reader::testLine(boost::filesystem::path extension,std::string line){
   char firstChar=0;
   
-  if(extension.compare(".csv")) {
+  if(extension.compare(".csv")==0) {
     firstChar=line[0];
-    if (firstChar=='#') {
+    if (firstChar>='A'&& firstChar<='z'){
       return false;
     }
     else{
       return true;
     }
   }
-  else if(extension.compare(".dat")) {
+  else if(extension.compare(".dat")==0) {
     firstChar=line[0];
-    if (firstChar>='A'&& firstChar<='z'){
+    if (firstChar=='#') {
       return false;
     }
     else {

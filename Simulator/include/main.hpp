@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <boost/thread.hpp>
 #include <vector>
 #include <ClientMonitorParameter.h>

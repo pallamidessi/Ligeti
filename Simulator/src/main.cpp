@@ -19,19 +19,21 @@
 #include "main.hpp"
 
 int main(int argc, char* argv[]){
-  int nbOfReader=argc; 
+  int nbOfReader=argc-2; 
   int i;
   std::vector<Reader*> listReader;
 
-  if (argc<=3) {
+  if (argc<=2) {
     std::cerr<<
       "Spécifier au moins un fichier pour lancer la simulation."
     <<std::endl;
     return 1;
   }
   
+  std::string ip(argv[1]);
+  std::cout<<ip<<std::endl;
   for (i = 0; i < nbOfReader; i++) {
-    listReader.push_back(new Reader(argv[i+1],new AudioMonitorModule(argv[0],34500+i),new ClientMonitorParameter(NULL)));  
+    listReader.push_back(new Reader(argv[i+2],new AudioMonitorModule(),new ClientMonitorParameter(NULL)));  
   }
   
   for (i = 0; i < nbOfReader; i++) {
