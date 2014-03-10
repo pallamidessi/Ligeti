@@ -102,11 +102,27 @@ class EASEAClientData {
     **/
     void print();
 
-
-    void verifyReception(MonitorParameter* params);
+    /**
+    * \brief    Check if the received MonitorParameter based class notify a
+    *           reception.
+    * \details  Check the isReception flag on params and set the hasReceived 
+    *           flag accordingly.
+    *
+    *  @param  params Last monitoring message parameter
+    **/
+   
+   
+   void verifyReception(MonitorParameter* params);
+    /**
+    * \brief    Check if the received MonitorParameter based class notify a
+    *           sending.
+    * \details  Check the isSending flag on params and set the hasSent flag
+    *           accordingly.
+    *
+    *  @param  params Last monitoring message parameter
+    **/
     void verifySending(MonitorParameter* params);
-    bool isAReception();
-    bool isASending();
+
     
     /*Getter----------------------------------------------------------------------*/
     /**
@@ -131,63 +147,111 @@ class EASEAClientData {
     * \brief    Return the value of ignoreFlag
     * \details  The select based server check this to know if the data are wanted.
     *
-    * @return  ignoreFlag The current ignore flag.
+    * @return   ignoreFlag The current ignore flag.
     **/
     bool toIgnore();
     
     
     /**
     * \brief    Return the vector containing the worst notes.
-    * \details Getter.
+    * \details  Getter.
     *
-    * @return  vector A pointer to the vector.
+    * @return   vector A pointer to the vector.
     **/
     std::vector<float>* getWorstVector();
     
     
     /**
     * \brief    Return the vector containing the best notes.
-    * \details Getter.
+    * \details  Getter.
     *
-    * @return  vector A pointer to the vector.
+    * @return   vector A pointer to the vector.
     **/
     std::vector<float>* getBestVector();
     
     
     /**
     * \brief    Return the vector containing the standard deviation of the
-    * population.
-    * \details Getter.
+    *           population.
+    * \details  Getter.
     *
-    * @return  vector A pointer to the vector.
+    * @return   vector A pointer to the vector.
     **/
     std::vector<float>* getStDevVector();
     
     
     /**
     * \brief    Return the vector containing the average notes of the population.
-    * \details Getter.
+    * \details  Getter.
     *
-    * @return  vector A pointer to the vector.
+    * @return   vector A pointer to the vector.
     **/
     std::vector<float>* getAverageVector();
     
+
+    /**
+    * \brief    Return the hasReceived flag.
+    * \details  Getter.
+    *
+    * @return   bool hasReceived
+    **/
+    bool isAReception();
     
+    
+    /**
+    * \brief    Return the hasSent flag.
+    * \details  Getter.
+    *
+    * @return   bool hasSent.
+    **/
+    bool isASending();
+    
+    
+    /**
+    * \brief    Get the port number of the associated EASEA node.
+    * \details  
+    *
+    * @return   int  The port number.
+    **/
+    int getPort();
+    
+    
+    /**
+    * \brief    Get the IP address of the associated EASEA node.
+    * \details  
+    *
+    * @return   std::string A string representing the ip address 
+    *           ("xxx.xxx.xxx.xxx").
+    **/
+    std::string getIP();
+
+
     /*Setter----------------------------------------------------------------------*/
     /**
     * \brief    Set the ignore flag.
     * \details  Data will not be process/add if ignoreFlag is true. 
     *
-    *  @param  value New value of the ignoreFlag.
+    *  @param   value New value of the ignoreFlag.
     **/
     void setIgnoreFlag(bool value);
-  
-  
+   
 
+    /**
+    * \brief    Set the ip address of the corresponding EASEA node (purely informal)  
+    * \details 
+    *
+    *  @param   ip The string representing the ip address ("xxx.xxx.xxx.xxx")
+    **/
     void setIP(std::string ip);
+    
+    
+    /**
+    * \brief    Set the port num of the corresponding EASEA node (purely informal)  
+    * \details 
+    *
+    *  @param   port The port number
+    **/
     void setPort(int port);
-    int getPort();
-    std::string getIP();
   private:
   
     /* Data-----------------------------------------------------------------------*/
