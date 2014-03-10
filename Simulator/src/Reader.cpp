@@ -18,12 +18,18 @@
  **/  
 #include "Reader.hpp"
 
-Reader::Reader(char* path,AudioMonitorModule* sendingModule,MonitorParameter* params):mPathTo(path),mSendingModule(sendingModule),mParams(params){
+/*Constructor/Destructor----------------------------------------------------------*/
+Reader::Reader(char* path,AudioMonitorModule* sendingModule,MonitorParameter* params)
+              :mPathTo(path),mSendingModule(sendingModule),mParams(params){
 
   mSendingModule->setParams(params);
-
 }
 
+
+Reader::~Reader(){
+}
+
+/*Methods-------------------------------------------------------------------------*/
 void Reader::readAndSend(){
   boost::filesystem::fstream fs;
   std::string buffer;
@@ -31,27 +37,27 @@ void Reader::readAndSend(){
   fs.open(boost::filesystem::system_complete(mPathTo),std::ios_base::in);
   boost::filesystem::path extension=mPathTo.extension();
   
+  /*Read a line,than wait the specified time and send the message*/
   while(std::getline(fs,buffer)){
     if(testLine(extension,buffer)){
       mParams->processBuffer(buffer);
-      usleep(mParams->getTime());
+      usleep(mParams->getTime());       
       mSendingModule->send();
     }
     else{
-      if(extension.compare(".dat")==0){
-        std::getline(fs,buffer);
+      if(extension.compare(".dat")==0){ //Jump an extra line after 
+        std::getline(fs,buffer);        //an non data line in a .dat file  
       }
     }
   }
 }
 
-Reader::~Reader(){
-}
 
 /*Check the current line, return true if it's a data line, false otherwise*/
 bool Reader::testLine(boost::filesystem::path extension,std::string line){
   char firstChar=0;
   
+  /*CSV case*/
   if(extension.compare(".csv")==0) {
     firstChar=line[0];
     if (firstChar>='A'&& firstChar<='z'){
@@ -61,6 +67,7 @@ bool Reader::testLine(boost::filesystem::path extension,std::string line){
       return true;
     }
   }
+  /*DAT case*/
   else if(extension.compare(".dat")==0) {
     firstChar=line[0];
     if (firstChar=='#') {
@@ -70,13 +77,18 @@ bool Reader::testLine(boost::filesystem::path extension,std::string line){
       return true;
     }
   }
-  return true;
+  /*Not a supported extension : always false*/
+  return false;
 }
 
+
+/*Start the lecture on the thread*/
 void Reader::start(){
   mThread=boost::thread(&Reader::readAndSend,this);
 }
 
+
+/*Wait for the encapsulated thread to finish*/
 void Reader::join(){
   mThread.join();
 }
