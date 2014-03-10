@@ -27,12 +27,10 @@
 #include <omp.h>
 #endif
 #include <string>
-#include "AudioMonitorModule.h"
 
 #define _MULTI_THREADED
 #define MAXINDSIZE 50000 /*maximum size of an individual in number of characters*/
 
-class AudioMonitorModule;
 
 typedef struct {
         char data[MAXINDSIZE];
@@ -44,7 +42,6 @@ typedef struct {
         int debug;
 	RECV_DATA *data;
 	int *nb_data;
-  AudioMonitorModule* audioMonitor;
 }UDP_server_thread_parm_t;
 
 class CComUDPServer {
@@ -55,7 +52,6 @@ public:
 	int nb_data;
 	UDP_server_thread_parm_t *parm;
 	CComUDPServer(unsigned short port, int dg);
-	CComUDPServer(unsigned short port,AudioMonitorModule* monitor, int dg);
 	static void * UDP_server_thread(void *parm);
 	~CComUDPServer();
 	void read_data_lock();
@@ -64,7 +60,6 @@ private:
 	int ServerSocket;
 	pthread_t thread;
 	int Socket;
-  AudioMonitorModule* audioMonitor;
 };
 
 class CComUDPClient {

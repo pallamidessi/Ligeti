@@ -51,7 +51,6 @@ void * CComUDPServer::UDP_server_thread(void *parm) {
 		}
 		printf("    Received individual from %s:%d\n", inet_ntoa(cliaddr.sin_addr), ntohs(cliaddr.sin_port));
 		pthread_mutex_lock(&server_mutex);
-    p->audioMonitor->receivedIndividuals();
 		/*process received data */
 		memmove(p->data[(*p->nb_data)].data,buffer,sizeof(char)*MAXINDSIZE);
 		(*p->nb_data)++;
@@ -64,12 +63,11 @@ void * CComUDPServer::UDP_server_thread(void *parm) {
    }
 };
 
-CComUDPServer::CComUDPServer(unsigned short port,AudioMonitorModule* monitor,int dg) {
+CComUDPServer::CComUDPServer(unsigned short port,int dg) {
     struct sockaddr_in ServAddr; /* Local address */
     debug = dg;
 	this->nb_data = 0;
 	this->data = (RECV_DATA*)calloc(1,sizeof(RECV_DATA));
-  this->audioMonitor=monitor;
 	#ifdef WIN32
 	WSADATA wsadata;
 	if (WSAStartup(MAKEWORD(1,1), &wsadata) == SOCKET_ERROR) {
@@ -108,7 +106,6 @@ CComUDPServer::CComUDPServer(unsigned short port,AudioMonitorModule* monitor,int
 	this->parm->nb_data = &this->nb_data;
 	this->parm->data = this->data;
     this->parm->debug = this->debug;
-    this->parm->audioMonitor=this->audioMonitor;
 
     if(pthread_create(&thread, NULL, &CComUDPServer::UDP_server_thread, (void *)this->parm) != 0) {
         printf("pthread create failed. exiting\n"); exit(1);

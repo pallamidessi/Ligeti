@@ -555,11 +555,19 @@ void CEvolutionaryAlgorithm::sendIndividual(){
 }
 
 void CEvolutionaryAlgorithm::receiveIndividuals(){
-	//Checking every generation for received individuals
+	int i;
+  //Checking every generation for received individuals
 	if(this->treatedIndividuals<(unsigned)this->server->nb_data){
 		//cout << "number of received individuals :" << this->server->nb_data << endl;
 		//cout << "number of treated individuals :" << this->treatedIndividuals << endl;
-		CSelectionOperator *antiTournament = getSelectionOperator("Tournament",!this->params->minimizing, globalRandomGenerator);		
+    
+    /*****************************************************************/
+    for (i = 0; i < this->server->nb_data; i++) {
+      audioMonitor->receiveIndividuals();
+    }
+    /*****************************************************************/
+		
+    CSelectionOperator *antiTournament = getSelectionOperator("Tournament",!this->params->minimizing, globalRandomGenerator);		
 
 		//Treating all the individuals before continuing
 		while(this->treatedIndividuals < (unsigned)this->server->nb_data){
