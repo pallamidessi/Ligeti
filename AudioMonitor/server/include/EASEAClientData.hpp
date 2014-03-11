@@ -102,7 +102,8 @@ class EASEAClientData {
     **/
     void print();
 
-    /**
+   
+   /**
     * \brief    Check if the received MonitorParameter based class notify a
     *           reception.
     * \details  Check the isReception flag on params and set the hasReceived 
@@ -110,10 +111,10 @@ class EASEAClientData {
     *
     *  @param  params Last monitoring message parameter
     **/
-   
-   
    void verifyReception(MonitorParameter* params);
-    /**
+   
+   
+   /**
     * \brief    Check if the received MonitorParameter based class notify a
     *           sending.
     * \details  Check the isSending flag on params and set the hasSent flag

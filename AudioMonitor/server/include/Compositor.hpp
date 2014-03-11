@@ -133,10 +133,10 @@ class Compositor {
     
     
     /**
-    * /brief    Send an OSC message specific to a sending of individuals.
+    * /brief    Send an OSC message specific to a reception of individuals.
     * /details 
     *
-    *  @param   cl An EASEAClientData which just had an update (sent an individual).  
+    *  @param   cl An EASEAClientData which just received an individual.  
     **/
     virtual void aReception(EASEAClientData* cl);
   

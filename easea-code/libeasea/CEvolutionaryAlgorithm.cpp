@@ -150,7 +150,7 @@ CEvolutionaryAlgorithm::CEvolutionaryAlgorithm(Parameters* params){
 		this->myClientNumber=0;	
 		this->initializeClients();
 		//if(params->remoteIslandModel)
-		server = new CComUDPServer(params->serverPort,audioMonitor,0); //1 if debug
+		server = new CComUDPServer(params->serverPort,0); //1 if debug
 	}
 }
 
@@ -562,9 +562,7 @@ void CEvolutionaryAlgorithm::receiveIndividuals(){
 		//cout << "number of treated individuals :" << this->treatedIndividuals << endl;
     
     /*****************************************************************/
-    for (i = 0; i < this->server->nb_data; i++) {
-      audioMonitor->receiveIndividuals();
-    }
+      audioMonitor->receivedIndividuals();
     /*****************************************************************/
 		
     CSelectionOperator *antiTournament = getSelectionOperator("Tournament",!this->params->minimizing, globalRandomGenerator);		
