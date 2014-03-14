@@ -21,7 +21,7 @@
     
 CellularAutoCompositor::CellularAutoCompositor(size_t gridSize,int maxClient,std::string synthesisIp,
                                               int portnum,bool dgb):
-                        Compositor(synthesisIp,portnum,dbg),conwayRules<int,int> mGridSize(gridSize){
+                        Compositor(synthesisIp,portnum,dbg),conwayRules<int,int,1,0> mGridSize(gridSize){
   
   int nbClientSquared=ceil(sqrt(maxClient));
   int spaceBetweenClient=gridSize/nbClientSquared;
