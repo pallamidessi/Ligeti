@@ -25,18 +25,23 @@ template<typename T>
   class Matrix {
     public:
       
-      Matrix (size_t sizeGrid):mSizeGrid(sizeGrid){
+      Matrix (size_t sizeGrid,T defaultValue):mSizeGrid(sizeGrid){
         mMat=new *T[sizeGrid];
 
         for (i = 0; i < sizeGrid; i++) {
           T[i]=new T[sizeGrid];
+        }
+        for (i = 0; i < sizeGrid; i++) {
+          for (j = 0; j < sizeGrid; j++) {
+            T[i][j]=defaultValue;
+          }
         }
       }
       
       int size(){
         return mSizeGrid;
       }
-
+      
       virtual ~Matrix ();
       T operator()(int i,int j){
         /* Raise an exception instead
@@ -45,7 +50,7 @@ template<typename T>
         */
         return mMat[i][j];
       }
-
+      
       T* operator[](int i){
         return mMat[i];
       }

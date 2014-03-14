@@ -21,7 +21,7 @@
     
 CellularAutoCompositor::CellularAutoCompositor(size_t gridSize,int maxClient,std::string synthesisIp,
                                               int portnum,bool dgb):
-                        Compositor(synthesisIp,portnum,dbg){
+                        Compositor(synthesisIp,portnum,dbg),conwayRules<int,int> mGridSize(gridSize){
   
   int nbClientSquared=ceil(sqrt(maxClient));
   int spaceBetweenClient=gridSize/nbClientSquared;
@@ -32,8 +32,7 @@ CellularAutoCompositor::CellularAutoCompositor(size_t gridSize,int maxClient,std
     }
   }
 
-  grid=new Matrix<int>(gridSize);
-
+  grid=new Matrix<int>(gridSize,0);
 }
 
 CellularAutoCompositor::~CellularAutoCompositor(){};
@@ -43,4 +42,20 @@ CellularAutoCompositor::addClientOnGrid(EASEAClientData* cl){
   mPlaceAvailabeOnGrid.pop_back();
 }
 
-
+//Deferencement multiple beurk ...
+void CellularAutoCompositor::nextStep(){
+  Matrix<int>* next=new Matrix<int>(mGridSize,0);
+  
+  for (i = 0; i < mGridSize; i++) {
+    for (j = 0; j < mGridSize; j++) {
+      if (*grid[i][j]) {
+        next[i][j]=aliveRules(*grid[i][j],grid);
+      }
+      else{
+        next[i][j]=deadRules(*grid[i][j],grid);
+      }
+    }
+  }
+  //delete grid
+  grid=next;
+}

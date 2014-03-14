@@ -21,14 +21,14 @@
 #include "Matrix.cpp"
 #include "Point.cpp"
 
-template<typename T,typename TT>
+template<typename T,typename TT,TT defaultAlive,TT defaultDead>
   class CellularRules {
     public:
-      CellularRules ();
+    CellularRules :mDefaultAlive(defaultAlive),mDefaultDead(defaultDead)();
       virtual ~CellularRules ();
   
-      virtual int aliveRules(Point<T,T>,Matrix<TT>*)=0;
-      virtual int deadRules(Point<T,T>,Matrix<TT>*)=0;
+      virtual TT aliveRules(Point<T,T>,Matrix<TT>*)=0;
+      virtual TT deadRules(Point<T,T>,Matrix<TT>*)=0;
     protected:
      
       bool isAlive(Point<T,T> p,int offsetX,int offsetY,Matrix<TT> m){
@@ -81,34 +81,37 @@ template<typename T,typename TT>
       
         return sum;
       }
-
+      
+    protected:
+      TT mDefaultAlive;
+      TT mDefaultDead;
 };
 
-template<typename T,typename TT>
+template<typename T,typename TT,TT defaultAlive,TT defaultDead>
   class ConwayRules:CellularRules {
     public:
-      ConwayRules ();
+      ConwayRules:CellularRules<T,TT,defaultAlive,defaultDead> ();
       virtual ~ConwayRules ();
   
-      virtual int aliveRules(point<T,T> p,Matrix<TT>* m){
+      virtual TT aliveRules(point<T,T> p,Matrix<TT>* m){
         int nbNeighbours=countMooreNeighbours(p,m);
 
         if (nbNeighbours<2) {
-          return 0;
+          return mDefaultDead;
         }
         else if (nbNeighbours>3) {
-          return 0;
+          return mDefaultDead;
         }
       }
 
-      virtual int deadRules(point<T,T>,Matrix<TT>*){
+      virtual TT deadRules(point<T,T>,Matrix<TT>*){
         int nbNeighbours=countMooreNeighbours(p,m);
 
         if (nbNeighbours==3) {
-          return 1;
+          return mDefaultAlive;
         }
         else {
-          return 0;
+          return mDefaultDead;
         }
       }
 
