@@ -21,11 +21,11 @@
 #include "Matrix.cpp"
 #include "Point.cpp"
 
-template<typename T,typename TT,TT defaultAlive,TT defaultDead>
+template<typename T,typename TT,>
   class CellularRules {
     public:
-    CellularRules :mDefaultAlive(defaultAlive),mDefaultDead(defaultDead)();
-      virtual ~CellularRules ();
+    CellularRules(TT defaultAlive,TT defaultDead) :mDefaultAlive(defaultAlive),mDefaultDead(defaultDead){};
+      virtual ~CellularRules (){};
   
       virtual TT aliveRules(Point<T,T>,Matrix<TT>*)=0;
       virtual TT deadRules(Point<T,T>,Matrix<TT>*)=0;
@@ -90,8 +90,8 @@ template<typename T,typename TT,TT defaultAlive,TT defaultDead>
 template<typename T,typename TT,TT defaultAlive,TT defaultDead>
   class ConwayRules:CellularRules {
     public:
-      ConwayRules:CellularRules<T,TT,defaultAlive,defaultDead> ();
-      virtual ~ConwayRules ();
+      ConwayRules(TT defaultAlive,TT defaultDead):CellularRules<T,TT>(defaultAlive,defaultDead){};
+      virtual ~ConwayRules (){};
   
       virtual TT aliveRules(point<T,T> p,Matrix<TT>* m){
         int nbNeighbours=countMooreNeighbours(p,m);

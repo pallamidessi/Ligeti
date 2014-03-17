@@ -59,3 +59,62 @@ void CellularAutoCompositor::nextStep(){
   //delete grid
   grid=next;
 }
+
+void CellularAutoCompositor::startTempoMode(Metronome* tempo,std::list<EASEAClientData*>* cl){
+  std::list<EASEAClientData*>::iterator iter;
+  std::list<EASEAClientData*>::iterator iter;
+  std::list<EASEAClientData*>::iterator end=list->end();
+  std::map<EASEAClientData*,Point<int,int>>::iterator cur;
+  int note;
+  //need mutex
+  
+  while(true){
+    tempo->beat();
+
+    for(iter=list->begin();iter!=end;iter++){
+      note=iter->computeNote();
+      cur=mClientOnGrid.find(*iter);
+      setStruct(cur->second,note);
+    }
+    
+    send(compose(NULL));
+  }
+}
+
+/*Unused parameter in tempo mode*/
+virtual osc::OutboundPacketStream CellularAutoCompositor::compose(EASEAClientData* cl){
+  char buffer[10000]; //max 50x50 full grid (conway's game of life tells us that only 54% of the grid can be alve,so we are able to send a 70*70 grid)
+  osc::OutboundPacketStream p( buffer, OUTPUT_BUFFER_SIZE );
+  
+  p << osc::BeginBundleImmediate << osc::BeginMessage( "/CellularGrid" );
+  p<<mGridSize<<osc::EndMessag;
+
+  for (i = 0; i < mGridSize; i++) {
+    p<<BeginMessage
+    for (j = 0; j < mGridSize; j++) {
+       if (grid[i][j]) {
+         p<<grid[i][j];
+       }
+    }
+  }
+  p<< osc::EndMessag << osc::EndBundle;
+}
+
+/*TODO : choose structur for each case*/
+void CellularAutoCompositor::setStruct(Point<int,int>,int note){
+  
+  if(note==NOTE_1){
+     
+  }
+  else if (note==NOTE_2) {
+  
+  }
+  else if (note==NOTE_3) {
+  
+  }
+  else if (note==NOTE_4) {
+  
+  }
+
+
+}

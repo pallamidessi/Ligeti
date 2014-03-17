@@ -1,5 +1,5 @@
 /**
- * @file CellularRules.cpp
+ * @file note.hpp
  * @author Pallamidessi Joseph
  * @version 1.0
  *
@@ -17,6 +17,24 @@
  * http://www.gnu.org/copyleft/gpl.html
 **/  
 
-#include "CellularRules.hpp"
+#include <cstdio>
+#include <cstdlib>
+#include <iostream.h>
 
+#define NOTE_1 1
+#define NOTE_2 2
+#define NOTE_3 3
+#define NOTE_4 4
+
+class Note{
+  public:
+    Note (){}
+    virtual ~Note (){}
+    
+    virtual int computeNote()=0;
+    virtual std::vector getNoteHistory(){return mNoteHistory;}
+
+  protected:
+    std::vector<int> mNoteHistory;  
+};
 

@@ -34,7 +34,7 @@
 *  \details  Hold client data and socket. 
 *  
 **/
-class EASEAClientData {
+class EASEAClientData:public Note {
   
   public:
     
@@ -124,7 +124,7 @@ class EASEAClientData {
     **/
     void verifySending(MonitorParameter* params);
 
-    
+    int computeNote(); 
     /*Getter----------------------------------------------------------------------*/
     /**
     * \brief   Return the socket.
@@ -136,12 +136,12 @@ class EASEAClientData {
     
     
     /**
-    * \brief   Return the last data on each vector, in an array.
-    * \details TODO: dirty
+    * \brief   Return the last data on each vector, in an EASEAClientRow.
+    * \details 
     *
-    * @return  array An flat array of the last data on each vector.
+    * @return  row A row containing the last data on each vector.
     **/
-    float* getLast(); //Vague: specialized struct instead ?
+    EASEAClientRow getLast(); 
     
     
     /**
@@ -262,6 +262,7 @@ class EASEAClientData {
     int clPort;
     bool hasSent;
     bool hasReceived;
+    EASEAClientRow mLastEvalued;
     std::string clIP;
     std::vector<float> best;
     std::vector<float> average;
