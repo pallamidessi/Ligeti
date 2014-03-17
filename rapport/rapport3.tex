@@ -1,0 +1,128 @@
+\documentclass{article}
+\usepackage{array}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\begin{document}
+
+  \title{Stage musicalisation pour EASEA: \\
+    \large rapport3}
+  \author{PALLAMIDESSI Joseph}
+  \maketitle
+  \newpage
+
+  \section{Récapitulatif} % (fold)
+  \label{sec:Récapitulatif}
+    \paragraph{} % (fold)
+    \label{par:}
+    
+      Ces deux dernières semaines, j'ai créer des outils qui seront particulièrement
+      utile à l'expérimentation. En particulier un simulateur de cloud EASEA, qui
+      utilise les logs de runs. Cela permettra d'accélérer grandement les phase de tests.\\
+      J'ai aussi commencer des systèmes de musicalisation (et de sonification), que je
+      vais détailler plus loin.\\
+      La principal avancée, sur le plan théorique, et le fait que j'ai pu trouver un
+      premier système de notation des nœuds du cloud.
+    % paragraph  (end)
+  % section Récapitulatif (end)
+
+  \section{Notation} % (fold)
+  \label{sec:Notation}
+    \paragraph{} % (fold)
+    \label{par:}
+      Sans plus attendre, voici le système de notation.\\
+      A chaque génération d'un nœud, nous récupérons la note de son meilleur
+      individu, de son pire individu, la note moyenne de la population et
+      l'écart type de la population. Certains paramètres sont plus important que
+      d'autres, notamment l'écart type et le meilleur individu. \\
+      Nous classons
+      donc les variations de paramètres entre deux générations selon ces critères
+      d'importance et nous obtenons le tableaux suivant: 
+    % paragraph  (end)
+    \paragraph{} % (fold)
+    \label{par:}
+      \begin{tabular}{|c|c|c|c|}
+        \hline
+        stdev & average & best & worst \\
+        \hline
+        \nearrow & \searrow & \searrow & \searrow \\
+        \hline
+        - & \searrow & \searrow & - \\
+        \hline
+        \nearrow & \searrow & - & - \\
+        \hline
+        - & - & - & - \\
+        \hline
+      \end{tabular}
+    % paragraph  (end)  
+    \paragraph{} % (fold)
+    \label{par:}
+      La logique derrière ces choix est assez naïve: quand toute les variables
+      évoluent dans le "bon" (ou plutôt attendu) sens de variation, il s'agit du
+      meilleurs cas possible et au contraire si entre deux générations rien ne bouge
+      alors le nœud à "planter" ou a été particulièrement inefficace. \\
+      Il y a une
+      ambiguïté quand au déclenchement de la notation, qui peut se faire par un 
+      temporisateur, ou de manière événementielle, chacune des ces méthodes ayant des
+      défauts et des avantages différents (avec temporisateur: note régulière dans
+      le temps , mais pas
+      moyen de distinguer entre un plantage et un nœud qui pédale dans la semoule).
+    % paragraph paragraph name (end)
+  % section Notation (end)
+
+  \section{Systèmes en cours de développement} % (fold)
+  \label{sec:Systèmes en cours de développement}
+    \paragraph{} % (fold)
+    \label{par:}
+      Il y a trois systèmes "musicaux" en cours de développement, qui auront des
+      résultats plus ou moins cohérent. 
+    % paragraph  (end)
+      \subsection{Par automate cellulaire} % (fold)
+      \label{sub:Par automate cellulaire}
+        \paragraph{} % (fold)
+        \label{par:}
+        
+          Le système paramètre à son tour un système complexe (Jeu de la Vie). L'idée
+          peut sembler aberrante, mais en utilisant certaines structures (notamment
+          oscillateur et gun) et en les associant (fixant) à l'état des nœuds, on
+          pourra peut-être obtenir une sonification intéressante (pas de musique ici
+          !).
+        % paragraph  (end)
+      % subsubsection Par automate cellulaire (end)
+      \subsection{Par lecture de partition} % (fold)
+      \label{sub:Par lecture de partition}
+       \paragraphe} % (fold)
+       \label{par:paragraph name}
+        
+         Ici les nœuds deviennent interprètes, une "partition" (MIDI) est fournie au
+         départ et selon leurs notes, ils jouent plus ou moins bien (mal...) : \\un
+         demi-ton au dessus, un temps avant/après etc... \\Dans la pratique ce sera
+         peut-être le système le plus agréable/performant, mais on perd le côté
+         compositionnel du sujet. De plus de nouvelles contraintes apparaissent:\\
+         Quel type de partitions faut il fournir, sont elles facile à trouver/créer ?
+         etc...
+       % paragraph paragraph name (end)
+      % subsubsection Par lecture de partition (end)
+
+      \subsection{Par chaîne de Markov} % (fold)
+      \label{sub:Par chaîne de Markov}
+        \paragraph{} % (fold)
+        \label{par:}
+        
+          L'idée est de se baser sur une matrice de transition entre des éléments
+          musicaux. Les probabilités de passer d'un état à l'autre changerons (comment
+          ?) selon l'état du système. Il s'agit d'un vision extrêmement naïve de la
+          musique, qu'il faudra forcément agrémenter d'un support.
+        % paragraph  (end)  
+      % subsubsection Par chaîne de Markov (end)
+  % section Systèmes en cours de développement (end)
+
+  \section{Jusqu'à la prochaine étape} % (fold)
+  \label{sec:Jusqu'à la prochaine étapes}
+    Je suis actuellement train d'implémenter le système basé sur le jeu de la vie,
+    je devrais avoir fini d'ici dans 2-3 jours, et si le résultat n'est pas
+    complètement dysfonctionnel je vous enverrai des samples. Si une de ces idées
+    vous semble particulièrement intéressante, ou au contraire irréalisable,
+    n'hésiter pas à prendre contact, je reste à votre entière disposition.
+  % section Jusqu'à la prochaine étapes (end)
+\end{document}
+\end{article}
