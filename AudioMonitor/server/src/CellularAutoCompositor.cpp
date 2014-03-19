@@ -32,7 +32,7 @@ CellularAutoCompositor::CellularAutoCompositor(size_t gridSize,int maxClient,std
     }
   }
 
-  grid=new Matrix<int>(gridSize,0);
+  mGrid=new Matrix<int>(gridSize,0);
 }
 
 CellularAutoCompositor::~CellularAutoCompositor(){};
@@ -48,33 +48,31 @@ void CellularAutoCompositor::nextStep(){
   
   for (i = 0; i < mGridSize; i++) {
     for (j = 0; j < mGridSize; j++) {
-      if (*grid[i][j]) {
-        next[i][j]=aliveRules(*grid[i][j],grid);
+      if (*mGrid[i][j]) {
+        next[i][j]=aliveRules(*mGrid[i][j],mGrid);
       }
       else{
-        next[i][j]=deadRules(*grid[i][j],grid);
+        next[i][j]=deadRules(*mGrid[i][j],mGrid);
       }
     }
   }
   //delete grid
-  grid=next;
+  mGrid=next;
 }
 
-void CellularAutoCompositor::startTempoMode(Metronome* tempo,std::list<EASEAClientData*>* cl){
-  std::list<EASEAClientData*>::iterator iter;
-  std::list<EASEAClientData*>::iterator iter;
-  std::list<EASEAClientData*>::iterator end=list->end();
-  std::map<EASEAClientData*,Point<int,int>>::iterator cur;
+void CellularAutoCompositor::startTempoMode(Metronome* tempo){
+  std::map<EASEAClientData*,Point<int,int>>::iterator iter;
+  std::map<EASEAClientData*,Point<int,int>>::iterator end=mClientOnGrid->end;
   int note;
   //need mutex
   
   while(true){
     tempo->beat();
-
-    for(iter=list->begin();iter!=end;iter++){
-      note=iter->computeNote();
-      cur=mClientOnGrid.find(*iter);
-      setStruct(cur->second,note);
+    
+    nextStep();
+    for(iter=mClientOnGrid->begin();iter!=end;iter++){
+      note=iter->first->computeNote();
+      setStruct(iter->second,note);
     }
     
     send(compose(NULL));
@@ -92,29 +90,52 @@ virtual osc::OutboundPacketStream CellularAutoCompositor::compose(EASEAClientDat
   for (i = 0; i < mGridSize; i++) {
     p<<BeginMessage
     for (j = 0; j < mGridSize; j++) {
-       if (grid[i][j]) {
-         p<<grid[i][j];
+       if (mGrid[i][j]) {
+         p<<mGrid[i][j];
        }
     }
   }
   p<< osc::EndMessag << osc::EndBundle;
 }
 
-/*TODO : choose structur for each case*/
-void CellularAutoCompositor::setStruct(Point<int,int>,int note){
+/*TODO : choose structurs for each case*/
+/*use operator (int i,int j) instead */
+void CellularAutoCompositor::setStruct(Point<int,int> p,int note){
+  int x=p.x();
+  int y=p.y();
   
+  /*block*/ 
   if(note==NOTE_1){
+    mGrid[x][y]=1; 
+    mGrid[x+1][y]=1; 
+    mGrid[x][y+1]=1; 
+    mGrid[x+1][y+1]=1; 
+  }
+  /*tub*/
+  else if (note==NOTE_2) {
+    mGrid[x][y]=1; 
+    mGrid[x-1][y+1]=1; 
+    mGrid[x+1][y+1]=1; 
+    mGrid[x][y+2]=1; 
      
   }
-  else if (note==NOTE_2) {
-  
-  }
+  /*boat*/
   else if (note==NOTE_3) {
+    mGrid[x][y]=1; 
+    mGrid[x+1][y]=1; 
+    mGrid[x][y+1]=1; 
+    mGrid[x+1][y+2]=1; 
+    mGrid[x+2][y+1]=1; 
   
   }
+  /*Eater 1*/
   else if (note==NOTE_4) {
-  
+    mGrid[x][y]=1; 
+    mGrid[x][y-1]=1; 
+    mGrid[x+1][y]=1; 
+    mGrid[x+2][y-1]=1; 
+    mGrid[x+2][y-2]=1; 
+    mGrid[x+2][y-3]=1; 
+    mGrid[x-3][y-3]=1; 
   }
-
-
 }
