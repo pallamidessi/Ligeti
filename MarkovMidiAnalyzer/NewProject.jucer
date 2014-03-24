@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="cQGHx9" name="NewProject" projectType="consoleapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.NewProject" includeBinaryInAppConfig="1"
+              jucerVersion="3.1.0">
+  <MAINGROUP id="h9tJBT" name="NewProject">
+    <FILE id="GbiAmH" name="Matrix.hpp" compile="0" resource="0" file="include/Matrix.hpp"/>
+    <FILE id="Cz5dln" name="MarkovAnalyzer.hpp" compile="0" resource="0"
+          file="include/MarkovAnalyzer.hpp"/>
+    <GROUP id="{704D0416-AAB4-9689-8473-B6CD10C4332B}" name="Source">
+      <FILE id="KM9Muk" name="MarkovAnalyzer.cpp" compile="1" resource="0"
+            file="src/MarkovAnalyzer.cpp"/>
+      <FILE id="CD5Ene" name="main.cpp" compile="1" resource="0" file="src/main.cpp"/>
+      <FILE id="awzYnf" name="TransitionMatrix.cpp" compile="1" resource="0"
+            file="src/TransitionMatrix.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <LINUX_MAKE targetFolder="Builds/Linux">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
+                       targetName="NewProject" headerPath="../../include"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="NewProject"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="lib/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="lib/JUCE/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="1"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>

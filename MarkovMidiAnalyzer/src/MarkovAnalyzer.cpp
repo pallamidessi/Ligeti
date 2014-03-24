@@ -18,54 +18,98 @@
 **/  
 #include "MarkovAnalyzer.hpp"
 
+MarkovAnalyzer::MarkovAnalyzer(){
+}
 
-void MarkovAnalyzer::parseMidiFile(const String& path){
-  juce::midiFile midiToParse;
-  juce::FileInputStream;
-  juce::MidiMessageSequence* curTrack;
-  juce::File midiFile;
+MarkovAnalyzer::MarkovAnalyzer(const std::string& path){
+  parseMidiFile(path);
+}
+
+MarkovAnalyzer::~MarkovAnalyzer(){}
+
+void MarkovAnalyzer::parseMidiFile(const std::string& path){
+  juce::MidiFile* midiToParse;
+  juce::FileInputStream* midiInputStream;
+  const juce::MidiMessageSequence* curTrack;
+  juce::File* midiFile;
   int nbTrack;
+  int i;
 
-  midiFile(path);
-  if(!midiFile.existsAsFile()){
+  midiFile=new File(path);
+  if(!midiFile->existsAsFile()){
     perror("File does not exist");
     return;
   }
 
-  midiInputStream(midiFile);
-  midiToParse();
+  midiInputStream= new FileInputStream(*midiFile);
+  midiToParse=new MidiFile();
 
-  if(!midiToParse->readFrom(midiInputStream)){
+  if(!midiToParse->readFrom(*midiInputStream)){
     perror("Can't read stream");
     return;
   }
 
   midiToParse->convertTimestampTicksToSeconds();
   nbTrack=midiToParse->getNumTracks();
-
+  
+   mTransition=new TransitionMatrix*[nbTrack]; 
   for (i = 1; i < nbTrack; i++) {
-    curTrack=midiFile->getTrack(i);
+    curTrack=midiToParse->getTrack(i);
     parseTrack(curTrack);
   }
 
 }
 
-void MarkovAnalyzer::parseTrack(MidiMessageSequence* track){
+void MarkovAnalyzer::parseTrack(const juce::MidiMessageSequence* track){
   int nbEvent=track->getNumEvents();
-  juce::MidiEventHolder* curEvent;
-  std::vector<int>* chord;
+  int i;
+  juce::MidiMessageSequence::MidiEventHolder* curEvent;
+  std::list<int>* chord;
 
-  for (i = 0; i < nbEvent; i++) {
-    curEvent=track->getEventPointer();
-    if(curEvent->isNoteOn()){
-      chord=getChord(curEvent,track);
-      i+=chord.size();
-      parseChord(chord)
+  for (i = 1; i < nbEvent; i++) {
+    curEvent=track->getEventPointer(i);
+    if(curEvent->message.isNoteOn()){
+      chord=getChord(curEvent,track,i);
+      i+=chord->size()-1;
+      analyzeChord(chord);
     }
   }
 }
 
-void MarkovAnalyzer::parseChord(std::vector<>){
+std::list<int>* MarkovAnalyzer::getChord(juce::MidiMessageSequence::MidiEventHolder* current,
+                                            const juce::MidiMessageSequence* track,
+                                            int pos){
+  int timestamp;
+  int i=1;
+  juce::MidiMessage message;
+  std::list<int>* chord=new std::list<int>;
+  
+  timestamp=current->message.getTimeStamp();
+  chord->push_back(current->message.getNoteNumber());
+  
+  while((message=track->getEventPointer(pos+i)->message).getTimeStamp()==timestamp){
+    if(message.isNoteOn()){
+      chord->push_back(message.getNoteNumber());
+      i++;
+    }
+  }
+  
+  chord->sort();
 
+  return chord;
+}
 
+void MarkovAnalyzer::analyzeChord(std::list<int>* chordMidiNote){
+  static int lastIndex=-1; 
+  int newIndex;
+
+  if (lastIndex!=-1) {
+    if((newIndex=mTransition[0]->find(chordMidiNote))==-1){
+      newIndex=mTransition[0]->addNewIndexKey(chordMidiNote);
+    }
+    mTransition[0]->addTransition(lastIndex,newIndex);
+  }
+  else {
+    lastIndex=mTransition[0]->addNewIndexKey(chordMidiNote);
+  }
 }

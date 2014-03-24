@@ -21,5 +21,7 @@
 
 int main(int argc, char* argv[]){
   
+  MarkovAnalyzer* test=new MarkovAnalyzer();
+  test->parseMidiFile(argv[1]);
   return 0;
 }
