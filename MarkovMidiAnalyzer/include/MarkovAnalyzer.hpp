@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include <list>
 #include <cstring>
 #include <map>
@@ -39,7 +40,7 @@ typedef int parseMode_t;
 
 class TransitionMatrix {
 public:
-  TransitionMatrix (std::map<std::list<int>,int>* chordMap);
+  TransitionMatrix ();
   virtual ~TransitionMatrix ();
 
   int addNewIndexKey(std::list<int>*); //Add a dimension
@@ -47,11 +48,16 @@ public:
   int find(std::list<int>* someChord);
   void computeProbabilities();
   void print();
+  void sumProbabilities();
 
+  int createFirstChord(juce::MidiMessageSequence* track);
+  int createNewChord(juce::MidiMessageSequence* track,int prevChordIndex);
+
+  std::vector< std::list<int> > mIndex; //the element vector containing vector are sorted
 private:
   Matrix<float> mTransition;
+  std::vector<int> mFreq;
   int mTotal;
-  std::vector< std::list<int> > mIndex; //the element vector containing vector are sorted
 };
 
 class MarkovAnalyzer {
@@ -61,7 +67,7 @@ public:
   virtual ~MarkovAnalyzer ();
   
   void parseMidiFile(const std::string& path);
-  
+  void createNewMelody(const std::string& path); 
 private:
   void parseTrack(const juce::MidiMessageSequence* track);
   std::list<int>* getChord(juce::MidiMessageSequence::MidiEventHolder* current,const juce::MidiMessageSequence* track,int pos);

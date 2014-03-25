@@ -52,9 +52,9 @@ template<typename T>
         int i;
         std::vector<T> newLine;
         
-        //for (i = 0; i < mSizeGrid; i++) {
-        //  mMat[i].push_back(defaultValue);
-        //}
+        for (i = 0; i < mSizeGrid; i++) {
+          mMat[i].push_back(defaultValue);
+        }
 
         for (i = 0; i < mSizeGrid+1; i++) {
           newLine.push_back(defaultValue);
@@ -64,26 +64,28 @@ template<typename T>
         mSizeGrid++;
       }
 
-      virtual ~Matrix ();
+      virtual ~Matrix (){};
       
-      T operator()(int i,int j){
+      T& operator()(int i,int j){
         /* Raise an exception instead
          if(i>mSizeGrid || i<0 || j>mSizeGrid || j<0)
           return -1;
         */
         return mMat[i][j];
       }
-      
-      std::vector<T> operator[](int i){
+
+      void incr(int i,int j){
+        mMat[i][j]=mMat[i][j]+1;
+      }
+
+      std::vector<T>& operator[](int i){
         return mMat[i];
       }
       
 
     private:
       /* data */
-      static int mSizeGrid;
+      int mSizeGrid;
       std::vector< std::vector<T> > mMat;
 };
-template<typename T>
-int Matrix<T>::mSizeGrid=0;
 

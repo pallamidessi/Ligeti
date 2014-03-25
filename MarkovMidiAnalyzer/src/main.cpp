@@ -20,8 +20,9 @@
 
 
 int main(int argc, char* argv[]){
-  
+  srand(time(NULL)); 
   MarkovAnalyzer* test=new MarkovAnalyzer();
   test->parseMidiFile(argv[1]);
+  test->createNewMelody(argv[2]); 
   return 0;
 }
