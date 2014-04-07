@@ -40,7 +40,7 @@ bool checkDir(fs::path p,std::vector<Reader*> *listReader){
            dirIter->path().extension().compare(".csv")){
           
           std::string pp(dirIter->path().c_str());
-          listReader->push_back(new Reader(pp.c_str(),
+          listReader->push_back(new Reader((char*)pp.c_str(),
                                new AudioMonitorModule(),
                                new ClientMonitorParameter(NULL)));  
           
@@ -53,11 +53,11 @@ return false;
 }
 
 int main(int argc, char* argv[]){
-  int nbOfReader=argc-2; 
+  int nbOfReader=argc-1; 
   int i;
   std::vector<Reader*> listReader;
 
-  if (argc<=2) {
+  if (argc<1) {
     std::cerr<<
       "Specified at least one path to start the simulation"
     <<std::endl;
@@ -65,13 +65,13 @@ int main(int argc, char* argv[]){
   }
 
   /* "Directory" mode*/ 
-  if (checkDir(argv[2],&listReader)) {
+  if (checkDir(argv[1],&listReader)) {
     nbOfReader=listReader.size();
   }
   /*List a file path given by hand*/
   else {
     for (i = 0; i < nbOfReader; i++) {
-      listReader.push_back(new Reader(argv[i+2],new AudioMonitorModule(),new ClientMonitorParameter(NULL)));  
+      listReader.push_back(new Reader(argv[i+1],new AudioMonitorModule(),new ClientMonitorParameter(NULL)));  
     }
   }
   
