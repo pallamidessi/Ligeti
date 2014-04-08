@@ -1,0 +1,6 @@
+[submodule "easea-code/test"]
+	path = easea-code/test
+	url = ssh://pallamidessi@git.code.sf.net/p/easea/code
+[submodule "easea-code/test2"]
+	path = easea-code/test2
+	url = ssh://pallamidessi@git.code.sf.net/p/easea/code

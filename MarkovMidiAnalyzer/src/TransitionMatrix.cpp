@@ -148,15 +148,15 @@ int TransitionMatrix::createFirstChord(juce::MidiMessageSequence* track){
 }
 
 int TransitionMatrix::createNewChord(juce::MidiMessageSequence* track,int prevChordIndex){
-  
+  static int mainTimestamp=0;
   int range=mIndex.size();
   int indexChord;
   float nextChord;
-  int stdDuration=100;
+  int stdDuration=50;
   uint8 stdVelocity=65;
-  int inf=0;
-  int sup=0;
-  int tmp=0;
+  float inf=0;
+  float sup=0;
+  float tmp=0;
   bool cont=true;
   std::list<int> chord;
   std::list<int>::iterator iter;
@@ -183,15 +183,15 @@ int TransitionMatrix::createNewChord(juce::MidiMessageSequence* track,int prevCh
 
   for (iter = chord.begin(); iter!=end; iter++) {
     curOn=juce::MidiMessage::noteOn(2,*iter,stdVelocity);
-    curOn.setTimeStamp(0);
+    curOn.setTimeStamp(mainTimestamp);
     
     curOff=juce::MidiMessage::noteOff(2,*iter,stdVelocity);
-    curOff.setTimeStamp(stdDuration);
+    curOff.setTimeStamp(mainTimestamp+stdDuration);
 
     track->addEvent(curOn);
     track->addEvent(curOff);
   }
-  
+  mainTimestamp+=stdDuration;
   track->updateMatchedPairs();
   
   return indexChord;

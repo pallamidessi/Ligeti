@@ -33,7 +33,7 @@ void MarkovAnalyzer::parseMidiFile(const std::string& path){
   const juce::MidiMessageSequence* curTrack;
   juce::File* midiFile;
   int nbTrack;
-  int i;
+  //int i;
 
   midiFile=new File(path);
   if(!midiFile->existsAsFile()){
@@ -141,8 +141,9 @@ void MarkovAnalyzer::createNewMelody(const std::string& path){
   }
 
   newTrack->addEvent(juce::MidiMessage::endOfTrack());
-  newTrack->sort
+  newTrack->sort();
   mid->addTrack(*newTrack);
+  mid->setTicksPerQuarterNote(96);
   mid->writeTo(*outputStream);
 
 }

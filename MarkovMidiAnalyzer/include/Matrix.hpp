@@ -62,6 +62,8 @@ template<typename T>
 
         mMat.push_back(newLine);
         mSizeGrid++;
+
+        return mSizeGrid;
       }
 
       virtual ~Matrix (){};
