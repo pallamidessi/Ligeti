@@ -3,8 +3,8 @@
 /*Constructor of AudioMonitorServer, create the server socket and initialize the data
  * structure*/
 
-AudioMonitorServer::AudioMonitorServer(int prt,int dbg):
-  debug(1),port(prt){
+AudioMonitorServer::AudioMonitorServer(int prt,int dbg,mode_t mode):
+  debug(1),port(prt),mMode(mode){
 
     /* socket factory*/
     if((servSockfd = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP)) == -1)
@@ -168,8 +168,11 @@ void AudioMonitorServer::recvFromClient(){
               std::cout<<last[0]<<" "<<last[1]<<" "<<last[2]<<" "<<last[3]<<std::endl;
               delete[] last;
             }
+            
+            if (mMode==NOTIFY_MODE) {
+              compo->notify(changedClient);
+            }
 
-            compo->notify(changedClient);
           }
           else{
             list_client->at(i).setIgnoreFlag(false);

@@ -39,6 +39,9 @@
 #include<AudioMonitorUtils.h>
 #include<ClientMonitorParameter.h>
 
+typedef int mode_t;
+#define NOTIFY_MODE 1
+#define METRO_MODE 1
 /**
 *  \class   AudioMonitorServer 
 *  \brief   Central server of the monitoring system.
@@ -56,7 +59,7 @@ class AudioMonitorServer{
     *  @param  port Port on which the server will listened.
     *  @param  dbg  For enabling debug printing.
     **/
-    AudioMonitorServer(int port,int dbg=0);
+    AudioMonitorServer(int port,int dbg=0,mode_t mode=NOTIFY_MODE);
     
 
     /**
@@ -83,7 +86,8 @@ class AudioMonitorServer{
     *  @param  compo An instance of a class derived from Compositor.
     **/
     virtual void setCompositor(Compositor* compo);
-  
+      
+    std::vector<EASEAClientData>* getVectorClient();
   protected:
     /*Signal handling function : not working*/
     void signalHandler();
@@ -129,6 +133,7 @@ class AudioMonitorServer{
 	  struct sigaction terminaison;
     struct sockaddr_in my_addr;
     Compositor* compo;
+    mode_t mMode
     fd_set rdclient; 
     socklen_t addrlen;
     std::vector<EASEAClientData>* list_client; 
