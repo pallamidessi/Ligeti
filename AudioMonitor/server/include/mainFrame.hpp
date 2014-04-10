@@ -25,4 +25,5 @@
 #include <pthread.h>
 #include "AudioMonitorServer.hpp"
 #include "Compositor.hpp"
+#include "MIDICompositor.hpp"
 #endif

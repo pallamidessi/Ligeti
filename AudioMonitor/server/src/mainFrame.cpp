@@ -19,8 +19,8 @@ int main(int argc, char* argv[]){
     port=atoi(argv[1]);
   }
   
-  SimpleCompositor* test=new SimpleCompositor("127.0.0.1",57120,true);
-  test->setNormalization(300,2000,0,130);
+  MIDICompositor* test=new MIDICompositor("127.0.0.1",57120,true);
+  //test->setNormalization(300,2000,0,130);
   int arg[2];
   arg[0]=port;
   arg[1]=test;

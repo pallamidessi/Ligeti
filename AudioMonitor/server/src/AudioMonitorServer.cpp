@@ -3,7 +3,7 @@
 /*Constructor of AudioMonitorServer, create the server socket and initialize the data
  * structure*/
 
-AudioMonitorServer::AudioMonitorServer(int prt,int dbg,mode_t mode):
+AudioMonitorServer::AudioMonitorServer(int prt,int dbg,compositor_mode_t mode):
   debug(1),port(prt),mMode(mode){
 
     /* socket factory*/
@@ -164,9 +164,8 @@ void AudioMonitorServer::recvFromClient(){
               std::cout<<"I have received something from "<<
                 changedClient->getIP()<<":"<<changedClient->getPort()
                 <<std::endl;
-              float* last=changedClient->getLast();
-              std::cout<<last[0]<<" "<<last[1]<<" "<<last[2]<<" "<<last[3]<<std::endl;
-              delete[] last;
+              EASEAClientRow last=changedClient->getLast();
+              std::cout<<last.best()<<" "<<last.average()<<" "<<last.stdev()<<" "<<last.worst()<<std::endl;
             }
             
             if (mMode==NOTIFY_MODE) {

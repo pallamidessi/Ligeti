@@ -1,21 +1,28 @@
 #include "EASEAClientData.hpp"
 
+int EASEAClientData::mGlobalID=0;
 
 EASEAClientData::EASEAClientData ():Note(){
+  mID=mGlobalID;
+  mGlobalID++;
 }
 
 
 EASEAClientData::EASEAClientData (int sock):
-                Note(),nbData(0),ignoreFlag(true),hasSent(false),hasReceived(false),mLasEvalued(){
+                Note(),nbData(0),ignoreFlag(true),hasSent(false),hasReceived(false),mLastEvalued(){
   clientSockfd=sock;
+  mID=mGlobalID;
+  mGlobalID++;
 }
 
 
 EASEAClientData::EASEAClientData (int sock,std::string ip,int port):
-                nbData(0),ignoreFlag(true),mLastEvalued(){
+                Note(),nbData(0),ignoreFlag(true),mLastEvalued(){
   clientSockfd=sock;
   clPort=port;
   clIP=ip;
+  mID=mGlobalID;
+  mGlobalID++;
 }
 
 
@@ -75,6 +82,10 @@ std::string EASEAClientData::getIP(){
 }
 
 
+int EASEAClientData::getID(){      
+  return mID;
+}
+
 std::vector<float>* EASEAClientData::getWorstVector(){
   return &worst;
 }
@@ -95,14 +106,9 @@ std::vector<float>* EASEAClientData::getAverageVector(){
 }
 
 
-float* EASEAClientData::getLast(){
-  float* lastData=new float[5];
-  lastData[0]=best.back();
-  lastData[1]=worst.back();
-  lastData[2]=stdev.back();
-  lastData[3]=average.back();
-
-  return lastData; 
+EASEAClientRow EASEAClientData::getLast(){
+  return EASEAClientRow(best.back(),average.back(),
+                        stdev.back(),worst.back()); 
 }
 
 
@@ -177,12 +183,12 @@ int EASEAClientData::computeNote(){
   if (mLastEvalued.stdev()<last.stdev()) {
     variaStdev=2;
   }
-  else if(lastevalued.stdev()>last.stdev()){
+  else if(mLastEvalued.stdev()>last.stdev()){
     variaStdev=1;
   }
   
   //TODO: copy operator EASEAClientRow
-  mLasEvalued=last;
+  mLastEvalued=last;
 
   if(variaBest && variaWorst && variaAverage && variaStdev==2){
     return NOTE_1;

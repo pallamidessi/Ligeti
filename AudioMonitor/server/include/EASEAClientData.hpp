@@ -27,6 +27,8 @@
 #include <vector>
 #include <AudioMonitorUtils.h>
 #include <ClientMonitorParameter.h>
+#include <EASEAClientRow.hpp>
+#include <Note.hpp>
 
 /**
 *  \class   EASEAClientData 
@@ -35,7 +37,7 @@
 *  
 **/
 class EASEAClientData:public Note {
-  
+   
   public:
     
     /*Constructor/Destructor------------------------------------------------------*/ 
@@ -225,7 +227,14 @@ class EASEAClientData:public Note {
     *           ("xxx.xxx.xxx.xxx").
     **/
     std::string getIP();
-
+    
+    /**
+    * \brief    Get the ID of this EASEA client.
+    *  \details  
+    *
+    * @return  mID the id.
+    **/
+    int getID();
 
     /*Setter----------------------------------------------------------------------*/
     /**
@@ -256,6 +265,8 @@ class EASEAClientData:public Note {
   private:
   
     /* Data-----------------------------------------------------------------------*/
+    static int mGlobalID;
+    int mID;
     int clientSockfd;
     int nbData;
     bool ignoreFlag;

@@ -18,8 +18,8 @@ ALL:$(TARGET)
 #	gcc $(CFLAGS) -o $@ $(OBJ_PATH)/mainFrame.o $(OBJ_PATH)/AudioMonitorServer.o $(OBJ_PATH)/EASEAClientData.o $(OBJ_PATH)/Compositor.o $(OBJ_PATH)/OSCWrapper.o  $(LIB)
 #	mv $@ bin/.
 
-AudioMonitor:mainFrame.o AudioMonitorServer.o EASEAClientData.o Compositor.o  
-	$(CC) $(CFLAGS) -o $@ $(OBJ_PATH)/mainFrame.o $(OBJ_PATH)/AudioMonitorServer.o $(OBJ_PATH)/EASEAClientData.o  $(OBJ_PATH)/Compositor.o $(LIB_OSCPACK)/ip/IpEndpointName.o $(LIB_OSCPACK)/osc/OscOutboundPacketStream.o $(LIB_OSCPACK)/osc/OscTypes.o $(LIB_OSCPACK)/ip/posix/UdpSocket.o $(LIB_OSCPACK)/ip/posix/NetworkingUtils.o $(EZ_PATH)libeasea/libeasea.a  $(LIB)
+AudioMonitor:mainFrame.o AudioMonitorServer.o EASEAClientData.o Compositor.o MIDICompositor.o  
+	$(CC) $(CFLAGS) -o $@ $(OBJ_PATH)/mainFrame.o $(OBJ_PATH)/AudioMonitorServer.o $(OBJ_PATH)/EASEAClientData.o  $(OBJ_PATH)/Compositor.o $(OBJ_PATH)/MIDICompositor.o $(LIB_OSCPACK)/ip/IpEndpointName.o $(LIB_OSCPACK)/osc/OscOutboundPacketStream.o $(LIB_OSCPACK)/osc/OscTypes.o $(LIB_OSCPACK)/ip/posix/UdpSocket.o $(LIB_OSCPACK)/ip/posix/NetworkingUtils.o $(EZ_PATH)libeasea/libeasea.a  $(LIB)
 	mv $@ bin/.
 
 %.o: %.cpp %.hpp

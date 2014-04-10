@@ -1,5 +1,5 @@
 /**
- * @file note.hpp
+ * @file MIDICompositor.cpp
  * @author Pallamidessi Joseph
  * @version 1.0
  *
@@ -16,25 +16,31 @@
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
 **/  
+#ifndef MIDICOMPOSITOR_H__
+#define MIDICOMPOSITOR_H__
 
+#include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include <iostream>
+#include"Compositor.hpp"
 
-#define NOTE_1 1
-#define NOTE_2 2
-#define NOTE_3 3
-#define NOTE_4 4
-
-class Note{
+class MIDICompositor:public Compositor {
   public:
-    Note (){}
-    virtual ~Note (){}
-    
-    virtual int computeNote()=0;
-    virtual std::vector<int> getNoteHistory(){return mNoteHistory;}
-
+    MIDICompositor(std::string synthesisIP,int portnum,bool dbg=false);
+    virtual ~MIDICompositor ();
+    void send();
+    void send(osc::OutboundPacketStream oscMsg);
+    osc::OutboundPacketStream compose(EASEAClientData* cl);
+    void notify(EASEAClientData* cl);
+    void aSending(EASEAClientData* cl);
+    void aReception(EASEAClientData* cl);
+  
   protected:
-    std::vector<int> mNoteHistory;  
+    
+  private:
+    /* data */
 };
+
+#endif /* end of include guard: MIDICOMPOSITOR_H__ */
+
 
