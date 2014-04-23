@@ -1,17 +1,28 @@
 s.boot;
 s.quit;
+s.options.numBuffers=2048;
+"launchctl limit maxfiles 16384 unlimited".unixCmd;
+"launchctl limit".unixCmd;
 (
 var idArray= Array.new;
 var timeout= 60; //timeout de 60 seconde s
-var midifile, path;
+var midifile, path, sampler;
+var tmpindex;
 idArray.add([0,1]);
 
-
-path ="/home/pallamidessi/Téléchargements/jsbwv532.mid";
+path ="/home/pallamidessi/Téléchargements/con2-cm.mid";
 midifile=MIDIFile.new;
 midifile.read(path);
+sampler=midifile.initSampler(s,"~/Téléchargements/maestro".standardizePath);
 
 /*
+Task({
+  88.do{arg x,index;
+    tmpindex=index+21;
+    sampler.play(tmpindex.asSymbol,0,1,1);
+    0.2.wait;
+  };
+}).play;
 OSCdef(\reception,
   {Synth.new("bleep",[440]);},
   \Reception);
@@ -31,9 +42,9 @@ OSCdef(\sending,
   result.value();
 }
 */
-b={idArray};
-midifile.playTrack(2,"Nsec",s,b);
 
+b={idArray};
+midifile.playTrack(0,"Nsec",s,b);
 u=OSCdef(\best,
   {
     arg msg;
@@ -50,6 +61,7 @@ u=OSCdef(\best,
     },
   \note);
 )
+
 (
 // read intire file
 var midifile, path,div, score, tempo= 160, step=0;
