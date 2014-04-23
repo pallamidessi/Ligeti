@@ -188,15 +188,15 @@ int EASEAClientData::computeNote(){
   }
   
   //TODO: copy operator EASEAClientRow
+  printf("%f\n",mLastEvalued.best());
   mLastEvalued=last;
-
-  if(variaBest && variaWorst && variaAverage && variaStdev==2){
+  if(variaBest && variaWorst && variaAverage){
     return NOTE_1;
   }
-  else if (!variaStdev && variaAverage && variaBest && !variaWorst) {
+  else if (variaAverage && !variaBest && variaWorst) {
     return NOTE_2;
   }
-  else if (variaStdev==1 && variaAverage && !variaBest && !variaWorst) {
+  else if (!variaAverage && !variaBest) {
     return NOTE_3;
   }
   else{

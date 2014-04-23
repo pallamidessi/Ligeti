@@ -96,9 +96,9 @@ CEvolutionaryAlgorithm::CEvolutionaryAlgorithm(Parameters* params){
     this->cstats = new CStats();
 
   /***********************************************************/
-  //this->audioMonitor=new AudioMonitorModule("127.0.0.1",27800);
-  //audioMonitor->setMigrationNotification();
-  //audioMonitor->setParams(new ClientMonitorParameter(this));
+  this->audioMonitor=new AudioMonitorModule("127.0.0.1",27800);
+  audioMonitor->setMigrationNotification();
+  audioMonitor->setParams(new ClientMonitorParameter(this));
   /***********************************************************/
    	
   CPopulation::initPopulation(params->selectionOperator,params->replacementOperator,params->parentReductionOperator,params->offspringReductionOperator,
@@ -440,7 +440,7 @@ void CEvolutionaryAlgorithm::showPopulationStats(struct timeval beginTime){
    *******************************************************************************/
   //TODO: multi platform, parser .ez etc...   
   
-  //audioMonitor->send();
+  audioMonitor->send();
 
   /********************************************************************************
    *-END   Monitoring Audio-----                                                  *
@@ -545,7 +545,7 @@ void CEvolutionaryAlgorithm::sendIndividual(){
 		cout << "    His IP is " << this->Clients[client]->getIP() << " and his port is " << this->Clients[client]->getPort() <<endl;
     
     /*****************************************************************/
-    //audioMonitor->sendingIndividuals();
+    audioMonitor->sendingIndividuals();
     /*****************************************************************/
 		
     //cout << "Sending individual " << index << " to client " << client << " now" << endl;
@@ -562,7 +562,7 @@ void CEvolutionaryAlgorithm::receiveIndividuals(){
 		//cout << "number of treated individuals :" << this->treatedIndividuals << endl;
     
     /*****************************************************************/
-     //audioMonitor->receivedIndividuals();
+     audioMonitor->receivedIndividuals();
     /*****************************************************************/
 		
     CSelectionOperator *antiTournament = getSelectionOperator("Tournament",!this->params->minimizing, globalRandomGenerator);		

@@ -19,19 +19,19 @@ f.scope;
 x=Synth.new("bubbles");
 {SinOsc.ar(800,0,0.4)}.play;
 
-SynthDef.new("2sec",{
-  arg freq=440;
+SynthDef.new("Nsec",{
+  arg freq=440,duration=2,vol;
   var sine,env,env_gen;
-  env=Env.perc(1,1,1,[-4,4]);
-  env.value.plot;
+  env=Env.perc(duration,duration,1,[-4,4]);
+  //env.value.plot;
   env_gen=EnvGen.kr(env,doneAction:2);
-  sine={SinOsc.ar(freq,0,0.4)};
+  sine={SinOsc.ar(freq,0,vol)};
   Out.ar(0,[sine*env_gen,sine*env_gen]);
-}).send(s);
+}).load(s);
 
 (
-x=Synth.new("2sec");
-x.set("freq",800);
+x=Synth.new("Nsec",[\freq,800,\duration,6]);
+//x.set("freq",[800,0.2]);
 //x.play;
 )
 x.free;

@@ -1,3 +1,55 @@
+s.boot;
+s.quit;
+(
+var idArray= Array.new;
+var timeout= 60; //timeout de 60 seconde s
+var midifile, path;
+idArray.add([0,1]);
+
+
+path ="/home/pallamidessi/Téléchargements/jsbwv532.mid";
+midifile=MIDIFile.new;
+midifile.read(path);
+
+/*
+OSCdef(\reception,
+  {Synth.new("bleep",[440]);},
+  \Reception);
+
+OSCdef(\sending,
+  {Synth.new("bleep",[1000]);},
+  \Sending);
+
+  ~isAlreadyDefined={
+  arg id,idArray;
+  var result=-1;
+  
+  idArray.do({arg item;index;
+    if(item[0]==id,{result=index; return.value(result)},{});
+  });
+  
+  result.value();
+}
+*/
+b={idArray};
+midifile.playTrack(2,"Nsec",s,b);
+
+u=OSCdef(\best,
+  {
+    arg msg;
+    var note,id;
+    note=msg[1];
+    id=msg[2];
+    "note :".post;
+    note.postln;
+    "id :".post;
+    id.postln;
+    "".postln;
+    //if(~isAlreadyDefined(id,idArray)!=-1,{idArray.add([id,note])});
+    idArray.at(0).put(1,note);
+    },
+  \note);
+)
 (
 // read intire file
 var midifile, path,div, score, tempo= 160, step=0;
@@ -22,14 +74,38 @@ midifile.texts.at(4).postln;
 midifile.seqNums.postln;
 )
 (
+s.boot;
 SynthDef("midiplayer",{ arg out=0, freq=0, vol=0.5;
 	Out.ar(out,SinOsc.ar(freq, 0, vol))
 }).writeDefFile;
 s.sendSynthDef("midiplayer");
 )
 
-s.boot;
+s.reboot;
 s.quit;
+
+SynthDef.new("Nsec",{
+  arg freq=440,duration;
+  var sine,env,env_gen;
+  env=Env.triangle(duration,1);
+  env_gen=EnvGen.kr(env,doneAction:2);
+  sine={SinOsc.ar(freq,0,0.4)};
+  Out.ar(0,[sine*env_gen,sine*env_gen]);
+}).send(s);
+(
+var midifile, path;
+path ="/home/pallamidessi/Téléchargements/gp_bolro.mid";
+midifile=MIDIFile.new;
+midifile.read(path);
+midifile.format.postln;
+//midifile.playTrack(1,"Nsec",s);
+//midifile.playTrack(2,"Nsec",s);
+//midifile.playTrack(3,"Nsec",s);
+//midifile.playTrack(4,"Nsec",s);
+//midifile.playTrack(5,"Nsec",s);
+//midifile.playTrack(6,"Nsec",s);
+midifile.playFile("Nsec",s);
+)
 
 (
 // the score player
@@ -37,9 +113,12 @@ var midifile, path, div, score, tempo= 120, step=0;
 var currentTempo=0,tempi;
 // where are you
 
-path ="/home/pallamidessi/Téléchargements/gym3_1.mid";
+path ="/home/pallamidessi/Téléchargements/gp_bolro.mid";
 midifile=MIDIFile.new;
 midifile.read(path);
+midifile.playTrack(1,"Nsec",s);
+//midifile.playFile("Nsec",s);
+/*
 score = midifile.scores.at(1); // score = midifile.scores.at(0); // for format 0
 div = midifile.division;
 tempi=midifile.tempos.at(0);
@@ -56,7 +135,7 @@ score.do({ arg item;
       tempo.postln;
     });
   }
-  ,{"Arf.postln";});
+  ,{});
 	
   item.put(0,item.at(0)/(div*tempo/60));
   item.put(1,item.at(1)-1);  // MIDI channel 1 == Sc channel 0
@@ -74,6 +153,7 @@ SystemClock.sched(0.0,{ arg time;
 	step = step+1; 
 	if(step<score.size,{score.at(step).at(0)},{nil}) 
 });
+*/
 )
 
 // play two handed
