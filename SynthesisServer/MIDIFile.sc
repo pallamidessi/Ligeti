@@ -196,16 +196,17 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
           },{
                   
         // note offs (3 bytes)
+        
           if ( trackArray.at(pointer) > 127 and: { trackArray.at(pointer) < 144 },
             { runningStatus = trackArray.at(pointer) ; 
-            timesArray = timesArray.add( deltaTime + deltaAkku ); 
+            //timesArray = timesArray.add( deltaTime + deltaAkku ); 
             deltaAkku = 0 ; 
-            notesArray = notesArray.add( trackArray.at(pointer+1) );
-            veloxArray = veloxArray.add( trackArray.at(pointer+2) ); 
-            channelsArray = channelsArray.add( runningStatus - 127 ); 
+            //notesArray = notesArray.add( trackArray.at(pointer+1) );
+            //veloxArray = veloxArray.add( trackArray.at(pointer+2) ); 
+            //channelsArray = channelsArray.add( runningStatus - 127 ); 
             pointer = pointer + 3 ;
           },{
-    
+        
         // note ons (3 bytes)
           if ( trackArray.at(pointer) > 143 and: { trackArray.at(pointer) < 160 }, 
             { runningStatus = trackArray.at(pointer) ; 
@@ -296,10 +297,12 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
   initSampler{ arg server,pathToSample;
     
     //var d= ();                                          /*for mapping midinote to filename*/
+    var sym;
     sampler= RedDiskInSamplerGiga(server);             /*sampler*/
-    sampler.overlaps=11; 
-    /*so number of samples to load is octavesToLoad.size*12*velocities.size*/
-    /*lowest note C2= midi 36*/
+    sampler.overlaps=3; 
+    /*lowest note = midi 21*/
+    //mezzo forte
+    
     88.do{|x,index|
       var pathname,key,tmpIndex,tmpNote;
       tmpIndex=index+1;
@@ -311,18 +314,58 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
       if(tmpNote>=100,{
         pathname=pathToSample++"/"++tmpIndex++"_mcg_mf_"++tmpNote++".wav";
       },{});
-
-      key= (tmpNote).asSymbol;
+      
+      sym=""++tmpNote++"_mf";
+      key= (sym).asSymbol;
       //d.put(index, key);            /*like (45 : A2_96)*/
       sampler.preload(key, pathname);
     };
-    sampler.overlaps;
+    /*
+    piano
+    88.do{|x,index|
+      var pathname,key,tmpIndex,tmpNote;
+      tmpIndex=index+177;
+      tmpNote=index+21;
+      if(tmpNote<100,{
+        pathname=pathToSample++"/"++tmpIndex++"_mcg_p_0"++tmpNote++".wav";
+      },{});
+      
+      if(tmpNote>=100,{
+        pathname=pathToSample++"/"++tmpIndex++"_mcg_p_"++tmpNote++".wav";
+      },{});
+      sym=""++tmpNote++"_p";
+      key= (sym).asSymbol;
+      d.put(index, key);            like (45 : A2_96)
+      sampler.preload(key, pathname);
+    };
+    */
+    //forte
+    88.do{|x,index|
+      var pathname,key,tmpIndex,tmpNote;
+      tmpIndex=index+265;
+      tmpNote=index+21;
+      if(tmpNote<100,{
+        pathname=pathToSample++"/"++tmpIndex++"_mcg_f_0"++tmpNote++".wav";
+      },{});
+      
+      if(tmpNote>=100,{
+        pathname=pathToSample++"/"++tmpIndex++"_mcg_f_"++tmpNote++".wav";
+      },{});
+
+      sym=""++tmpNote++"_f";
+      key= (sym).asSymbol;
+      //d.put(index, key);            /*like (45 : A2_96)*/
+      sampler.preload(key, pathname);
+    };
+
     ^sampler; 
   }
   playTrack{ arg numTrack, synthName,server,funcArrayNote;
     // the score player
     var midifile, path, div, score, tempo=75, step=0;
     var currentTempo=0,tempi,minDelta,note;
+    var velocity; 
+    //var noteoff=Array.new;
     // where are you
     //if((this.format==1),{numTrack=numTrack+1;tempi=tempos.at(numTrack-1);},{tempi=tempos.at(numTrack);});
     score = this.scores.at(numTrack); 
@@ -330,10 +373,13 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
     div.postln;
     tempi=tempos.at(0);
     tempos.at(1).postln;
+    score.postln;
+    "nombre note on :".post;
+    score.size.postln;
     score.do({ arg item;
       if((currentTempo < tempi.size),{
         if(((item.at(4)>=tempi.at(currentTempo).at(0))), {
-          tempo=60000000/tempi.at(currentTempo).at(1);
+          //tempo=60000000/tempi.at(currentTempo).at(1);
           currentTempo=currentTempo+1;
           tempo.postln;
         });
@@ -351,25 +397,33 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
     // play the score
     SystemClock.sched(score.at(0).at(4),{ arg time; 
     //	score.at(step).at(2).postln;
-      
-      sampler.play(score.at(step).at(2).asSymbol,0.1,1,2);
+      if(score.at(step).at(3)<128,{velocity="_f"});
+      if(score.at(step).at(3)<85,{velocity="_mf"});
+      if(score.at(step).at(3)<42,{velocity="_p"});
+      velocity.postln;
+      sampler.play((""++(score.at(step).at(2))++velocity).asSymbol,0.1,1,1,0.7);
       //score.at(step).at(2).asSymbol.postln;
       note=funcArrayNote.value.at(0).at(1);
-      if(note==2,{sampler.play((score.at(step).at(2)+1).asSymbol,0,1,1,0.3);});
-      if(note==3,{sampler.play((score.at(step).at(2)+2).asSymbol,0,1,1,0.5);});
-      if(note==4,{sampler.play((score.at(step).at(2)+3).asSymbol,0,1,1,1);});
+      if(note==2,{sampler.play((""++(score.at(step).at(2)+1)++velocity).asSymbol,0,1,1,0.7);});
+      if(note==3,{sampler.play((""++(score.at(step).at(2)+2)++velocity).asSymbol,0,1,1,0.7);});
+      if(note==4,{sampler.play((""++(score.at(step).at(2)+3)++velocity).asSymbol,0,1,1,0.7);});
       minDelta=score.at(step).at(0);      
      
      //chord 
      
      {score.at(step).at(4)==score.at(step+1).at(4)}.while({
-        "hit !".postln; 
         step = step+1; 
-        sampler.play(score.at(step).at(2).asSymbol,0,1,1);
+        if(score.at(step).at(3)<128,{velocity="_f"});
+        if(score.at(step).at(3)<85,{velocity="_mf"});
+        if(score.at(step).at(3)<42,{velocity="_p"});
+        sampler.play((""++(score.at(step).at(2))++velocity).asSymbol,0.1,1,1,0.7);
+        if(note==2,{sampler.play((""++(score.at(step).at(2)+1)++velocity).asSymbol,0,1,1,0.7);});
+        if(note==3,{sampler.play((""++(score.at(step).at(2)+2)++velocity).asSymbol,0,1,1,0.7);});
+        if(note==4,{sampler.play((""++(score.at(step).at(2)+3)++velocity).asSymbol,0,1,1,0.7);});
       });
      
       step = step+1;
-      minDelta=(score.at(step).at(4))-(score.at(step-1).at(4));
+      if(step<score.size,{minDelta=(score.at(step).at(4))-(score.at(step-1).at(4));});
       if(step<score.size,{minDelta},{nil}) 
     });
   }
