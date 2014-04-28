@@ -299,7 +299,7 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
     //var d= ();                                          /*for mapping midinote to filename*/
     var sym;
     sampler= RedDiskInSamplerGiga(server);             /*sampler*/
-    sampler.overlaps=3; 
+    sampler.overlaps=11; 
     /*lowest note = midi 21*/
     //mezzo forte
     
@@ -338,8 +338,8 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
       d.put(index, key);            like (45 : A2_96)
       sampler.preload(key, pathname);
     };
-    */
-    //forte
+    
+    forte
     88.do{|x,index|
       var pathname,key,tmpIndex,tmpNote;
       tmpIndex=index+265;
@@ -351,12 +351,12 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
       if(tmpNote>=100,{
         pathname=pathToSample++"/"++tmpIndex++"_mcg_f_"++tmpNote++".wav";
       },{});
-
       sym=""++tmpNote++"_f";
       key= (sym).asSymbol;
-      //d.put(index, key);            /*like (45 : A2_96)*/
+      //d.put(index, key);            like (45 : A2_96)
       sampler.preload(key, pathname);
     };
+    */
 
     ^sampler; 
   }
@@ -397,29 +397,35 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
     // play the score
     SystemClock.sched(score.at(0).at(4),{ arg time; 
     //	score.at(step).at(2).postln;
+      /*
       if(score.at(step).at(3)<128,{velocity="_f"});
       if(score.at(step).at(3)<85,{velocity="_mf"});
       if(score.at(step).at(3)<42,{velocity="_p"});
       velocity.postln;
+      */
+      velocity="_mf";
       sampler.play((""++(score.at(step).at(2))++velocity).asSymbol,0.1,1,1,0.7);
       //score.at(step).at(2).asSymbol.postln;
       note=funcArrayNote.value.at(0).at(1);
-      if(note==2,{sampler.play((""++(score.at(step).at(2)+1)++velocity).asSymbol,0,1,1,0.7);});
-      if(note==3,{sampler.play((""++(score.at(step).at(2)+2)++velocity).asSymbol,0,1,1,0.7);});
-      if(note==4,{sampler.play((""++(score.at(step).at(2)+3)++velocity).asSymbol,0,1,1,0.7);});
+      if(note==2,{sampler.play((""++(score.at(step).at(2)+1)++velocity).asSymbol,0,1,1,0.2);});
+      if(note==3,{sampler.play((""++(score.at(step).at(2)+2)++velocity).asSymbol,0,1,1,0.2);});
+      if(note==4,{sampler.play((""++(score.at(step).at(2)+3)++velocity).asSymbol,0,1,1,0.2);});
       minDelta=score.at(step).at(0);      
      
      //chord 
      
      {score.at(step).at(4)==score.at(step+1).at(4)}.while({
         step = step+1; 
+        /*
         if(score.at(step).at(3)<128,{velocity="_f"});
         if(score.at(step).at(3)<85,{velocity="_mf"});
         if(score.at(step).at(3)<42,{velocity="_p"});
+        */
+        velocity="_mf";
         sampler.play((""++(score.at(step).at(2))++velocity).asSymbol,0.1,1,1,0.7);
-        if(note==2,{sampler.play((""++(score.at(step).at(2)+1)++velocity).asSymbol,0,1,1,0.7);});
-        if(note==3,{sampler.play((""++(score.at(step).at(2)+2)++velocity).asSymbol,0,1,1,0.7);});
-        if(note==4,{sampler.play((""++(score.at(step).at(2)+3)++velocity).asSymbol,0,1,1,0.7);});
+        if(note==2,{sampler.play((""++(score.at(step).at(2)+1)++velocity).asSymbol,0,1,1,0.2);});
+        if(note==3,{sampler.play((""++(score.at(step).at(2)+2)++velocity).asSymbol,0,1,1,0.2);});
+        if(note==4,{sampler.play((""++(score.at(step).at(2)+3)++velocity).asSymbol,0,1,1,0.2);});
       });
      
       step = step+1;
