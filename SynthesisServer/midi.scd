@@ -1,13 +1,13 @@
-s.boot;
-s.quit;
 
-(
+s.waitForBoot({
   
   var timeout= 60; //timeout de 60 seconde s
   var midifile, path, sampler;
   var tmpindex;
   
   var idArray= Array.new;
+  
+  s.options.numBuffers=4096;
   idArray.add([0,1]);
 
   ~defineinput={
@@ -42,19 +42,8 @@ s.quit;
    };
   }).play;
  };
-  /*
-  //midifile.scores.at(0).postln;
-  //midifile.scores.at(1).postln;
-  //midifile.scores.at(2).postln;
-  "format :".post;
-  midifile.format.postln;
-  "nb track :".post;
-  midifile.ntrks.postln;
-  "division :".post;
-  midifile.division.postln;
-  */
-
-  b={idArray};
+  
+ b={idArray};
 
   midifile.playTrack(0,"Nsec",s,b);
   //midifile.playTrack(2,"Nsec",s,b);
@@ -65,10 +54,12 @@ s.quit;
 
   ~testNote={arg note;
     sampler.play(note.asSymbol,0.1,1,1,1);
-  }
-)
-s.freeAll;
+  };
 ~defineinput.value;
+~play.value;
+})
+/*
+s.freeAll;
 ~play.value;
 ~playkeyboard.("_f");
 ~freesampler.value;
@@ -78,3 +69,4 @@ OSCdef(\best).enabled;
 s.options.numBuffers=4096;
 "launchctl limit maxfiles 16384 unlimited".unixCmd;
 "launchctl limit".unixCmd;
+*/
