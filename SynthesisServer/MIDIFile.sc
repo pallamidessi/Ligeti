@@ -406,10 +406,12 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
       velocity="_mf";
       sampler.play((""++(score.at(step).at(2))++velocity).asSymbol,0.1,1,1,0.7);
       //score.at(step).at(2).asSymbol.postln;
-      note=funcArrayNote.value.at(0).at(1);
-      if(note==2,{sampler.play((""++(score.at(step).at(2)+1)++velocity).asSymbol,0,1,1,0.2);});
-      if(note==3,{sampler.play((""++(score.at(step).at(2)+2)++velocity).asSymbol,0,1,1,0.2);});
-      if(note==4,{sampler.play((""++(score.at(step).at(2)+3)++velocity).asSymbol,0,1,1,0.2);});
+      //funcArrayNote.value.at(\0).postln;
+      funcArrayNote.value.do({ arg note;
+        if(note==2,{sampler.play((""++(score.at(step).at(2)+1)++velocity).asSymbol,0,1,1,0.2);});
+        if(note==3,{sampler.play((""++(score.at(step).at(2)+2)++velocity).asSymbol,0,1,1,0.2);});
+        if(note==4,{sampler.play((""++(score.at(step).at(2)+3)++velocity).asSymbol,0,1,1,0.2);});
+      });
       minDelta=score.at(step).at(0);      
      
      //chord 
@@ -427,7 +429,6 @@ MIDIFile { var <>format, <>ntrks, <>division, <>dataChunks, <>scores , <>tempos,
         if(note==3,{sampler.play((""++(score.at(step).at(2)+2)++velocity).asSymbol,0,1,1,0.2);});
         if(note==4,{sampler.play((""++(score.at(step).at(2)+3)++velocity).asSymbol,0,1,1,0.2);});
       });
-     
       step = step+1;
       if(step<score.size,{minDelta=(score.at(step).at(4))-(score.at(step-1).at(4));});
       if(step<score.size,{minDelta},{nil}) 

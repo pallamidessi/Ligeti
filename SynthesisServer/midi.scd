@@ -1,29 +1,30 @@
-
 s.waitForBoot({
   
   var timeout= 60; //timeout de 60 seconde s
   var midifile, path, sampler;
   var tmpindex;
   
-  var idArray= Array.new;
+  var idHashMap= IdentityDictionary.new;
   
   s.options.numBuffers=4096;
-  idArray.add([0,1]);
+  idHashMap.put(0,1);
 
   ~defineinput={
     OSCdef(\best,
     {
       arg msg;
       var note,id;
+      
       note=msg[1];
       id=msg[2];
+      
       "note :".post;
       note.postln;
       "id :".post;
       id.postln;
       "".postln;
-      //if(~isAlreadyDefined(id,idArray)!=-1,{idArray.add([id,note])});
-      idArray.at(0).put(1,note);
+      
+      idHashMap.put(id,note);
       },
     \note);
   };
@@ -43,7 +44,7 @@ s.waitForBoot({
   }).play;
  };
   
- b={idArray};
+ b={idHashMap};
 
   midifile.playTrack(0,"Nsec",s,b);
   //midifile.playTrack(2,"Nsec",s,b);
@@ -55,10 +56,17 @@ s.waitForBoot({
   ~testNote={arg note;
     sampler.play(note.asSymbol,0.1,1,1,1);
   };
+  /*
+  ~isAlreadyDefined={arg id,idArray
+    idHashMap 
+  };
+  */
 ~defineinput.value;
 ~play.value;
 })
 /*
+s.quit;
+Buffer.freeAll;
 s.freeAll;
 ~play.value;
 ~playkeyboard.("_f");
