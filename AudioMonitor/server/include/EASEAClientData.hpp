@@ -189,6 +189,14 @@ class EASEAClientData:public Note {
     **/
     EASEAClientRow getLast(); 
     
+    /**
+    * \brief   Return the i-eme data on each vector, in an EASEAClientRow.
+    * \details 
+    *
+    * @return  row  A row containing the  data at the specified index on each 
+    *               vector.
+    **/
+    EASEAClientRow getFromIndex(int i); 
     
     /**
     * \brief    Return the value of ignoreFlag

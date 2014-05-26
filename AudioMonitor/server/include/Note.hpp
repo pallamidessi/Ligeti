@@ -28,15 +28,19 @@
 
 class Note{
   public:
-    Note (){}
+    Note ():mGenRange(1),mQualityNotation(true),mQuantityNotation(false),
+            mBestDiffRatio(0),mWorstDiffRatio(0),mAverageDiffRatio(0),
+            mStdevDiffRatio(0){}
+
     virtual ~Note (){}
     
     virtual int computeNote()=0;
     virtual std::vector<int> getNoteHistory(){return mNoteHistory;}
-
+  
   protected:
     std::vector<int> mNoteHistory; 
-    
+   
+    int mGenRange;
     bool mQualityNotation;
     bool mQuantityNotation;
 

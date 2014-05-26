@@ -44,10 +44,10 @@ public:
   }
 
 private:
+  /* data */
   float mBest;
   float mWorst;
   float mStdev;
   float mAverage;
-  /* data */
 };
 

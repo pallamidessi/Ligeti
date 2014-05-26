@@ -168,7 +168,9 @@ int EASEAClientData::computeNote(){
   if(mQualityNotation)
     return computeVariationNote();
   else if (mQuantityNotation)
-    return computeQuantifyNote;
+    return computeQuantifyNote();
+  else
+    return NOTE_1;
   
 }
 
@@ -180,10 +182,10 @@ int EASEAClientData::computeVariationNote(){
   int variaAverage=0;
   int i;
 
-  EASEAClientRow last=getLast(nbData-1);
-  EASEAClientRow previous=getLast(nbData-2);
+  EASEAClientRow last=getFromIndex(nbData-1);
+  EASEAClientRow previous=getFromIndex(nbData-2);
 
-  for (i = 1; i <= genRange; i++) {
+  for (i = 1; i <= mGenRange; i++) {
     /*Best variation*/
     if (previous.best()>last.best()) {
       variaBest=1;
@@ -207,11 +209,11 @@ int EASEAClientData::computeVariationNote(){
       variaStdev=1;
     }
     
-    if(nbData-genRange<0)
+    if(nbData-mGenRange<0)
       break;
 
     last=previous;
-    previous=getFromIndex(nbData-genRange)
+    previous=getFromIndex(nbData-mGenRange);
   }
   
   //TODO: copy operator EASEAClientRow
@@ -240,10 +242,10 @@ int EASEAClientData::computeQuantifyNote(){
   int variaAverage=0;
   int i;
 
-  EASEAClientRow last=getLast(nbData-1);
-  EASEAClientRow previous=getLast(nbData-2);
+  EASEAClientRow last=getFromIndex(nbData-1);
+  EASEAClientRow previous=getFromIndex(nbData-2);
 
-  for (i = 1; i <= genRange; i++) {
+  for (i = 1; i <= mGenRange; i++) {
     /*Best variation*/
     if (percent(last.best(),previous.best())<mBestDiffRatio) {
       variaBest=1;
@@ -267,11 +269,11 @@ int EASEAClientData::computeQuantifyNote(){
       variaStdev=1;
     }
 
-    if(nbData-genRange<0)
+    if(nbData-mGenRange<0)
       break;
 
     last=previous;
-    previous=getFromIndex(nbData-genRange)
+    previous=getFromIndex(nbData-mGenRange);
   }
   
   //TODO: copy operator EASEAClientRow
