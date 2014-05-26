@@ -1,5 +1,6 @@
 #include "EASEAClientData.hpp"
 
+
 int EASEAClientData::mGlobalID=0;
 
 EASEAClientData::EASEAClientData ():Note(){
@@ -107,8 +108,14 @@ std::vector<float>* EASEAClientData::getAverageVector(){
 
 
 EASEAClientRow EASEAClientData::getLast(){
-  return EASEAClientRow(best.back(),average.back(),
-                        stdev.back(),worst.back()); 
+  return EASEAClientRow(best.back(),worst.back(),average.back(),
+                        stdev.back()); 
+}
+
+
+EASEAClientRow EASEAClientData::getFromIndex(int i){
+  return EASEAClientRow(best[i],worst[i],average[i],
+                        stdev[i]); 
 }
 
 
@@ -157,40 +164,60 @@ bool EASEAClientData::isASending(){
 
 
 int EASEAClientData::computeNote(){
+
+  if(mQualityNotation)
+    return computeVariationNote();
+  else if (mQuantityNotation)
+    return computeQuantifyNote;
+  
+}
+
+
+int EASEAClientData::computeVariationNote(){
   int variaBest=0;
   int variaWorst=0;
   int variaStdev=0;
   int variaAverage=0;
-  
-  EASEAClientRow last=getLast();
-  
-  /*Best variation*/
-  if (mLastEvalued.best()>last.best()) {
-    variaBest=1;
-  }
+  int i;
 
-  /*Worst variation*/
-  if (mLastEvalued.worst()>last.worst()) {
-    variaWorst=1;
-  }
+  EASEAClientRow last=getLast(nbData-1);
+  EASEAClientRow previous=getLast(nbData-2);
 
-  /*Average variation*/
-  if(mLastEvalued.average()>last.average()){
-    variaAverage=1;
-  }
-   
-  /*Stdev variation*/
-  if (mLastEvalued.stdev()<last.stdev()) {
-    variaStdev=2;
-  }
-  else if(mLastEvalued.stdev()>last.stdev()){
-    variaStdev=1;
+  for (i = 1; i <= genRange; i++) {
+    /*Best variation*/
+    if (previous.best()>last.best()) {
+      variaBest=1;
+    }
+
+    /*Worst variation*/
+    if (previous.worst()>last.worst()) {
+      variaWorst=1;
+    }
+
+    /*Average variation*/
+    if(previous.average()>last.average()){
+      variaAverage=1;
+    }
+     
+    /*Stdev variation*/
+    if (previous.stdev()<last.stdev()) {
+      variaStdev=2;
+    }
+    else if(previous.stdev()>last.stdev()){
+      variaStdev=1;
+    }
+    
+    if(nbData-genRange<0)
+      break;
+
+    last=previous;
+    previous=getFromIndex(nbData-genRange)
   }
   
   //TODO: copy operator EASEAClientRow
   printf("%f\n",mLastEvalued.best());
   mLastEvalued=last;
-  if(variaBest && variaWorst && variaAverage){
+  if(variaBest && variaAverage){
     return NOTE_1;
   }
   else if (variaAverage && !variaBest && variaWorst) {
@@ -201,6 +228,71 @@ int EASEAClientData::computeNote(){
   }
   else{
     return NOTE_4;
-  }  
+  } 
+
 }
 
+
+int EASEAClientData::computeQuantifyNote(){
+  int variaBest=0;
+  int variaWorst=0;
+  int variaStdev=0;
+  int variaAverage=0;
+  int i;
+
+  EASEAClientRow last=getLast(nbData-1);
+  EASEAClientRow previous=getLast(nbData-2);
+
+  for (i = 1; i <= genRange; i++) {
+    /*Best variation*/
+    if (percent(last.best(),previous.best())<mBestDiffRatio) {
+      variaBest=1;
+    }
+
+    /*Worst variation*/
+    if (percent(last.worst(),previous.worst())<mWorstDiffRatio) {
+      variaWorst=1;
+    }
+
+    /*Average variation*/
+    if (percent(last.average(),previous.average())<mAverageDiffRatio) {
+      variaAverage=1;
+    }
+     
+    /*Stdev variation*/
+    if (percent(last.stdev(),previous.stdev())>mStdevDiffRatio) {
+      variaStdev=2;
+    }
+    if (percent(last.stdev(),previous.stdev())<mStdevDiffRatio) {
+      variaStdev=1;
+    }
+
+    if(nbData-genRange<0)
+      break;
+
+    last=previous;
+    previous=getFromIndex(nbData-genRange)
+  }
+  
+  //TODO: copy operator EASEAClientRow
+  printf("%f\n",mLastEvalued.best());
+  mLastEvalued=last;
+  if(variaBest && variaAverage){
+    return NOTE_1;
+  }
+  else if (variaAverage && !variaBest && variaWorst) {
+    return NOTE_2;
+  }
+  else if (!variaAverage && !variaBest) {
+    return NOTE_3;
+  }
+  else{
+    return NOTE_4;
+  } 
+
+}
+
+
+float EASEAClientData::percent(float numerator, float denominator){
+  return 100-(numerator/denominator)*100;
+}

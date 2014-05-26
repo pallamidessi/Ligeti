@@ -77,6 +77,18 @@ class EASEAClientData:public Note {
     
     /*Method----------------------------------------------------------------------*/
     /**
+    * \brief    Compute the difference in percent between two value using the
+    *           denominator as the reference.
+    *
+    * @param  numerator   We want the difference in percent between this value and the
+    *                     denominator, expressed by the denominator value.
+    * @param  denominator See above.
+    * @return percent     The calculated percentage can be positive or negative.
+    **/
+    float percent(float numerator, float denominator);
+
+
+    /**
     * \brief    A more generic way to add data. 
     * \details  See specific implementation for details.
     *
@@ -86,7 +98,7 @@ class EASEAClientData:public Note {
     
 
     /**
-    * \brief    Add data to the different vector.
+    * \brief    Add data to the different vectors.
     * \details  TODO: Not very generic.
     *
     *  @param  best     Value to push back to the best's vector.
@@ -126,7 +138,39 @@ class EASEAClientData:public Note {
     **/
     void verifySending(MonitorParameter* params);
 
+    
+    /**
+    * \brief    Compute a note based on the setting choosed by the users. 
+    *           Wrapper for the note computation function.
+    * \details  Call computeVariationNote if mQualityNotation is set to true.
+    *           The user can changed the notation mode and its setting using 
+    *           the GUI.
+    *
+    * @return  note The resulting note
+    **/
     int computeNote(); 
+    
+    
+    /**
+    * \brief    Do the real calculation of the note by verifying variation, on 
+    *           genRange generation value if possible.
+    * \details  The genRange value is by default 2, but can be changed using 
+    *           the GUI.
+    *
+    * @return  note the note
+    **/
+    int computeVariationNote();
+    
+    
+    /**
+    * \brief    Do the real calculation of the note by verifying variation of
+    *           specified quantity, on genRange generation value if possible.
+    * \details  The genRange value is by default 2, but can be changed using 
+    *           the GUI.
+    *
+    * @return  note the note
+    **/
+    int computeQuantifyNote();
     /*Getter----------------------------------------------------------------------*/
     /**
     * \brief   Return the socket.

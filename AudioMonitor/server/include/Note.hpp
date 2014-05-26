@@ -35,6 +35,14 @@ class Note{
     virtual std::vector<int> getNoteHistory(){return mNoteHistory;}
 
   protected:
-    std::vector<int> mNoteHistory;  
+    std::vector<int> mNoteHistory; 
+    
+    bool mQualityNotation;
+    bool mQuantityNotation;
+
+    float mBestDiffRatio;
+    float mWorstDiffRatio;
+    float mAverageDiffRatio;
+    float mStdevDiffRatio;
 };
 
