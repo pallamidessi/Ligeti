@@ -1,3 +1,5 @@
+(
+s.options.numBuffers=4096;
 s.waitForBoot({
   
   var timeout= 60; //timeout de 60 seconde s
@@ -6,7 +8,6 @@ s.waitForBoot({
   
   var idHashMap= IdentityDictionary.new;
   
-  s.options.numBuffers=4096;
   idHashMap.put(0,1);
 
   ~defineinput={
@@ -29,7 +30,7 @@ s.waitForBoot({
     \note);
   };
   midifile=MIDIFile.new;
-  sampler=midifile.initSampler(s,"~/Téléchargements/maestro".standardizePath);
+  sampler=midifile.initSampler(s,"/home/pallamidessi/Téléchargements/maestro".standardizePath);
   ~play={
   path ="/home/pallamidessi/Téléchargements/con2-cm.mid";
   midifile.read(path);
@@ -64,6 +65,7 @@ s.waitForBoot({
 ~defineinput.value;
 ~play.value;
 })
+)
 /*
 s.quit;
 Buffer.freeAll;
