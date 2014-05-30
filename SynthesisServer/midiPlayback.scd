@@ -26,13 +26,6 @@ s.waitForBoot({
     \note);
   };
 
-  ~customPlay={
-    path ="/home/pallamidessi/Téléchargements/con2-cm.mid";
-    midifile.read(path);
-    b={idHashMap};
-    midifile.playTrack(0,"Nsec",s,b);
-  };
-
   ~array={idHashMap};
   
   ~truc={arg  noteNr, velo, dur, upVelo, track, channel, absTime,

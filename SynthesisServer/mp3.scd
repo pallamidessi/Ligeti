@@ -1,12 +1,3 @@
-/*
-s.boot; 
-s.quit;
-MP3.lamepath;
-MP3.curlpath;
-File.exists(MP3.lamepath)
-File.exists(MP3.curlpath)
-*/
-
 s.waitForBoot({
   var mp3Playback=MP3.readToBuffer(s,"/home/pallamidessi/Musique2/test.mp3");
   var idHashMap= IdentityDictionary.new;
@@ -32,7 +23,7 @@ s.waitForBoot({
         idHashMap.put(id,note);
       },
       \note);
-    
+
     SynthDef.new(\playback, {arg inbus=0;
       var sig; 
       sig = In.ar(inbus, 1); 
@@ -48,6 +39,10 @@ s.waitForBoot({
       y = Mix.ar(Array.fill(7,{ CombL.ar(z, 0.05, rrand(0.03, 0.05), combdecay) })); 
       6.do({ y = AllpassN.ar(y, 0.050, rrand(0.03, 0.05), allpassdecay) });
       Out.ar(outbus, sig + (y * revVol) ! 2); // as fxlevel is 1 then I lower the vol a bit
+    }).add;
+    
+    SynthDef.new(\bandStopFilter,{arg inbus=0, beginCutoff, stopCutoff;
+      //TODO: one HPF and one LPF 
     }).add;
 
     SynthDef.new(\flanger, { arg out=0, in=0, delay=0.1, depth=0.08, rate=0.06, fdbk=0.0, decay=0.0; 
@@ -115,27 +110,31 @@ s.waitForBoot({
   ~play={arg funcHash;
     {Out.ar(10, PlayBuf.ar(2, mp3Playback.bufnum, BufRateScale.kr(mp3Playback.bufnum),loop:1))}.play(addAction:\addToHead);
     //playbackEffect=Synth(\playback, [\inbus, 10], addAction:\addToTail);
-    reverbEffect = Synth(\reverb, [\inbus, 10], addAction:\addToTail);
+    //reverbEffect = Synth(\reverb, [\inbus, 10], addAction:\addToTail);
     
-    reverbEffect.set(\revVol, 0.00);
-    
+    //reverbEffect.set(\revVol, 0.00);
+   /* 
     Task({
       inf.do({
         var newReverb=0;
         funcHash.value.do({arg note;
-          if(note==2,{newReverb=newReverb+0.01});
-          if(note==3,{newReverb=newReverb+0.05});
-          if(note==4,{newReverb=newReverb+0.1});
+          if(note==2,{newReverb=newReverb+0.005});
+          if(note==3,{newReverb=newReverb+0.01});
+          if(note==4,{newReverb=newReverb+0.02});
         });
         newReverb.postln;
         reverbEffect.set(\revVol,newReverb);
         0.15.wait;
       });
     }).play;
+    */
+
     //flangerEffect=Synth(\flanger, [\in, 10], addAction:\addToTail);
     //pitchEffect=Synth(\pitcher, addAction:\addToTail);
-    //chorusEffect=Synth(\chorus, [\inbus, 10], addAction:\addToTail);
+    chorusEffect=Synth(\chorus, [\inbus, 10], addAction:\addToTail);
     //tremoloEffect=Synth(\tremolo, [\inbus, 10], addAction:\addToTail);
+    //tremoloEffect.set(\freq,0.1);
+   
   };
   
 

@@ -1,6 +1,9 @@
+/*
+TODO: add constraints/bounds
+*/
 (
 var playButton,pauseButton,stopButton,nextButton,previousButton,addButton,
-    tracktitle,timeElapsed,volumeSlider,shuffleButton;
+    tracktitle,timeElapsed,volumeSlider,shuffleButton,trackList;
 
 playButton = Button.new().states_([["Play"]]);
 pauseButton = Button.new().states_([["Pause"]]);
@@ -13,7 +16,9 @@ timeElapsed = StaticText.new().string_("00:00");
 tracktitle = StaticText.new().string_("Artist - Tracktitle");
 volumeSlider = Slider.new();
 volumeSlider.orientation = \horizontal;
-shuffleButton = Button.new().states([["Shuffle"]]);
+shuffleButton = Button.new().states_([["Shuffle"]]);
+trackList=ListView.new().items=["Artist1 - Tracktitle1","Artist2 - Tracktitle2",
+                              "Artist3 - Tracktitle3","Artist4 - Tracktitle4"];
 
 w = Window.new(bounds: Rect(200,200,255,100)).layout_(
   VLayout(
@@ -21,8 +26,10 @@ w = Window.new(bounds: Rect(200,200,255,100)).layout_(
       timeElapsed,
       VLayout(
         tracktitle,
-        volumeSlider,
-        shuffleButton
+        HLayout(
+          volumeSlider,
+          shuffleButton
+        )
       )
     ),
     HLayout(
@@ -32,7 +39,8 @@ w = Window.new(bounds: Rect(200,200,255,100)).layout_(
       stopButton,
       nextButton,
       addButton
-    )
+    ),
+    trackList;
   )
 );
 
