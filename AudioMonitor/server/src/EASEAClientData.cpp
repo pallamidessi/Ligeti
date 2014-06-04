@@ -184,6 +184,9 @@ int EASEAClientData::computeVariationNote(){
 
   EASEAClientRow last=getFromIndex(nbData-1);
   EASEAClientRow previous=getFromIndex(nbData-2);
+  
+  if(nbData<2)
+    return NOTE_1;
 
   for (i = 1; i <= mGenRange; i++) {
     /*Best variation*/
@@ -217,7 +220,6 @@ int EASEAClientData::computeVariationNote(){
   }
   
   //TODO: copy operator EASEAClientRow
-  printf("%f\n",mLastEvalued.best());
   mLastEvalued=last;
   if(variaBest && variaAverage){
     return NOTE_1;
@@ -244,6 +246,9 @@ int EASEAClientData::computeQuantifyNote(){
 
   EASEAClientRow last=getFromIndex(nbData-1);
   EASEAClientRow previous=getFromIndex(nbData-2);
+
+  if(nbData<2)
+    return NOTE_1;
 
   for (i = 1; i <= mGenRange; i++) {
     /*Best variation*/
@@ -277,7 +282,6 @@ int EASEAClientData::computeQuantifyNote(){
   }
   
   //TODO: copy operator EASEAClientRow
-  printf("%f\n",mLastEvalued.best());
   mLastEvalued=last;
   if(variaBest && variaAverage){
     return NOTE_1;
