@@ -28,7 +28,7 @@ s.waitForBoot({
       var sig; 
       sig = In.ar(inbus, 1); 
       Out.ar(0,sig);
-    }).add;
+    }).load(s);
 
     SynthDef.new(\reverb, {arg inbus=0, outbus=0, predelay=0.048, combdecay=15, allpassdecay=1, revVol=0.31;
       var sig, y, z;
@@ -39,11 +39,16 @@ s.waitForBoot({
       y = Mix.ar(Array.fill(7,{ CombL.ar(z, 0.05, rrand(0.03, 0.05), combdecay) })); 
       6.do({ y = AllpassN.ar(y, 0.050, rrand(0.03, 0.05), allpassdecay) });
       Out.ar(outbus, sig + (y * revVol) ! 2); // as fxlevel is 1 then I lower the vol a bit
-    }).add;
+    }).load(s);
     
     SynthDef.new(\bandStopFilter,{arg inbus=0, beginCutoff, stopCutoff;
+      var sig, sigHigh, sigLow;
+      sig= In.ar(inbus, 1); 
+      sigHigh = HPF.ar(sig,stopCutoff);
+      sigLow = LPF.ar(sig, beginCutoff); 
+      Out.ar([0,1],sigHigh+sigLow);
       //TODO: one HPF and one LPF 
-    }).add;
+    }).load(s);
 
     SynthDef.new(\flanger, { arg out=0, in=0, delay=0.1, depth=0.08, rate=0.06, fdbk=0.0, decay=0.0; 
       var input, maxdelay, maxrate, dsig, mixed, local;
@@ -63,7 +68,7 @@ s.waitForBoot({
       mixed = input + dsig;
       LocalOut.ar(mixed);
       Out.ar([out, out+1], mixed);
-    }).add;
+    }).load(s);
   
     SynthDef.new(\chorus, { arg inbus=10, outbus=0, predelay=0.08, speed=0.05, depth=0.1, ph_diff=0.5;
       var in, sig, modulators, numDelays = 12;
@@ -74,14 +79,14 @@ s.waitForBoot({
       sig = DelayC.ar(in, 0.5, modulators);  
       sig = sig.sum; //Mix(sig); 
       Out.ar(outbus, sig!2); // output in stereo
-    }).add;
+    }).load(s);
   
     SynthDef.new(\tremolo, {arg inbus=0, outbus=0, freq=1, strength=1; 
       var fx, sig; 
       sig = In.ar(inbus, 1); 
       fx = sig * SinOsc.ar(freq, 0, strength, 0.5, 2); 
       Out.ar(outbus, (fx+ sig).dup );
-    }).add;
+    }).load(s);
 
     SynthDef.new(\pitcher,{
       var in, amp, freq, hasFreq, out, gate, threshold;
@@ -104,16 +109,16 @@ s.waitForBoot({
         out = AllpassN.ar(out, 0.040, [0.040.rand,0.040.rand], 2)
       });
       Out.ar(0,out);
-      }).add;
+      }).load(s);
   };
 
   ~play={arg funcHash;
     {Out.ar(10, PlayBuf.ar(2, mp3Playback.bufnum, BufRateScale.kr(mp3Playback.bufnum),loop:1))}.play(addAction:\addToHead);
     //playbackEffect=Synth(\playback, [\inbus, 10], addAction:\addToTail);
-    //reverbEffect = Synth(\reverb, [\inbus, 10], addAction:\addToTail);
+    reverbEffect = Synth(\reverb, [\inbus, 10], addAction:\addToTail);
     
     //reverbEffect.set(\revVol, 0.00);
-   /* 
+    
     Task({
       inf.do({
         var newReverb=0;
@@ -122,19 +127,19 @@ s.waitForBoot({
           if(note==3,{newReverb=newReverb+0.01});
           if(note==4,{newReverb=newReverb+0.02});
         });
-        newReverb.postln;
         reverbEffect.set(\revVol,newReverb);
         0.15.wait;
       });
     }).play;
-    */
+   
 
     //flangerEffect=Synth(\flanger, [\in, 10], addAction:\addToTail);
     //pitchEffect=Synth(\pitcher, addAction:\addToTail);
-    chorusEffect=Synth(\chorus, [\inbus, 10], addAction:\addToTail);
+    //chorusEffect=Synth(\chorus, [\inbus, 10], addAction:\addToTail);
+    //chorusEffect=Synth(\bandStopFilter,
+    //[\inbus,10,\beginCutoff,4000,\stopCutoff,5000], addAction:\addToTail);
     //tremoloEffect=Synth(\tremolo, [\inbus, 10], addAction:\addToTail);
     //tremoloEffect.set(\freq,0.1);
-   
   };
   
 
