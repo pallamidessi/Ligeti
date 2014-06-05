@@ -1,5 +1,5 @@
 s.waitForBoot({
-  var mp3Playback=MP3.readToBuffer(s,"/home/pallamidessi/Musique2/test.mp3");
+  var mp3Playback=MP3.readToBuffer(s,"../Test_and_demo/mp3/test.mp3");
   var idHashMap= IdentityDictionary.new;
   var flangerEffect,reverbEffect,tremoloEffect,pitchEffect,chorusEffect,playbackEffect;
 

@@ -41,7 +41,7 @@ s.waitForBoot({
 
   ~libPlay={
     var m;
-    m = SimpleMIDIFile.read( "/home/pallamidessi/Téléchargements/gym3_1.mid" );
+    m = SimpleMIDIFile.read( "../Test_and_demo/midi/gym3_1.mid" );
     m.playNotesWithFunction(~truc,0,1); 
   };
   
