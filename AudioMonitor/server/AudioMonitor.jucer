@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="t8oiJy" name="AudioMonitor" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.AudioMonitor" includeBinaryInAppConfig="1"
+              jucerVersion="3.1.0">
+  <MAINGROUP id="ZvSWCk" name="AudioMonitor">
+    <GROUP id="{1A996737-58F1-5D92-856F-A17F86FFF788}" name="ip">
+      <FILE id="hUFNA1" name="IpEndpointName.cpp" compile="1" resource="0"
+            file="lib/oscpack/ip/IpEndpointName.cpp"/>
+      <FILE id="WkLCJW" name="IpEndpointName.h" compile="0" resource="0"
+            file="lib/oscpack/ip/IpEndpointName.h"/>
+      <FILE id="x6P1MA" name="IpEndpointName.o" compile="0" resource="1"
+            file="lib/oscpack/ip/IpEndpointName.o"/>
+      <FILE id="BTxZYi" name="NetworkingUtils.h" compile="0" resource="0"
+            file="lib/oscpack/ip/NetworkingUtils.h"/>
+      <FILE id="XBRMPb" name="PacketListener.h" compile="0" resource="0"
+            file="lib/oscpack/ip/PacketListener.h"/>
+      <GROUP id="{B2AEF15C-F17D-0FEF-BC86-3F963245AA50}" name="posix">
+        <FILE id="M12KxY" name="NetworkingUtils.cpp" compile="1" resource="0"
+              file="lib/oscpack/ip/posix/NetworkingUtils.cpp"/>
+        <FILE id="AQkur8" name="NetworkingUtils.o" compile="0" resource="1"
+              file="lib/oscpack/ip/posix/NetworkingUtils.o"/>
+        <FILE id="WCk2nI" name="UdpSocket.cpp" compile="1" resource="0" file="lib/oscpack/ip/posix/UdpSocket.cpp"/>
+        <FILE id="sFyAv2" name="UdpSocket.o" compile="0" resource="1" file="lib/oscpack/ip/posix/UdpSocket.o"/>
+      </GROUP>
+      <FILE id="Bj7xLL" name="TimerListener.h" compile="0" resource="0" file="lib/oscpack/ip/TimerListener.h"/>
+      <FILE id="rhaLER" name="UdpSocket.h" compile="0" resource="0" file="lib/oscpack/ip/UdpSocket.h"/>
+      <GROUP id="{092E06FD-70AF-8B5A-684F-E1AC5F579224}" name="win32">
+        <FILE id="h1x4Nd" name="NetworkingUtils.cpp" compile="0" resource="0"
+              file="lib/oscpack/ip/win32/NetworkingUtils.cpp"/>
+        <FILE id="VsExMD" name="UdpSocket.cpp" compile="0" resource="0" file="lib/oscpack/ip/win32/UdpSocket.cpp"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{E844BC4D-E840-1183-9992-D3FC265297F6}" name="osc">
+      <FILE id="zwXJa6" name="MessageMappingOscPacketListener.h" compile="0"
+            resource="0" file="lib/oscpack/osc/MessageMappingOscPacketListener.h"/>
+      <FILE id="c9W9sA" name="OscException.h" compile="0" resource="0" file="lib/oscpack/osc/OscException.h"/>
+      <FILE id="lYSnWW" name="OscHostEndianness.h" compile="0" resource="0"
+            file="lib/oscpack/osc/OscHostEndianness.h"/>
+      <FILE id="fzJvRQ" name="OscOutboundPacketStream.cpp" compile="1" resource="0"
+            file="lib/oscpack/osc/OscOutboundPacketStream.cpp"/>
+      <FILE id="rc6AMx" name="OscOutboundPacketStream.h" compile="0" resource="0"
+            file="lib/oscpack/osc/OscOutboundPacketStream.h"/>
+      <FILE id="N2PMrI" name="OscOutboundPacketStream.o" compile="0" resource="0"
+            file="lib/oscpack/osc/OscOutboundPacketStream.o"/>
+      <FILE id="Z4RSi7" name="OscPacketListener.h" compile="0" resource="0"
+            file="lib/oscpack/osc/OscPacketListener.h"/>
+      <FILE id="PSOLos" name="OscPrintReceivedElements.cpp" compile="1" resource="0"
+            file="lib/oscpack/osc/OscPrintReceivedElements.cpp"/>
+      <FILE id="O4C7z6" name="OscPrintReceivedElements.h" compile="0" resource="0"
+            file="lib/oscpack/osc/OscPrintReceivedElements.h"/>
+      <FILE id="ov3gCD" name="OscPrintReceivedElements.o" compile="0" resource="0"
+            file="lib/oscpack/osc/OscPrintReceivedElements.o"/>
+      <FILE id="cQk1QL" name="OscReceivedElements.cpp" compile="1" resource="0"
+            file="lib/oscpack/osc/OscReceivedElements.cpp"/>
+      <FILE id="U6emxN" name="OscReceivedElements.h" compile="0" resource="0"
+            file="lib/oscpack/osc/OscReceivedElements.h"/>
+      <FILE id="bJzkP1" name="OscReceivedElements.o" compile="0" resource="0"
+            file="lib/oscpack/osc/OscReceivedElements.o"/>
+      <FILE id="nRADeN" name="OscTypes.cpp" compile="1" resource="0" file="lib/oscpack/osc/OscTypes.cpp"/>
+      <FILE id="k2akdv" name="OscTypes.h" compile="0" resource="0" file="lib/oscpack/osc/OscTypes.h"/>
+      <FILE id="GBptFb" name="OscTypes.o" compile="0" resource="0" file="lib/oscpack/osc/OscTypes.o"/>
+    </GROUP>
+    <GROUP id="{8A036E7C-985D-8A19-27A0-9C54239842EA}" name="include">
+      <FILE id="QreGO7" name="AudioMonitorServer.hpp" compile="0" resource="0"
+            file="include/AudioMonitorServer.hpp"/>
+      <FILE id="NzfNSG" name="CellularAutoCompositor.hpp" compile="0" resource="0"
+            file="include/CellularAutoCompositor.hpp"/>
+      <FILE id="aiqf6q" name="CellularRules.hpp" compile="0" resource="0"
+            file="include/CellularRules.hpp"/>
+      <FILE id="c0O4RB" name="Compositor.hpp" compile="0" resource="0" file="include/Compositor.hpp"/>
+      <FILE id="WQeAlU" name="EASEAClientData.hpp" compile="0" resource="0"
+            file="include/EASEAClientData.hpp"/>
+      <FILE id="mHNJ1I" name="EASEAClientRow.hpp" compile="0" resource="0"
+            file="include/EASEAClientRow.hpp"/>
+      <FILE id="BPsTxV" name="mainFrame.hpp" compile="0" resource="0" file="include/mainFrame.hpp"/>
+      <FILE id="cNLFtB" name="Matrix.hpp" compile="0" resource="0" file="include/Matrix.hpp"/>
+      <FILE id="ZfCNzS" name="Metronome.hpp" compile="0" resource="0" file="include/Metronome.hpp"/>
+      <FILE id="IQnTdE" name="MIDICompositor.hpp" compile="0" resource="0"
+            file="include/MIDICompositor.hpp"/>
+      <FILE id="MphL9c" name="Note.hpp" compile="0" resource="0" file="include/Note.hpp"/>
+      <FILE id="l3vtDz" name="OSCSender.hpp" compile="0" resource="0" file="include/OSCSender.hpp"/>
+      <FILE id="cxBYKo" name="Point.hpp" compile="0" resource="0" file="include/Point.hpp"/>
+      <FILE id="Om2Isx" name="SourceCode.h" compile="0" resource="0" file="include/SourceCode.h"/>
+    </GROUP>
+    <GROUP id="{9DBAC882-F84B-61C3-145D-01AF2D4412E1}" name="Source">
+      <GROUP id="{B6786044-4876-F022-CA10-05C8EF635385}" name="src">
+        <FILE id="Z4lUnJ" name="AudioMonitorServer.cpp" compile="1" resource="0"
+              file="src/AudioMonitorServer.cpp"/>
+        <FILE id="jgp4Q4" name="CellularAutoCompositor.cpp" compile="0" resource="0"
+              file="src/CellularAutoCompositor.cpp"/>
+        <FILE id="x0wfIe" name="Compositor.cpp" compile="1" resource="0" file="src/Compositor.cpp"/>
+        <FILE id="G0NPKv" name="EASEAClientData.cpp" compile="1" resource="0"
+              file="src/EASEAClientData.cpp"/>
+        <FILE id="l8BOUb" name="mainFrame.cpp" compile="1" resource="0" file="src/mainFrame.cpp"/>
+        <FILE id="VV2e4L" name="MIDICompositor.cpp" compile="1" resource="0"
+              file="src/MIDICompositor.cpp"/>
+      </GROUP>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <LINUX_MAKE targetFolder="Builds/Linux" externalLibraries="easea" extraLinkerFlags="-L/usr/local/easea/libeasea/">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/&#10;/usr/local/easea/libeasea/&#10;../../lib/oscpack/"
+                       isDebug="1" optimisation="1" targetName="AudioMonitor" headerPath="../../include&#10;/usr/local/easea/libeasea/include/&#10;../../lib/oscpack"
+                       binaryPath="../../bin"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="AudioMonitor" headerPath="include/"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_audio_devices" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_audio_formats" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_events" showAllCode="1" useLocalCopy="1"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
