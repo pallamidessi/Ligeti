@@ -1,5 +1,5 @@
 /**
- * @file MIDICompositor.cpp
+ * @file FluidCompositor.cpp
  * @author Pallamidessi Joseph
  * @version 1.0
  *
@@ -23,11 +23,12 @@
 #include <cstdio>
 #include <cstdlib>
 #include"Compositor.hpp"
+#include "../JuceLibraryCode/JuceHeader.h"
 
-class MIDICompositor:public Compositor {
+class FluidCompositor:public Compositor {
   public:
-    MIDICompositor(std::string synthesisIP,int portnum,bool dbg=false);
-    virtual ~MIDICompositor ();
+    FluidCompositor(std::string synthesisIP,int portnum,bool dbg=false);
+    virtual ~FluidCompositor ();
     void send();
     void send(osc::OutboundPacketStream oscMsg);
     osc::OutboundPacketStream compose(EASEAClientData* cl);
