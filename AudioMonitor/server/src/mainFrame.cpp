@@ -1,9 +1,15 @@
 #include "mainFrame.hpp"
 AudioMonitorServer* serv;
 
+struct parameters{
+  Compositor* maestro;
+  int port;
+};
+
 void* launch_monitoring(void* arg){
-  serv=new AudioMonitorServer(((int*)arg)[0],0);
-  serv->setCompositor((SimpleCompositor*)(((int*)arg)[1]));
+  parameters* param=(parameters*)arg;
+  serv=new AudioMonitorServer(param->port,0);
+  serv->setCompositor(param->maestro);
   serv->start();
  
   //never return
@@ -21,11 +27,14 @@ int main(int argc, char* argv[]){
   
   MIDICompositor* test=new MIDICompositor("127.0.0.1",57120,true);
   //test->setNormalization(300,2000,0,130);
-  int arg[2];
-  arg[0]=port;
-  arg[1]=test;
-  pthread_create(&TCP_serv,NULL,&launch_monitoring,(void*)&arg);
+  parameters arg;
+  arg.port=port;
+  arg.maestro=test;
+  serv=new AudioMonitorServer(arg.port,0);
+  serv->setCompositor(arg.maestro);
+  serv->start();
+  //pthread_create(&TCP_serv,NULL,&launch_monitoring,(void*)&arg);
   
-  pthread_join(TCP_serv,NULL);
+ // pthread_join(TCP_serv,NULL);
   return 0;
 }
