@@ -104,8 +104,9 @@
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/&#10;/usr/local/easea/libeasea/&#10;../../lib/oscpack/"
                        isDebug="1" optimisation="1" targetName="AudioMonitor" headerPath="../../include&#10;/usr/local/easea/libeasea/include/&#10;../../lib/oscpack"
                        binaryPath="bin"/>
-        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
-                       targetName="AudioMonitor" headerPath="include/"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/&#10;/usr/local/easea/libeasea/&#10;../../lib/oscpack/"
+                       isDebug="1" optimisation="1" targetName="AudioMonitor" headerPath="../../include&#10;/usr/local/easea/libeasea/include/&#10;../../lib/oscpack"
+                       binaryPath="bin"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="lib/JUCE/modules"/>
