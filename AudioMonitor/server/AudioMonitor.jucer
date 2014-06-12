@@ -62,6 +62,8 @@
       <FILE id="GBptFb" name="OscTypes.o" compile="0" resource="0" file="lib/oscpack/osc/OscTypes.o"/>
     </GROUP>
     <GROUP id="{8A036E7C-985D-8A19-27A0-9C54239842EA}" name="include">
+      <FILE id="TosJUM" name="FluidCompositor.hpp" compile="0" resource="0"
+            file="include/FluidCompositor.hpp"/>
       <FILE id="QreGO7" name="AudioMonitorServer.hpp" compile="0" resource="0"
             file="include/AudioMonitorServer.hpp"/>
       <FILE id="NzfNSG" name="CellularAutoCompositor.hpp" compile="0" resource="0"
@@ -85,6 +87,8 @@
     </GROUP>
     <GROUP id="{9DBAC882-F84B-61C3-145D-01AF2D4412E1}" name="Source">
       <GROUP id="{B6786044-4876-F022-CA10-05C8EF635385}" name="src">
+        <FILE id="hsBEa8" name="FluidCompositor.cpp" compile="1" resource="0"
+              file="src/FluidCompositor.cpp"/>
         <FILE id="Z4lUnJ" name="AudioMonitorServer.cpp" compile="1" resource="0"
               file="src/AudioMonitorServer.cpp"/>
         <FILE id="jgp4Q4" name="CellularAutoCompositor.cpp" compile="0" resource="0"
