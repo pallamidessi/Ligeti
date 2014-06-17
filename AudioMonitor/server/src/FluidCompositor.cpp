@@ -63,6 +63,8 @@ std::vector<juce::MidiFile*>* FluidCompositor::loadMidiFromPath(fs::path p, int 
   else {
     for (i = 0; i < nbArg; i++) {
     
+      std::string pp(p.c_str());
+      
       /* Open and Read midiFile */
       midiFile=new File(pp);
 
@@ -123,22 +125,21 @@ void FluidCompositor::notify(EASEAClientData* cl){
 }
 
 
-FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg):Compositor::Compositor(ip,port,dbg){
+FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg,std::vector<juce::MidiFile*> *listMidi):Compositor::Compositor(ip,port,dbg){
   juce::StringArray deviceName;
   juce::MidiFile* midiToParse;
-  juce::FileInputStream* midiInputStream;
   juce::MidiOutput* fluidsynth;
   juce::MidiMessageSequence::MidiEventHolder* curEvent;
   juce::MidiBuffer chord;
   const juce::MidiMessageSequence* curTrack;
-  juce::File* midiFile;
+  int nbFile;
   int nbTrack;
   int nbEvent;
   int num;
   int i,j;
   double curTimestamp;
   double refTime;
-
+  double fileDuration;
   deviceName=juce::MidiOutput::getDevices();
   std::cout<<"Available MIDI devices:"<<std::endl;
 
@@ -150,57 +151,51 @@ FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg):Compositor::C
   fluidsynth->startBackgroundThread();
 
   /* Open and Read midiFile */
-  midiFile=new File("/home/pallamidessi/Ligeti/Test_and_demo/midi/gp_bolro.mid");
+  nbFile=listMidi->size();
 
-  if(!midiFile->existsAsFile()){
-    perror("File does not exist");
-    return;
-  }
-
-  midiInputStream= new FileInputStream(*midiFile);
-  midiToParse=new MidiFile();
-
-  if(!midiToParse->readFrom(*midiInputStream)){
-    perror("Can't read stream");
-    return;
-  }
-
-  /*Retrieve track(s) and info*/
-  nbTrack=midiToParse->getNumTracks();
-  midiToParse->convertTimestampTicksToSeconds(); 
-
-  /* Start time */
-  refTime=Time::getMillisecondCounter();
-
-
-  /* Loop on all events, add them on MidiBuffers if they're "chords"
-   * and send the MidiBuffers with delay
-   * */
-  for (i = 1; i < nbTrack; i++) {
+  for (k = 0; k < nbFile; k++) {
+    midiToParse=(*listMidi)[k];
     
-    curTrack=midiToParse->getTrack(i);
-    nbEvent=curTrack->getNumEvents();
-    curTimestamp=curTrack->getStartTime();
-    
-    for (j = 0; j < nbEvent;) {
-      num=0;
+    /*Retrieve track(s) and info*/
+    nbTrack=midiToParse->getNumTracks();
+    midiToParse->convertTimestampTicksToSeconds(); 
 
-      /* Check if events form a "Chord" */
-      while(curTrack->getEventTime(j)==curTimestamp){
-        chord.addEvent(curTrack->getEventPointer(j)->message,num);
-        num++;
-        j++;
+    /* Start time */
+    refTime=Time::getMillisecondCounter()+fileDuration;
+    fileDuration=0;
+
+    /* Loop on all events, add them on MidiBuffers if they're "chords"
+     * and send the MidiBuffers with delay
+     */
+    for (i = 0; i < nbTrack; i++) {
+      
+      curTrack=midiToParse->getTrack(i);
+      nbEvent=curTrack->getNumEvents();
+      curTimestamp=curTrack->getStartTime();
+      
+      for (j = 0; j < nbEvent;) {
+        num=0;
+
+        /* Check if events form a "Chord" */
+        while(curTrack->getEventTime(j)==curTimestamp && j< nbEvent){
+          chord.addEvent(curTrack->getEventPointer(j)->message,num);
+          num++;
+          j++;
+        }
+
+        fluidsynth->sendBlockOfMessages(chord,refTime+curTimestamp*1000,100000);
+
+        if(debug){ 
+          std::cout<<"message block sent :"<< curTimestamp<<" with "
+            <<chord.getNumEvents()<<" event(s) "<<std::endl;
+        }
+
+        chord.clear();
+        curTimestamp=curTrack->getEventTime(j);
       }
-
-      fluidsynth->sendBlockOfMessages(chord,refTime+curTimestamp*1000,100000);
-
-      if(debug){ 
-        std::cout<<"message block sent :"<< curTimestamp<<" with "
-          <<chord.getNumEvents()<<" event(s) "<<std::endl;
+      if (curTrack->getEndTime()>fileDuration) {
+        fileDuration=curTrack->getEndTime()
       }
-
-      chord.clear();
-      curTimestamp=curTrack->getEventTime(j);
     }
   }
 }

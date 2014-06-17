@@ -31,7 +31,7 @@
 
 class FluidCompositor:public Compositor {
   public:
-    FluidCompositor(std::string synthesisIP,int portnum,bool dbg=false);
+    FluidCompositor(std::string synthesisIP,int portnum,bool dbg=false,std::vector<juce::MidiFile*> *listMidi=NULL);
     virtual ~FluidCompositor ();
     void send();
     void send(osc::OutboundPacketStream oscMsg);

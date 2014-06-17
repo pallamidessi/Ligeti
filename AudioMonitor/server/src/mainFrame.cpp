@@ -24,8 +24,8 @@ int main(int argc, char* argv[]){
   if (argc == 2) {
     port=atoi(argv[1]);
   }
-  
-  FluidCompositor* test=new FluidCompositor("127.0.0.1",57120,true);
+  std::vector<juce::MidiFile*>* midi=FluidCompositor::loadMidiFromPath(argv[1],1); 
+  FluidCompositor* test=new FluidCompositor("127.0.0.1",57120,true,midi);
   //test->setNormalization(300,2000,0,130);
   parameters arg;
   arg.port=port;
