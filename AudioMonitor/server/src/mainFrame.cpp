@@ -25,7 +25,7 @@ int main(int argc, char* argv[]){
     port=atoi(argv[1]);
   }
   
-  MIDICompositor* test=new MIDICompositor("127.0.0.1",57120,true);
+  FluidCompositor* test=new FluidCompositor("127.0.0.1",57120,true);
   //test->setNormalization(300,2000,0,130);
   parameters arg;
   arg.port=port;

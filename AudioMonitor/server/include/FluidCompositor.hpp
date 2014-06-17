@@ -16,8 +16,8 @@
  * General Public License for more details at
  * http://www.gnu.org/copyleft/gpl.html
 **/  
-#ifndef MIDICOMPOSITOR_H__
-#define MIDICOMPOSITOR_H__
+#ifndef FLUIDCOMPOSITOR_H__
+#define FLUIDCOMPOSITOR_H__
 
 #include <iostream>
 #include <cstdio>
@@ -42,6 +42,6 @@ class FluidCompositor:public Compositor {
     /* data */
 };
 
-#endif /* end of include guard: MIDICOMPOSITOR_H__ */
+#endif /* end of include guard: FLUIDCOMPOSITOR_H__ */
 
 
