@@ -103,7 +103,7 @@
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <LINUX_MAKE targetFolder="Builds/Linux" externalLibraries="easea " extraLinkerFlags="-L/usr/local/easea/libeasea/ -pthread">
+    <LINUX_MAKE targetFolder="Builds/Linux" externalLibraries="easea " extraLinkerFlags="-L/usr/local/easea/libeasea/ -pthread -lboost_system -lboost_filesystem">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/&#10;/usr/local/easea/libeasea/&#10;../../lib/oscpack/"
                        isDebug="1" optimisation="1" targetName="AudioMonitor" headerPath="../../include&#10;/usr/local/easea/libeasea/include/&#10;../../lib/oscpack"

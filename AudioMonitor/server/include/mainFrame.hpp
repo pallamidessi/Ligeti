@@ -26,4 +26,5 @@
 #include "AudioMonitorServer.hpp"
 #include "Compositor.hpp"
 #include "MIDICompositor.hpp"
+#include "FluidCompositor.hpp"
 #endif
