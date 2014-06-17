@@ -22,8 +22,12 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
+#include <cstring>
 #include"Compositor.hpp"
 #include "../JuceLibraryCode/JuceHeader.h"
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 class FluidCompositor:public Compositor {
   public:
@@ -35,7 +39,11 @@ class FluidCompositor:public Compositor {
     void notify(EASEAClientData* cl);
     void aSending(EASEAClientData* cl);
     void aReception(EASEAClientData* cl);
-  
+    static std::vector<juce::MidiFile*>* loadMidiFromPath(
+                                                          boost::filesystem::path p, int nbArg);
+
+  private:
+    static bool checkDir(boost::filesystem::path p,std::vector<juce::MidiFile*> *listMidi);
   protected:
     
   private:
