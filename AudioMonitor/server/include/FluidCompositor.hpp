@@ -23,19 +23,22 @@
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
+#include <map>
 #include <cstring>
 #include"Compositor.hpp"
 #include "../JuceLibraryCode/JuceHeader.h"
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-class MidiOutputControlled:public juce::MidiOutput {
+class JUCE_API MidiOutputControlled:public juce::MidiOutput {
   public:
-    MidiOutputControlled(std::map<int,int>* note):juce::MidiOutput(){}
-    run();
+    MidiOutputControlled(std::map<int,int>* note):juce::MidiOutput(),
+      internal (nullptr),
+      firstMessage (nullptr){}
+    void run() override;
   protected:
     std::map<int,int>* note;
-}
+};
 
 class FluidCompositor:public Compositor {
   public:

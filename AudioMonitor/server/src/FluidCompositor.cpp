@@ -2,7 +2,17 @@
 
 namespace fs=boost::filesystem;
 
-MidiOutputControlled::run(){
+struct MidiOutput::PendingMessage
+{
+    PendingMessage (const void* const data, const int len, const double timeStamp)
+        : message (data, len, timeStamp)
+    {}
+
+    MidiMessage message;
+    PendingMessage* next;
+};
+
+void MidiOutputControlled::run(){
   while (! threadShouldExit())
   {
     uint32 now = Time::getMillisecondCounter();
@@ -44,12 +54,11 @@ MidiOutputControlled::run(){
       }
 
       if (eventTime > now - 200)
-        juce::sendMessageNow (message->message);
+        sendMessageNow (message->message);
         sendMessageError(message->message);
     }
     else
     {
-      juce::jassert (timeToWait < 1000 * 30);
       wait ((int) timeToWait);
     }
   }
