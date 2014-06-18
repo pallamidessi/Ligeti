@@ -29,6 +29,14 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 
+class MidiOutputControlled:public juce::MidiOutput {
+  public:
+    MidiOutputControlled(std::map<int,int>* note):juce::MidiOutput(){}
+    run();
+  protected:
+    std::map<int,int>* note;
+}
+
 class FluidCompositor:public Compositor {
   public:
     FluidCompositor(std::string synthesisIP,int portnum,bool dbg=false,std::vector<juce::MidiFile*> *listMidi=NULL);
@@ -40,11 +48,12 @@ class FluidCompositor:public Compositor {
     void aSending(EASEAClientData* cl);
     void aReception(EASEAClientData* cl);
     static std::vector<juce::MidiFile*>* loadMidiFromPath(
-                                                          boost::filesystem::path p, int nbArg);
+                                                          char** argv, int argc);
 
   private:
     static bool checkDir(boost::filesystem::path p,std::vector<juce::MidiFile*> *listMidi);
   protected:
+    std::map<int,int>* amalgamatedNote;
     
   private:
     /* data */

@@ -2,6 +2,66 @@
 
 namespace fs=boost::filesystem;
 
+MidiOutputControlled::run(){
+  while (! threadShouldExit())
+  {
+    uint32 now = Time::getMillisecondCounter();
+    uint32 eventTime = 0;
+    uint32 timeToWait = 500;
+
+    PendingMessage* message;
+
+    {
+      const ScopedLock sl (lock);
+      message = firstMessage;
+
+      if (message != nullptr)
+      {
+        eventTime = (uint32) roundToInt (message->message.getTimeStamp());
+
+        if (eventTime > now + 20)
+        {
+          timeToWait = eventTime - (now + 20);
+          message = nullptr;
+        }
+        else
+        {
+          firstMessage = message->next;
+        }
+      }
+    }
+
+    if (message != nullptr)
+    {
+      const ScopedPointer<PendingMessage> messageDeleter (message);
+
+      if (eventTime > now)
+      {
+        Time::waitForMillisecondCounter (eventTime);
+
+        if (threadShouldExit())
+          break;
+      }
+
+      if (eventTime > now - 200)
+        juce::sendMessageNow (message->message);
+        sendMessageError(message->message);
+    }
+    else
+    {
+      juce::jassert (timeToWait < 1000 * 30);
+      wait ((int) timeToWait);
+    }
+  }
+
+  clearAllPendingMessages();
+}
+
+void MidiOutputControlled::sendMessageError(message->message){
+  
+
+}
+
 bool FluidCompositor::checkDir(fs::path p,std::vector<juce::MidiFile*> *listMidi){
   fs::directory_iterator end_iter;
   juce::MidiFile* midiToParse;
@@ -121,7 +181,7 @@ osc::OutboundPacketStream FluidCompositor::compose(EASEAClientData* cl){
 
 
 void FluidCompositor::notify(EASEAClientData* cl){
-  Compositor::notify(cl);
+  (*amalgamatedNote)[cl->mID]=cl->computeNote();
 }
 
 /*TODO move code from constructor to a specific function*/
