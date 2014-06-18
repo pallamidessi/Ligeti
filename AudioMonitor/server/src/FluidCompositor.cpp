@@ -7,15 +7,15 @@ bool FluidCompositor::checkDir(fs::path p,std::vector<juce::MidiFile*> *listMidi
   juce::MidiFile* midiToParse;
   juce::FileInputStream* midiInputStream;
   juce::File* midiFile;
-  
+
   if (fs::exists(p) && fs::is_directory(p)) { 
     for (fs::directory_iterator dirIter(p); dirIter!=end_iter; dirIter++) {
       if (fs::is_regular_file(dirIter->status())) {
         if(dirIter->path().extension().compare(".mid")|| //check file extension
-           dirIter->path().extension().compare(".midi")){
-          
+            dirIter->path().extension().compare(".midi")){
+
           std::string pp(dirIter->path().c_str());
-          
+
           /* Open and Read midiFile */
           midiFile=new File(pp);
 
@@ -33,19 +33,19 @@ bool FluidCompositor::checkDir(fs::path p,std::vector<juce::MidiFile*> *listMidi
           }
 
           listMidi->push_back(midiToParse);  
-          
+
           delete midiInputStream;
           delete midiFile;
         } 
       }
     }
-  return true;
+    return true;
   }
-return false;
+  return false;
 }
 
 
-std::vector<juce::MidiFile*>* FluidCompositor::loadMidiFromPath(fs::path p, int nbArg){
+std::vector<juce::MidiFile*>* FluidCompositor::loadMidiFromPath(char** argv, int argc){
 
   int i;
   std::string pp;
@@ -53,18 +53,18 @@ std::vector<juce::MidiFile*>* FluidCompositor::loadMidiFromPath(fs::path p, int 
   juce::MidiFile* midiToParse;
   juce::FileInputStream* midiInputStream;
   juce::File* midiFile;
-  
+
   listMidi= new std::vector<juce::MidiFile*>;
 
   /* "Directory" mode*/ 
-  if (checkDir(p.c_str(),listMidi)) {
+  if (checkDir(argv[1],listMidi)) {
   }
   /*List a file path given by hand*/
   else {
-    for (i = 0; i < nbArg; i++) {
-    
-      std::string pp(p.c_str());
-      
+    for (i = 1; i < argc; i++) {
+
+      std::string pp(argv[i]);
+
       /* Open and Read midiFile */
       midiFile=new File(pp);
 
@@ -82,7 +82,7 @@ std::vector<juce::MidiFile*>* FluidCompositor::loadMidiFromPath(fs::path p, int 
       }
 
       listMidi->push_back(midiToParse);  
-      
+
       delete midiInputStream;
       delete midiFile;
     }
@@ -124,19 +124,21 @@ void FluidCompositor::notify(EASEAClientData* cl){
   Compositor::notify(cl);
 }
 
-
+/*TODO move code from constructor to a specific function*/
 FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg,std::vector<juce::MidiFile*> *listMidi):Compositor::Compositor(ip,port,dbg){
   juce::StringArray deviceName;
   juce::MidiFile* midiToParse;
   juce::MidiOutput* fluidsynth;
   juce::MidiMessageSequence::MidiEventHolder* curEvent;
   juce::MidiBuffer chord;
+  juce::MidiBuffer stopAndReset;
   const juce::MidiMessageSequence* curTrack;
   int nbFile;
   int nbTrack;
   int nbEvent;
   int num;
-  int i,j;
+  int i,j,k;
+  int channel;
   double curTimestamp;
   double refTime;
   double fileDuration;
@@ -147,6 +149,9 @@ FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg,std::vector<ju
   for (i = 0; i < deviceName.size(); i++) {
     std::cout<<i<<"\t"<<deviceName[i]<<std::endl;
   }
+
+  /*TODO: DEVICE iNDEX HARDCODED 
+   * find device with id Fluidsynth and use its index*/
   fluidsynth=juce::MidiOutput::openDevice(1);
   fluidsynth->startBackgroundThread();
 
@@ -155,7 +160,7 @@ FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg,std::vector<ju
 
   for (k = 0; k < nbFile; k++) {
     midiToParse=(*listMidi)[k];
-    
+
     /*Retrieve track(s) and info*/
     nbTrack=midiToParse->getNumTracks();
     midiToParse->convertTimestampTicksToSeconds(); 
@@ -168,11 +173,11 @@ FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg,std::vector<ju
      * and send the MidiBuffers with delay
      */
     for (i = 0; i < nbTrack; i++) {
-      
+
       curTrack=midiToParse->getTrack(i);
       nbEvent=curTrack->getNumEvents();
       curTimestamp=curTrack->getStartTime();
-      
+
       for (j = 0; j < nbEvent;) {
         num=0;
 
@@ -193,10 +198,16 @@ FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg,std::vector<ju
         chord.clear();
         curTimestamp=curTrack->getEventTime(j);
       }
-      if (curTrack->getEndTime()>fileDuration) {
-        fileDuration=curTrack->getEndTime()
+      if (curTrack->getEndTime()*1000>fileDuration) {
+        fileDuration=curTrack->getEndTime()*1000;
       }
     }
+    for (channel = 1; channel <= 16; channel++) {
+      stopAndReset.addEvent((juce::MidiMessage::allNotesOff(channel)),1);
+      stopAndReset.addEvent((juce::MidiMessage::allControllersOff(channel)),1);
+      stopAndReset.addEvent(*(new juce::MidiMessage(175+channel,121,0)),1);
+    }
+    fluidsynth->sendBlockOfMessages(stopAndReset,refTime+fileDuration,100000);
   }
 }
 
