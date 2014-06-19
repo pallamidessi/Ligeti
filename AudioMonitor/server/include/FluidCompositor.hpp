@@ -30,16 +30,6 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-class JUCE_API MidiOutputControlled:public juce::MidiOutput {
-  public:
-    MidiOutputControlled(std::map<int,int>* note):juce::MidiOutput(),
-      internal (nullptr),
-      firstMessage (nullptr){}
-    void run() override;
-  protected:
-    std::map<int,int>* note;
-};
-
 class FluidCompositor:public Compositor {
   public:
     FluidCompositor(std::string synthesisIP,int portnum,bool dbg=false,std::vector<juce::MidiFile*> *listMidi=NULL);

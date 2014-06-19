@@ -2,75 +2,6 @@
 
 namespace fs=boost::filesystem;
 
-struct MidiOutput::PendingMessage
-{
-    PendingMessage (const void* const data, const int len, const double timeStamp)
-        : message (data, len, timeStamp)
-    {}
-
-    MidiMessage message;
-    PendingMessage* next;
-};
-
-void MidiOutputControlled::run(){
-  while (! threadShouldExit())
-  {
-    uint32 now = Time::getMillisecondCounter();
-    uint32 eventTime = 0;
-    uint32 timeToWait = 500;
-
-    PendingMessage* message;
-
-    {
-      const ScopedLock sl (lock);
-      message = firstMessage;
-
-      if (message != nullptr)
-      {
-        eventTime = (uint32) roundToInt (message->message.getTimeStamp());
-
-        if (eventTime > now + 20)
-        {
-          timeToWait = eventTime - (now + 20);
-          message = nullptr;
-        }
-        else
-        {
-          firstMessage = message->next;
-        }
-      }
-    }
-
-    if (message != nullptr)
-    {
-      const ScopedPointer<PendingMessage> messageDeleter (message);
-
-      if (eventTime > now)
-      {
-        Time::waitForMillisecondCounter (eventTime);
-
-        if (threadShouldExit())
-          break;
-      }
-
-      if (eventTime > now - 200)
-        sendMessageNow (message->message);
-        sendMessageError(message->message);
-    }
-    else
-    {
-      wait ((int) timeToWait);
-    }
-  }
-
-  clearAllPendingMessages();
-}
-
-void MidiOutputControlled::sendMessageError(message->message){
-  
-
-}
-
 bool FluidCompositor::checkDir(fs::path p,std::vector<juce::MidiFile*> *listMidi){
   fs::directory_iterator end_iter;
   juce::MidiFile* midiToParse;
@@ -190,14 +121,14 @@ osc::OutboundPacketStream FluidCompositor::compose(EASEAClientData* cl){
 
 
 void FluidCompositor::notify(EASEAClientData* cl){
-  (*amalgamatedNote)[cl->mID]=cl->computeNote();
+  (*amalgamatedNote)[cl->getID()]=cl->computeNote();
 }
 
 /*TODO move code from constructor to a specific function*/
 FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg,std::vector<juce::MidiFile*> *listMidi):Compositor::Compositor(ip,port,dbg){
   juce::StringArray deviceName;
   juce::MidiFile* midiToParse;
-  juce::MidiOutput* fluidsynth;
+  MidiOutput* fluidsynth;
   juce::MidiMessageSequence::MidiEventHolder* curEvent;
   juce::MidiBuffer chord;
   juce::MidiBuffer stopAndReset;
@@ -213,7 +144,8 @@ FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg,std::vector<ju
   double fileDuration;
   deviceName=juce::MidiOutput::getDevices();
   std::cout<<"Available MIDI devices:"<<std::endl;
-
+  
+  amalgamatedNote= new std::map<int,int>();
   /* Print found device */
   for (i = 0; i < deviceName.size(); i++) {
     std::cout<<i<<"\t"<<deviceName[i]<<std::endl;
@@ -221,7 +153,7 @@ FluidCompositor::FluidCompositor(std::string ip,int port,bool dbg,std::vector<ju
 
   /*TODO: DEVICE iNDEX HARDCODED 
    * find device with id Fluidsynth and use its index*/
-  fluidsynth=juce::MidiOutput::openDevice(1);
+  fluidsynth=MidiOutput::openDevice(1,amalgamatedNote);
   fluidsynth->startBackgroundThread();
 
   /* Open and Read midiFile */
