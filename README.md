@@ -3,6 +3,11 @@ Ligeti
 
 Sonification du système évolutionnaire distribué GPGPU Easea
 
+Requirements
+============
+
+* libboost => 1.50
+* JUCE Introjucer
 
 JUCE
 ====
