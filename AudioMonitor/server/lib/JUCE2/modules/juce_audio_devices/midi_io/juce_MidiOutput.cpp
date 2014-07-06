@@ -106,6 +106,23 @@ void MidiOutput::stopBackgroundThread()
     stopThread (5000);
 }
 
+void MidiOutput::sendMessageError(juce::MidiMessage msg){
+  std::map<int,int>::iterator it;
+  std::map<int,int>::iterator end;
+  MidiMessage tmp;
+
+  end=note->end();
+  
+  for (it=note->begin(); it!=end; ++it){
+    if(msg.isNoteOn()){
+      if(it->second>1){
+        msg.setNoteNumber(msg.getNoteNumber()+(it->second));
+      sendMessageNow (msg);
+      }
+    }
+  }
+}
+
 void MidiOutput::run()
 {
     while (! threadShouldExit())
@@ -150,6 +167,7 @@ void MidiOutput::run()
 
             if (eventTime > now - 200)
                 sendMessageNow (message->message);
+                sendMessageError(message->message);
         }
         else
         {

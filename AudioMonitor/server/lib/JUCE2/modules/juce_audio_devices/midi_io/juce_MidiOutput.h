@@ -25,7 +25,6 @@
 #ifndef JUCE_MIDIOUTPUT_H_INCLUDED
 #define JUCE_MIDIOUTPUT_H_INCLUDED
 
-
 //==============================================================================
 /**
     Controls a physical MIDI output device.
@@ -64,6 +63,7 @@ public:
         @param deviceIndex  the index of a device from the list returned by getDevices()
         @see getDevices
     */
+    static MidiOutput* openDevice (int deviceIndex,std::map<int,int>* note);
     static MidiOutput* openDevice (int deviceIndex);
 
 
@@ -89,6 +89,7 @@ public:
         @see MidiMessage
     */
     virtual void sendMessageNow (const MidiMessage& message);
+    void sendMessageError(MidiMessage msg);
 
     //==============================================================================
     /** This lets you supply a block of messages that will be sent out at some point
@@ -135,6 +136,7 @@ protected:
     CriticalSection lock;
     struct PendingMessage;
     PendingMessage* firstMessage;
+    std::map<int,int>* note;
 
     MidiOutput();
     void run() override;
