@@ -89,7 +89,7 @@ public:
         @see MidiMessage
     */
     virtual void sendMessageNow (const MidiMessage& message);
-    void sendMessageError(MidiMessage msg);
+    void sendMessageError(MidiMessage msg,std::map<int,int>*);
 
     //==============================================================================
     /** This lets you supply a block of messages that will be sent out at some point

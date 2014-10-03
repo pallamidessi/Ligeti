@@ -22,6 +22,7 @@
   ==============================================================================
 */
 
+
 struct MidiOutput::PendingMessage
 {
     PendingMessage (const void* const data, const int len, const double timeStamp)
@@ -106,7 +107,7 @@ void MidiOutput::stopBackgroundThread()
     stopThread (5000);
 }
 
-void MidiOutput::sendMessageError(juce::MidiMessage msg){
+void MidiOutput::sendMessageError(juce::MidiMessage msg,std::map<int,int>* errorNoteOff){
   std::map<int,int>::iterator it;
   std::map<int,int>::iterator end;
   MidiMessage tmp;
@@ -114,10 +115,23 @@ void MidiOutput::sendMessageError(juce::MidiMessage msg){
   end=note->end();
   
   for (it=note->begin(); it!=end; ++it){
+    if(msg.isNoteOff()){
+      if(errorNoteOff->count(msg.getNoteNumber())!=0)
+        errorNoteOff->erase(msg.getNoteNumber());
+        msg.setNoteNumber(msg.getNoteNumber()+2);
+        sendMessageNow (msg);
+        msg.setNoteNumber(msg.getNoteNumber()+3);
+        sendMessageNow (msg);
+        msg.setNoteNumber(msg.getNoteNumber()+4);
+        sendMessageNow (msg);
+    }
+
     if(msg.isNoteOn()){
       if(it->second>1){
+        (*errorNoteOff)[msg.getNoteNumber()]=msg.getNoteNumber()+(it->second);
         msg.setNoteNumber(msg.getNoteNumber()+(it->second));
-      sendMessageNow (msg);
+        msg.multiplyVelocity(((float)(it->second))/3.);
+        sendMessageNow (msg);
       }
     }
   }
@@ -125,6 +139,7 @@ void MidiOutput::sendMessageError(juce::MidiMessage msg){
 
 void MidiOutput::run()
 {
+    std::map<int,int>* noteErrorOff=new std::map<int,int>;
     while (! threadShouldExit())
     {
         uint32 now = Time::getMillisecondCounter();
@@ -167,7 +182,7 @@ void MidiOutput::run()
 
             if (eventTime > now - 200)
                 sendMessageNow (message->message);
-                sendMessageError(message->message);
+                sendMessageError(message->message,noteErrorOff);
         }
         else
         {
