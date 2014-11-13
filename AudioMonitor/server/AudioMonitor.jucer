@@ -9,7 +9,7 @@
             file="lib/oscpack/ip/IpEndpointName.cpp"/>
       <FILE id="WkLCJW" name="IpEndpointName.h" compile="0" resource="0"
             file="lib/oscpack/ip/IpEndpointName.h"/>
-      <FILE id="x6P1MA" name="IpEndpointName.o" compile="0" resource="1"
+      <FILE id="x6P1MA" name="IpEndpointName.o" compile="0" resource="0"
             file="lib/oscpack/ip/IpEndpointName.o"/>
       <FILE id="BTxZYi" name="NetworkingUtils.h" compile="0" resource="0"
             file="lib/oscpack/ip/NetworkingUtils.h"/>
