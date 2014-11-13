@@ -479,6 +479,23 @@ int MidiOutput::getDefaultDeviceIndex()
     return 0;
 }
 
+MidiOutput* MidiOutput::openDevice (int deviceIndex,std::map<int,int>* note)
+{
+    MidiOutput* newDevice = nullptr;
+
+    StringArray devices;
+    AlsaPort port (iterateMidiDevices (false, devices, deviceIndex));
+
+    if (port.isValid())
+    {
+        newDevice = new MidiOutput();
+        newDevice->internal = new MidiOutputDevice (newDevice, port);
+        newDevice->note=note;
+    }
+
+    return newDevice;
+}
+
 MidiOutput* MidiOutput::openDevice (int deviceIndex)
 {
     MidiOutput* newDevice = nullptr;
